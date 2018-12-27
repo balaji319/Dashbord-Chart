@@ -41,7 +41,10 @@ Route::get('logout', 'UserController@logout');
   | Report  Routes
   |--------------------------------------------------------------------------
  */
-
+/**
+ * all routes.
+ * @author Balaji  .
+ */
 Route::group(['namespace' => 'Web'], function() {
 
     Route::get('exe-summary', 'Report\ReportController@exeSummary');
@@ -50,7 +53,6 @@ Route::group(['namespace' => 'Web'], function() {
     Route::get('web-summary', 'Report\ReportController@webSummary');
     Route::get('top-cities', 'Report\ReportController@topCities');
     Route::get('top-countries', 'Report\ReportController@topCountries');
-
     Route::get('stats-countries', 'Report\ReportController@statsCountries');
     Route::get('top-prayers', 'Report\ReportController@topPrayers');
     Route::get('gender-break', 'Report\ReportController@genderBreak');
@@ -66,7 +68,6 @@ Route::group(['namespace' => 'Web'], function() {
  * User Dashboard api.
  * @author Harshal Pawar. <harshal.pawar@ytel.co.in>
  */
-
 Route::group(['middleware' => ['userAuth']], function() {
     Route::get('my-home', 'UserController@myHome');
     Route::get('advert-spikes-past-hour', 'Api\Report\HomeController@advertSpikesPastHour');
@@ -75,4 +76,9 @@ Route::group(['middleware' => ['userAuth']], function() {
     Route::get('top-active-numbers', 'Api\Report\HomeController@topActiveNumbers');
 });
 
-
+/**
+ * Report tabs route.
+ */
+Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() {
+    Route::post('executive-report', 'Api\Report\ReportController@executiveReport');
+});
