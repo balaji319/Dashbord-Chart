@@ -59,4 +59,71 @@ class Report extends Model {
         }
     }
 
+    
+    public static function detailsExecutiveReport(Request $request) {
+        try {
+            $daydate = $request->daydate;
+            if (empty($daydate)) {
+                $daydate = date('m/d/Y');
+            }
+            
+            //Bar chart.
+            $sql = "SELECT count(*) as Calls FROM hangups where CONVERT(CHAR(10),hangupdate,101) = '".$daydate."' and CompanyID = '". session('user_info')->CompanyID ."'group by DATEPART(hour, hangupdate)";
+            $smallbarchart = DB::select($sql);
+            
+            //list of all stations.
+            $sql = "SELECT Campaigns.Name, HangUps.Campaign, COUNT(*) AS Calls FROM HangUps INNER JOIN Campaigns ON HangUps.Campaign = Campaigns.Campaign
+                    WHERE (CONVERT(CHAR(10), HangUps.HangUpDate, 101) = '".$daydate."') AND (HangUps.companyid = '". session('user_info')->CompanyID ."')
+                    GROUP BY HangUps.Campaign, Campaigns.Name";
+            $get_stations = DB::select($sql);
+            $arr = [];
+            foreach ($get_stations as $key => $value) {
+                $arr[$key]['Name'] = $value->Name;
+                $arr[$key]['Campaign'] = $value->Campaign;
+                $arr[$key]['Calls'] = $value->Calls;
+                $query = "SELECT COUNT(*) AS Calls FROM HangUps WHERE (CONVERT(CHAR(10), HangUps.HangUpDate, 101) = '".$daydate."') AND (HangUps.companyid = '". session('user_info')->CompanyID ."') and HangupCount = 2  and Campaign = '".$value->Campaign."'";
+                $info = DB::select($query);
+                $arr[$key]['Completed'] = $info[0]->Calls;
+            }
+            
+            //Get all countries counts.
+            $sql = "SELECT     COUNT(*) AS Calls, Campaigns.Geography FROM HangUps INNER JOIN Campaigns ON HangUps.Campaign = Campaigns.Campaign
+                                    WHERE CONVERT(CHAR(10),hangupdate,101) = '".$daydate."' and companyid = '". session('user_info')->CompanyID ."'
+                                    GROUP BY Campaigns.Geography";
+            $get_countries = DB::select($sql);
+            
+            //Get top 20 cities calls count.
+            $sql = "SELECT     TOP 20 COUNT(*) AS calls, RTRIM(LTRIM(fone3.City)) + ', ' + RTRIM(LTRIM(fone3.State)) AS Location
+                    FROM         HangUps INNER JOIN
+                    fone3 ON LEFT(replace(HangUps.CallerID,'-',''), 6) = ltrim(rtrim(right(fone3.NPA,3))) + '' + ltrim(rtrim(right(fone3.prefix,3)))
+                    where CONVERT(CHAR(10),hangupdate,101) = '".$daydate."' and companyid = '". session('user_info')->CompanyID ."'
+                    GROUP BY RTRIM(LTRIM(fone3.City)) + ', ' + RTRIM(LTRIM(fone3.State))
+                    order by count(*) desc";
+            $get_cities = DB::select($sql);
+            
+            $data = ["smallbarchart" => $smallbarchart, "get_stations" => $arr, "get_countries" => $get_countries, "get_cities" => $get_cities];
+            return $data;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    
+    
+    
+    public static function networkReports(Request $request) {
+        try {
+            $report_month = $request->report_month;
+            $report_year = $request->report_year;
+            $campaign_number = $request->campaign_number;
+            
+            //Bar chart.
+            $sql = "SELECT count(*) as Calls FROM hangups where hangupdate = '".$daydate."' and CompanyID = '". session('user_info')->CompanyID ."' GROUP BY CAST(hangupdate AS DATE) ";
+            $smallbarchart = DB::select($sql);
+            
+            $data = ["smallbarchart" => $smallbarchart, "get_stations" => $arr, "get_countries" => $get_countries, "get_cities" => $get_cities];
+            return $data;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
 }
