@@ -12,6 +12,7 @@ class ReportController extends Controller {
 
     public function executiveReport(Request $request) {
         try {
+            
             $response = Report::executiveReport($request);
             return response()->json([
                         'status' => 200,
@@ -53,35 +54,47 @@ class ReportController extends Controller {
     
     public function networkReports(Request $request) {
         try {
-            $report_month = $request->report_month;
-            $report_year = $request->report_year;
-            $campaign_number = $request->campaign_number;
-            if(empty($report_month) || empty($report_year) || empty($campaign_number)) {
-                return response()->json([ 'status' => 400, 'message' => 'Please enter all details.', ], 400);
-            }
+            $report_month = "11";//$request->report_month;
+            $report_year = "2018";//$request->report_year;
+            $campaign_number = "1376";//$request->campaign_number;
             $info = cal_days_in_month(CAL_GREGORIAN,$report_month,$report_year);
             $start_date= "$report_month/1/$report_year";
             $end_date= "$report_month/$info/$report_year";
             
-            $arr = [];
-            for($i = 1;$i<=$info;$i++) {
-                $day = "$report_month/".str_pad($i, 2, "0", STR_PAD_LEFT)."/$report_year";
-                $arr[$i]['day'] = $day .'-'. date('l', strtotime($day));
-                
-                $sql = "SELECT COUNT(*) AS total FROM HangUps WHERE convert(varchar, hangupdate, 101) = '".$day."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') ";
+            
+            /*$sql = "SELECT COUNT(*) AS completed FROM HangUps WHERE hangupdate BETWEEN '".$start_date."' AND '".$end_date."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') and hangupcount = 2 GROUP BY convert(varchar, hangupdate, 101) ";
+            $completed = DB::select($sql);
+            
+            $sql = "SELECT COUNT(*) AS total FROM HangUps WHERE hangupdate BETWEEN '".$start_date."' AND '".$end_date."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."')  GROUP BY convert(varchar, hangupdate, 101) ";
+            $total = DB::select($sql);
+            print_r($completed);
+            print_r($total);die;*/
+            
+            /*echo $sql = "SELECT convert(varchar, hangupdate, 101)as hangupdate, hangupcount FROM HangUps WHERE hangupdate BETWEEN '".$start_date."' AND '".$end_date."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') Order BY hangupdate ";
+            $total = DB::select($sql);
+            $result = array_map(function ($value) {
+                return (array)$value;
+            }, $total);
+            $colors = array_count_values(array_column($result, 'hangupdate'));
+            $colors = array_count_values(array_column($result, 'hangupcount'));
+            print_r($colors);die;
+            $materials = array_count_values(array_column($arr, 1));
+            */
+            /*$arr = [];
+            for($i = 1;$i<$info;$i++) {
+                $day = "$report_month/$i/$report_year";
+                echo $sql = "SELECT convert(varchar, hangupdate, 101)as hangupdate, hangupcount FROM HangUps WHERE convert(varchar, hangupdate, 101) = '".$day."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') ";
                 $total = DB::select($sql);
-                $arr[$i]['total'] = $total[0]->total;
-                
-                $sql = "SELECT COUNT(*) AS completed FROM HangUps WHERE convert(varchar, hangupdate, 101) = '".$day."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') and hangupcount = 2";
-                $completed = DB::select($sql);
-                $arr[$i]['completed'] = $completed[0]->completed;
-            
+                print_r($total);die;
+                $arr[$i]['day'] = $day .'-'. date('l', strtotime($day));
+                $arr[$i]['total'] = $total[$i -1 ]->total;
+                $arr[$i]['completed'] = $completed[$i - 1]->completed;
             }
-            
+            print_r($arr);die;*/
             return response()->json([
                         'status' => 200,
                         'message' => 'Success',
-                        'data' => $arr,
+                        'data' => $response,
                         ], 200);
         } catch (Exception $ex) {
             throw $ex;

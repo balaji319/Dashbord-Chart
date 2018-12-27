@@ -62,7 +62,7 @@ class Report extends Model {
     
     public static function detailsExecutiveReport(Request $request) {
         try {
-            $daydate = $request->daydate;
+            $daydate = $request->date;
             if (empty($daydate)) {
                 $daydate = date('m/d/Y');
             }
@@ -103,7 +103,7 @@ class Report extends Model {
                     GROUP BY RTRIM(LTRIM(fone3.City)) + ', ' + RTRIM(LTRIM(fone3.State))
                     order by count(*) desc";
             $get_cities = DB::select($sql);
-            echo "<pre/>";
+         
             foreach ($get_cities as $k => $v) {
                 $get_cities_arr['calls'][$k] = $v->calls;
                 $get_cities_arr['Location'][$k] = $v->Location;
