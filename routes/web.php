@@ -11,28 +11,14 @@
   |
  */
 
-/* Route::get('/', function () {
-  return view('login');
-  }); */
 /*
   |--------------------------------------------------------------------------
   | Register and Login Routes
   |--------------------------------------------------------------------------
  */
-Route::group([], function() {
-
-    Route::get('login', 'UserController@login')->name('login');
-
-    Route::get('/', 'UserController@login');
-
-    Route::post('/login', 'UserController@loginApi');
-});
-
-
 Route::get('/', 'UserController@login');
-Route::get('login', 'UserController@login');
-
-
+Route::get('login', 'UserController@login')->name('login');
+Route::post('/login', 'UserController@loginApi');
 Route::get('my-users', 'UserController@myUsers');
 Route::get('logout', 'UserController@logout');
 
@@ -61,6 +47,24 @@ Route::group(['middleware' => ['userAuth']], function() {
     Route::get('hourly-calls', 'Api\Report\HomeController@hourlyCalls');
     Route::get('most-recent-calls', 'Api\Report\HomeController@mostRecentCalls');
     Route::get('top-active-numbers', 'Api\Report\HomeController@topActiveNumbers');
+    /*
+    |--------------------------------------------------------------------------
+    | 7 Day call camparison route
+    |--------------------------------------------------------------------------
+    */
+    Route::get('call/comparison', 'Web\Report\CallController@callComparison');
+    /*
+    |--------------------------------------------------------------------------
+    | Hourly log route
+    |--------------------------------------------------------------------------
+    */
+    Route::get('hourly/log', 'Web\Report\CallController@hourlyLog');
+    /*
+    |--------------------------------------------------------------------------
+    | Minute log route
+    |--------------------------------------------------------------------------
+    */
+    Route::get('minute/log', 'Web\Report\CallController@minuteLog');
 });
 
 /**
