@@ -55,7 +55,6 @@ Route::group(['namespace' => 'Web'], function() {
  * User Dashboard api.
  * @author Harshal Pawar. <harshal.pawar@ytel.co.in>
  */
-
 Route::group(['middleware' => ['userAuth']], function() {
     Route::get('my-home', 'UserController@myHome');
     Route::get('advert-spikes-past-hour', 'Api\Report\HomeController@advertSpikesPastHour');
@@ -64,3 +63,9 @@ Route::group(['middleware' => ['userAuth']], function() {
     Route::get('top-active-numbers', 'Api\Report\HomeController@topActiveNumbers');
 });
 
+/**
+ * Report tabs route.
+ */
+Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() {
+    Route::post('executive-report', 'Api\Report\ReportController@executiveReport');
+});
