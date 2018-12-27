@@ -70,6 +70,9 @@ class Report extends Model {
             //Bar chart.
             $sql = "SELECT count(*) as Calls FROM hangups where CONVERT(CHAR(10),hangupdate,101) = '".$daydate."' and CompanyID = '". session('user_info')->CompanyID ."'group by DATEPART(hour, hangupdate)";
             $smallbarchart = DB::select($sql);
+            foreach ($smallbarchart as $k => $v) {
+                $small_arr[] = $v->Calls;
+            }
             
             //list of all stations.
             $sql = "SELECT Campaigns.Name, HangUps.Campaign, COUNT(*) AS Calls FROM HangUps INNER JOIN Campaigns ON HangUps.Campaign = Campaigns.Campaign
@@ -100,8 +103,13 @@ class Report extends Model {
                     GROUP BY RTRIM(LTRIM(fone3.City)) + ', ' + RTRIM(LTRIM(fone3.State))
                     order by count(*) desc";
             $get_cities = DB::select($sql);
+            echo "<pre/>";
+            foreach ($get_cities as $k => $v) {
+                $get_cities_arr['calls'][$k] = $v->calls;
+                $get_cities_arr['Location'][$k] = $v->Location;
+            }
             
-            $data = ["smallbarchart" => $smallbarchart, "get_stations" => $arr, "get_countries" => $get_countries, "get_cities" => $get_cities];
+            $data = ["smallbarchart" => $small_arr, "get_stations" => $arr, "get_countries" => $get_countries, "get_cities" => $get_cities_arr];
             return $data;
         } catch (Exception $ex) {
             throw $ex;
@@ -109,21 +117,4 @@ class Report extends Model {
     }
     
     
-    
-    public static function networkReports(Request $request) {
-        try {
-            $report_month = $request->report_month;
-            $report_year = $request->report_year;
-            $campaign_number = $request->campaign_number;
-            
-            //Bar chart.
-            $sql = "SELECT count(*) as Calls FROM hangups where hangupdate = '".$daydate."' and CompanyID = '". session('user_info')->CompanyID ."' GROUP BY CAST(hangupdate AS DATE) ";
-            $smallbarchart = DB::select($sql);
-            
-            $data = ["smallbarchart" => $smallbarchart, "get_stations" => $arr, "get_countries" => $get_countries, "get_cities" => $get_cities];
-            return $data;
-        } catch (Exception $ex) {
-            throw $ex;
-        }
-    }
 }
