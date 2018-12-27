@@ -62,7 +62,7 @@ class Report extends Model {
     
     public static function detailsExecutiveReport(Request $request) {
         try {
-            $daydate = $request->daydate;
+            $daydate = $request->date;
             if (empty($daydate)) {
                 $daydate = date('m/d/Y');
             }
@@ -70,7 +70,7 @@ class Report extends Model {
             //Bar chart.
             $sql = "SELECT count(*) as Calls FROM hangups where CONVERT(CHAR(10),hangupdate,101) = '".$daydate."' and CompanyID = '". session('user_info')->CompanyID ."'group by DATEPART(hour, hangupdate)";
             $smallbarchart = DB::select($sql);
-            
+            print_r($smallbarchart);die;
             //list of all stations.
             $sql = "SELECT Campaigns.Name, HangUps.Campaign, COUNT(*) AS Calls FROM HangUps INNER JOIN Campaigns ON HangUps.Campaign = Campaigns.Campaign
                     WHERE (CONVERT(CHAR(10), HangUps.HangUpDate, 101) = '".$daydate."') AND (HangUps.companyid = '". session('user_info')->CompanyID ."')

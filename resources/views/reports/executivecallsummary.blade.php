@@ -242,7 +242,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                                   <div class="clearfix"></div>
                                                 </div>
                                                 
-                                                <div class="x_content" style="min-height: 300px">
+                                                <div class="x_content" style="overflow-y: scroll;height: 300px;">
                                                           
                                                             <table class="table table-hover" id="records_table1">
                                                                         <thead>
@@ -446,8 +446,9 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
                   success: function(response) {
                         var trHTML = '';
                         $('#loadingtable1').hide();
-                        $.each(response.data, function(i, item) {
-                        trHTML += '<tr><td>' + item.Name  + '</td><td>' + item.Calls + '</td><td>' + item.LastCall+ '</td></tr>';
+                        $.each(response.data.get_stations, function(i, item) {
+                              
+                        trHTML += '<tr><td>' + item.Name  + '</td><td>' + item.Campaign + '</td><td>' + item.Calls+ ' </td><td>' + item.Completed+ ' </td></tr>';
                   });
                   $('#records_table1').append(trHTML);
 

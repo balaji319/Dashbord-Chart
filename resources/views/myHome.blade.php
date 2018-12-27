@@ -125,7 +125,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                 </div>
               </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12">
+     <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>Top Active Numbers / <?php echo $var_date?> <small></small></h2>
@@ -394,7 +394,7 @@ function init_charts_home(type,data) {
 }
 jQuery(document).ready(function($){
 
-
+      tempData = [];
          init_charts_home('mybarChart',tempData);
          init_charts_home('lineChart',tempData);
          init_recent_table('mybarChart');
