@@ -68,4 +68,9 @@ Route::group(['middleware' => ['userAuth']], function() {
  */
 Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() {
     Route::post('executive-report', 'Api\Report\ReportController@executiveReport');
+    Route::get('details-executive-report', 'Api\Report\ReportController@detailsExecutiveReport');
+    
+    Route::get('campaign-list', 'Api\Report\ReportController@campaignList');
+    Route::get('network-reports', 'Api\Report\ReportController@networkReports');
+    
 });
