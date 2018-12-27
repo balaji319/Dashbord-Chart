@@ -89,5 +89,84 @@ class ReportController extends Controller {
     }
     
     
+    public function statistics(Request $request) {
+        try {
+            $current_time = date('m/d/Y');
+            $seven_day = date('m/d/Y', strtotime('-7 days'));
+            $fourteen_day = date('m/d/Y', strtotime('-14 days'));
+            $twenty_one_day = date('m/d/Y', strtotime('-21 days'));
+            
+            $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
+                FROM HangUps INNER JOIN Campaigns ON HangUps.CampaignID = Campaigns.CampaignID WHERE HangUps.CompanyID = '".session('user_info')->CompanyID."' 
+                AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) > '".$seven_day."' AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) <= '".$current_time."'
+                GROUP BY day(HangUps.hangupdate),CONVERT(CHAR(10), HangUps.hangupdate, 101)
+                Order By day(HangUps.hangupdate)";
+            $last_week = DB::select($sql);
+            foreach ($last_week as $k => $v){
+                $week_array[] = $v->CallCount;
+            }
+         
+            $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
+                FROM HangUps INNER JOIN Campaigns ON HangUps.CampaignID = Campaigns.CampaignID WHERE HangUps.CompanyID = '".session('user_info')->CompanyID."' 
+                AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) > '".$fourteen_day."' AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) <= '".$seven_day."'
+                GROUP BY day(HangUps.hangupdate),CONVERT(CHAR(10), HangUps.hangupdate, 101)
+                Order By day(HangUps.hangupdate)";
+            $last_fourteen = DB::select($sql);
+            foreach ($last_fourteen as $k => $v){
+                $fourteen_array[] = $v->CallCount;
+            }
+            
+            $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
+                FROM HangUps INNER JOIN Campaigns ON HangUps.CampaignID = Campaigns.CampaignID WHERE HangUps.CompanyID = '".session('user_info')->CompanyID."' 
+                AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) > '".$twenty_one_day."' AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) <= '".$fourteen_day."'
+                GROUP BY day(HangUps.hangupdate),CONVERT(CHAR(10), HangUps.hangupdate, 101)
+                Order By day(HangUps.hangupdate)";
+            $twenty_one = DB::select($sql);
+            foreach ($twenty_one as $k => $v){
+                $twenty_one_array[] = $v->CallCount;
+                $days_array[] = date('l', strtotime($v->hangupdate));
+            }
+            
+            $arr = ["days_array"=>$days_array,"week_array"=>$week_array,"fourteen_array"=>$fourteen_array,"twenty_one_array"=>$twenty_one_array];
+           
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $arr ], 200);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    
+    
+    public function topCities(Request $request) {
+        try {
+            $startdate = $request->startdate;
+            $enddate = $request->enddate;
+            if (empty($startdate)) {
+                $startdate = date('m/01/Y');
+            }
+            if (empty($enddate)) {
+                $enddate = date('m/d/Y');
+            }
+            $current_time = date('m/d/Y');
+            $sql = "SELECT     TOP 25 COUNT(*) AS CallCount, City + ', ' + State AS City
+                FROM         IVRTranscriptions
+                WHERE     (IVRTranscriptions.GroupNumber <> 'web')
+                 AND (IVRTranscriptions.City IS NOT NULL AND IVRTranscriptions.City <> '') AND
+                IVRTranscriptions.CompanyID = '".session('user_info')->CompanyID."'
+                AND CAST(CONVERT(CHAR(10), IVRTranscriptions.dateentered, 102) AS DATETIME) >= '".$startdate."' 
+                AND CAST(CONVERT(CHAR(10), IVRTranscriptions.dateentered, 102) AS DATETIME) <= '".$enddate." 11:59 PM'
+                GROUP BY City + ', ' + State
+                ORDER BY COUNT(*) DESC";
+            $top_city = DB::select($sql);
+            foreach ($top_city as $k => $v){
+                $top_cities['CallCount'][] = $v->CallCount;;
+                $top_cities['City'][] = $v->City;
+            }
+            
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $top_cities ], 200);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    
     
 }
