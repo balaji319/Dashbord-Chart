@@ -455,6 +455,33 @@
         format: 'DD.MM.YYYY'
     });
 });
+
+
+jQuery(document).ready(function($){
+
+
+      var myUrl = "/executive-report";
+      getAjax(myUrl);
+
+
+});
+
+function getAjax(url){
+
+$.ajax({url: url, success: function(result){
+ 
+
+  //init_charts_home('mybarChart',result);
+    console.log(result.data)
+    // myChart.data.labels.push("Post " + postId++);
+    // myChart.data.datasets[0].data.push(getRandomIntInclusive(1, 25));
+
+    // // re-render the chart
+    // myChart.update();
+
+  }});
+}
+
       </script>
 
 

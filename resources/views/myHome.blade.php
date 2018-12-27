@@ -394,10 +394,6 @@ function init_charts_home(type,data) {
 }
 jQuery(document).ready(function($){
 
-    var myUrl = "api/my-bar";
-      getAjax(myUrl);
-      tempData = [];
-
 
          init_charts_home('mybarChart',tempData);
          init_charts_home('lineChart',tempData);
@@ -407,21 +403,6 @@ jQuery(document).ready(function($){
 
 });
 
-function getAjax(url){
-
-  $.ajax({url: url, success: function(result){
-    var barChartData =JSON.parse(JSON.stringify(result))
-
-    //init_charts_home('mybarChart',result);
-      console.log(mybarChart.data)
-      // myChart.data.labels.push("Post " + postId++);
-      // myChart.data.datasets[0].data.push(getRandomIntInclusive(1, 25));
-
-      // // re-render the chart
-      // myChart.update();
-
-    }});
-}
 
 </script>
 <style>

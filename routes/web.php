@@ -47,6 +47,17 @@ Route::group(['namespace' => 'Web'], function() {
     Route::get('exe-summary', 'Report\ReportController@exeSummary');
     Route::get('network-summary', 'Report\ReportController@networkCallSummary');
     Route::get('statical-summary', 'Report\ReportController@staticalSummary');
+    Route::get('web-summary', 'Report\ReportController@webSummary');
+    Route::get('top-cities', 'Report\ReportController@topCities');
+    Route::get('top-countries', 'Report\ReportController@topCountries');
+
+    Route::get('stats-countries', 'Report\ReportController@statsCountries');
+    Route::get('top-prayers', 'Report\ReportController@topPrayers');
+    Route::get('gender-break', 'Report\ReportController@genderBreak');
+    Route::get('minute-log', 'Report\ReportController@minuteLog');
+    Route::get('hour-log', 'Report\ReportController@hourLog');
+    Route::get('map-calls', 'Report\ReportController@mapCalls');
+    Route::get('hourly168', 'Report\ReportController@hourly168');
 });
 
 
@@ -63,4 +74,5 @@ Route::group(['middleware' => ['userAuth']], function() {
     Route::get('most-recent-calls', 'Api\Report\HomeController@mostRecentCalls');
     Route::get('top-active-numbers', 'Api\Report\HomeController@topActiveNumbers');
 });
+
 
