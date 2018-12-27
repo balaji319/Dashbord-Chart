@@ -1,0 +1,68 @@
+{
+    "page": 2,
+    "per_page": 3,
+    "total": 12,
+    "total_pages": 4,
+    "data": [
+        {
+            "id": 1,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 2,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 3,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 4,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 5,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 6,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 7,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 8,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 9,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        },
+        {
+            "id": 10,
+            "station": "AMC Spot-9",
+            "calls": "219",
+            "l_calls": "12/25 6:49:13 PM"
+        }
+    ]
+}
