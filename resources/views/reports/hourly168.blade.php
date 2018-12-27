@@ -137,7 +137,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
 jQuery(document).ready(function($){
 
-      var myUrl = "/executive-report";
+      var myUrl = "/call/comparison";
       getAjax(myUrl);
 
 
@@ -145,58 +145,28 @@ jQuery(document).ready(function($){
 
 function getAjax(url,startDate,flag){
 
-var objData =  flag ? {"startdate":startDate} :'';
+var objData =  flag ? {"start_date":startDate} :'';
 
 $("#loadingbar").show();
 $.ajax({
       url: url,  
-      type: "post", 
+      type: "get", 
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-      success: function(result){
-    
-       $("#loadingbar").hide();
-       
-
+      success: function(response){
+       var trHTML ='';
+       var trHTML1='';
+       $("#loadingadvert").hide();
+       myChart.data.datasets[0].data=response.data.todays.data;
+       myChart.data.datasets[1].data=response.data.before_seven_days.data;
+       myChart.data.datasets[2].data=response.data.before_fourteen_days.data;
+       myChart.update();
 
   }});
 }
-$("#executivecallsummary").on( "click", ".tbl_row", function() {
 
-      var var_date = 
-      {
-           'date':$(this).attr('data-date')
-      }
-      $(".selectedDate").text($(this).attr('data-date'))
-           
-             $.ajax({
-                  url: '/details-executive-report',
-                  data:var_date,
-                
-                  success: function(response) {
-                        var trHTML = '';
-                        $('#loadingtable1').hide();
-                        $('#loadingadvert').hide();
-                        $('#loadingbar').hide();
-                        $('#loadingtable').hide();
-
-                        $.each(response.data.get_stations, function(i, item) {
-                              
-                        trHTML += '<tr><td>' + item.Name  + '</td><td>' + item.Campaign + '</td><td>' + item.Calls+ ' </td><td>' + item.Completed+ ' </td></tr>';
-                  });
-                  $('#records_table1').append(trHTML);
-                    
-                  myChart.data.datasets[0].data=response.data.smallbarchart;
-                  // re-render the chart
-                  myChart2.data.labels=response.data.get_cities.Location;
-                  myChart2.data.datasets[0].data=response.data.get_cities.calls;
-                  myChart.update();
-                  myChart2.update();
-                  }
-                  });
-});
 $('.modal-footer .btn-primary').click(function() {
    $('form[name="modalForm"]').submit();
 });
@@ -293,7 +263,7 @@ function init_charts_home(type,data) {
                       pointHoverBackgroundColor: "#fff",
                       pointHoverBorderColor: "rgba(220,220,220,1)",
                       pointBorderWidth: 1,
-                      data: ["13","21","9","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]
+                      data: []
                       }, {
                       label: "My Second dataset",
                       borderColor: "rgba(3, 88, 106, 0.70)",
@@ -301,7 +271,7 @@ function init_charts_home(type,data) {
                       pointHoverBackgroundColor: "#fff",
                       pointHoverBorderColor: "rgba(151,187,205,1)",
                       pointBorderWidth: 1,
-                      data: ["31","11","19","10","0","20","70","10","10","10","50","20","10","30","01","0","0","0","0","50","06","70","0","40"]
+                      data: []
                       },
                       {
                       label: "My Third dataset",
@@ -310,7 +280,7 @@ function init_charts_home(type,data) {
                       pointHoverBackgroundColor: "#fff",
                       pointHoverBorderColor: "rgba(51,187,05,1)",
                       pointBorderWidth: 1,
-                      data: ["17","18","19","10","8","5","6","10","10","10","2","0","17","33","01","88","44","033","55","50","06","70","0","40"]
+                      data: []
                       }]
 
               },

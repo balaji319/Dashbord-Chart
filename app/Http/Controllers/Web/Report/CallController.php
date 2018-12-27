@@ -18,7 +18,7 @@ class CallController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Http\Controllers\Api\Report\Exception
      */
-    public function index(Request $request)
+    public function callComparison(Request $request)
     {
         try {
 
