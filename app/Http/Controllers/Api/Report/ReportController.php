@@ -60,7 +60,7 @@ class ReportController extends Controller {
             $info = cal_days_in_month(CAL_GREGORIAN,$report_month,$report_year);
             $start_date= "$report_month/1/$report_year";
             $end_date= "$report_month/$info/$report_year";
-            echo "<pre/>";
+            
             
             /*$sql = "SELECT COUNT(*) AS completed FROM HangUps WHERE hangupdate BETWEEN '".$start_date."' AND '".$end_date."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') and hangupcount = 2 GROUP BY convert(varchar, hangupdate, 101) ";
             $completed = DB::select($sql);

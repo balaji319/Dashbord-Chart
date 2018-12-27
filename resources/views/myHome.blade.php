@@ -394,6 +394,7 @@ function init_charts_home(type,data) {
 }
 jQuery(document).ready(function($){
 
+ 
       tempData = [];
          init_charts_home('mybarChart',tempData);
          init_charts_home('lineChart',tempData);

@@ -173,7 +173,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                     <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true" class="">×   </span><span class="sr-only">Close</span>
                     
                                     </button>
-                                     <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                     <h4 class="modal-title" id="myModalLabel">Report</h4>
                     
                                 </div>
                                 <div class="modal-body" style="    min-height: 500px;">
@@ -185,7 +185,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                               <div class="x_panel">
                                                 <div class="x_title">
-                                                  <h2>Advert Spikes Past Hour /  <?php echo $var_date ?><small></small></h2>
+                                                  <h2>Hourly Call Breakdown for :  <span class="selectedDate"></span><small></small></h2>
                                                   <ul class="nav navbar-right panel_toolbox">
                                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                     </li>
@@ -223,7 +223,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                               <div class="x_panel">
                                                 <div class="x_title">
-                                                  <h2>Hourly Calls / <?php echo $var_date ?><small></small></h2>
+                                                  <h2>Calls by station for:  <span class="selectedDate"></span><small></small></h2>
                                                   <ul class="nav navbar-right panel_toolbox">
                                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                     </li>
@@ -325,14 +325,11 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                               
                                           </div>
                                         </div>
-                              
-                              
-                              
-                              
+    
                               </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -438,6 +435,7 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
       {
            'date':$(this).attr('data-date')
       }
+      $(".selectedDate").text($(this).attr('data-date'))
            
              $.ajax({
                   url: '/details-executive-report',
@@ -446,12 +444,22 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
                   success: function(response) {
                         var trHTML = '';
                         $('#loadingtable1').hide();
+                        $('#loadingadvert').hide();
+                        $('#loadingbar').hide();
+                        $('#loadingtable').hide();
+
                         $.each(response.data.get_stations, function(i, item) {
                               
                         trHTML += '<tr><td>' + item.Name  + '</td><td>' + item.Campaign + '</td><td>' + item.Calls+ ' </td><td>' + item.Completed+ ' </td></tr>';
                   });
                   $('#records_table1').append(trHTML);
-
+                    
+                  myChart.data.datasets[0].data=response.data.smallbarchart;
+                  // re-render the chart
+                  myChart2.data.labels=response.data.get_cities.Location;
+                  myChart2.data.datasets[0].data=response.data.get_cities.calls;
+                  myChart.update();
+                  myChart2.update();
                   }
                   });
 });
@@ -523,7 +531,8 @@ function init_active_table(min, max) {
 //getDataActiveCalls();
 }
 
-
+ var myChart ='';
+ var myChart2 ='';
 function init_charts_home(type,data) {
         console.log('run_charts  typeof [' + typeof (Chart) + ']');
         if( typeof (Chart) === 'undefined'){ return; }
@@ -547,14 +556,14 @@ function init_charts_home(type,data) {
               for (var i = 0, l = 24; i < l; i++) {
                 labelArray.push(i)
               }
-              var myChart = new Chart(ctx, {
+               myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                   labels: labelArray,
                   datasets: [{
                         label: '# of Votes',
                         backgroundColor: "#b5ced3",
-                        data: ['10','20','30','10','20','30','10','20','30','10','20','30']
+                        data: []
                         }]
                 },
                 options: {
@@ -570,8 +579,8 @@ function init_charts_home(type,data) {
                     yAxes: [{
 
                             ticks: {
-                                min: 0,
-                                stepSize: 10,
+                                min: 0
+                        
                             }
                     }]
                   }
@@ -618,14 +627,14 @@ function init_charts_home(type,data) {
               for (var i = 0, l = 24; i < l; i++) {
                 labelArray.push(i)
               }
-              var myChart = new Chart(ctx_live, {
+               myChart2 = new Chart(ctx_live, {
                 type: 'bar',
                 data: {
-                  labels: labelArray,
+                  labels: [],
                   datasets: [{
                         label: '# of Votes',
                         backgroundColor: "#b5ced3",
-                        data: ['10','20','30','10','20','30','10','20','30','10','20','30']
+                        data: []
                         }]
                 },
                 options: {
@@ -695,7 +704,7 @@ else if(type=='mybarChart1'){
                         };
 
 
-              var myChart = new Chart(ctx_live1, {
+              var myChart1 = new Chart(ctx_live1, {
                 type: 'pie',
                 data: oilData
               });
