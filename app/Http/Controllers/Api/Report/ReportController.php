@@ -20,7 +20,7 @@ class ReportController extends Controller {
                         'data' => $response,
                             ], 200);
         } catch (Exception $ex) {
-            throw $ex;
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
     
@@ -33,7 +33,7 @@ class ReportController extends Controller {
                         'data' => $response,
                         ], 200);
         } catch (Exception $ex) {
-            throw $ex;
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
     
@@ -47,57 +47,46 @@ class ReportController extends Controller {
                         'data' => $info,
                         ], 200);
         } catch (Exception $ex) {
-            throw $ex;
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
 
     
     public function networkReports(Request $request) {
         try {
-            $report_month = "11";//$request->report_month;
-            $report_year = "2018";//$request->report_year;
-            $campaign_number = "1376";//$request->campaign_number;
-            $info = cal_days_in_month(CAL_GREGORIAN,$report_month,$report_year);
-            $start_date= "$report_month/1/$report_year";
-            $end_date= "$report_month/$info/$report_year";
-            
-            
-            /*$sql = "SELECT COUNT(*) AS completed FROM HangUps WHERE hangupdate BETWEEN '".$start_date."' AND '".$end_date."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') and hangupcount = 2 GROUP BY convert(varchar, hangupdate, 101) ";
-            $completed = DB::select($sql);
-            
-            $sql = "SELECT COUNT(*) AS total FROM HangUps WHERE hangupdate BETWEEN '".$start_date."' AND '".$end_date."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."')  GROUP BY convert(varchar, hangupdate, 101) ";
-            $total = DB::select($sql);
-            print_r($completed);
-            print_r($total);die;*/
-            
-            /*echo $sql = "SELECT convert(varchar, hangupdate, 101)as hangupdate, hangupcount FROM HangUps WHERE hangupdate BETWEEN '".$start_date."' AND '".$end_date."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') Order BY hangupdate ";
-            $total = DB::select($sql);
-            $result = array_map(function ($value) {
-                return (array)$value;
-            }, $total);
-            $colors = array_count_values(array_column($result, 'hangupdate'));
-            $colors = array_count_values(array_column($result, 'hangupcount'));
-            print_r($colors);die;
-            $materials = array_count_values(array_column($arr, 1));
-            */
-            /*$arr = [];
-            for($i = 1;$i<$info;$i++) {
-                $day = "$report_month/$i/$report_year";
-                echo $sql = "SELECT convert(varchar, hangupdate, 101)as hangupdate, hangupcount FROM HangUps WHERE convert(varchar, hangupdate, 101) = '".$day."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') ";
-                $total = DB::select($sql);
-                print_r($total);die;
-                $arr[$i]['day'] = $day .'-'. date('l', strtotime($day));
-                $arr[$i]['total'] = $total[$i -1 ]->total;
-                $arr[$i]['completed'] = $completed[$i - 1]->completed;
+            $report_month = $request->report_month;
+            $report_year = $request->report_year;
+            $campaign_number = $request->campaign_number;
+            if(empty($report_month) || empty($report_year) || empty($campaign_number)) {
+                return response()->json([ 'status' => 400, 'message' => 'Please enter all details.', ], 400);
             }
-            print_r($arr);die;*/
+            $info = cal_days_in_month(CAL_GREGORIAN,$report_month,$report_year);
+            $end_date= "$report_month/$report_year";
+            if($end_date == date("m/Y")){
+                $info = date("d");
+            }
+            $arr = [];
+            for($i = 1;$i<=$info;$i++) {
+                $day = "$report_month/".str_pad($i, 2, "0", STR_PAD_LEFT)."/$report_year";
+                $arr[$i]['day'] = $day .'-'. date('l', strtotime($day));
+                
+                $sql = "SELECT COUNT(*) AS total FROM HangUps WHERE convert(varchar, hangupdate, 101) = '".$day."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') ";
+                $total = DB::select($sql);
+                $arr[$i]['total'] = $total[0]->total;
+                
+                $sql = "SELECT COUNT(*) AS completed FROM HangUps WHERE convert(varchar, hangupdate, 101) = '".$day."' AND (CompanyID =  '".session('user_info')->CompanyID."') AND (CampaignID = '".$campaign_number."') and hangupcount = 2";
+                $completed = DB::select($sql);
+                $arr[$i]['completed'] = $completed[0]->completed;
+            
+            }
+            
             return response()->json([
                         'status' => 200,
                         'message' => 'Success',
-                        'data' => $response,
+                        'data' => $arr,
                         ], 200);
         } catch (Exception $ex) {
-            throw $ex;
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
     
@@ -144,7 +133,7 @@ class ReportController extends Controller {
            
             return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $arr ], 200);
         } catch (Exception $ex) {
-            throw $ex;
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
     
@@ -177,7 +166,55 @@ class ReportController extends Controller {
             
             return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $top_cities ], 200);
         } catch (Exception $ex) {
-            throw $ex;
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+    
+    
+    public function topCountries(Request $request) {
+        try {
+            $startdate = $request->startdate;
+            $enddate = $request->enddate;
+            if (empty($startdate)) {
+                $startdate = date('m/01/Y');
+            }
+            if (empty($enddate)) {
+                $enddate = date('m/d/Y');
+            }
+            $current_time = date('m/d/Y');
+            $sql = "SELECT TOP 25 COUNT(*) AS CallCount, Country AS City FROM IVRTranscriptions
+                    WHERE (IVRTranscriptions.City IS NOT NULL AND IVRTranscriptions.City <> '') AND
+                    IVRTranscriptions.CompanyID = '".session('user_info')->CompanyID."' AND CAST(CONVERT(CHAR(10), IVRTranscriptions.dateentered, 102) AS DATETIME) >= '".$startdate."' AND CAST(CONVERT(CHAR(10), IVRTranscriptions.dateentered, 102) AS DATETIME) <= '".$enddate." 11:59 PM'
+                    GROUP BY Country ORDER BY COUNT(*) DESC";
+            $top_country = DB::select($sql);
+            foreach ($top_country as $k => $v){
+                $top_countries['CallCount'][] = $v->CallCount;;
+                $top_countries['City'][] = $v->City;
+            }
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $top_countries ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+    
+    
+    
+    public function websiteSummery(Request $request) {
+        try {
+            $month = $request->month;
+            $year = $request->year;
+            if (empty($month)) {
+                $month = date('m');
+            }
+            if (empty($year)) {
+                $year = date('Y');
+            }
+            $date = "$month/1/$year";
+            $sql = "SELECT Count(*) as Completed FROM IVRTranscriptions WHERE CompanyID = '".session('user_info')->CompanyID."' AND DateEntered >= '".$date."' AND GroupNumber = 'Web'";
+            $summery = DB::select($sql);
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $summery ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
     
