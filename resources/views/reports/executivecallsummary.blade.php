@@ -171,7 +171,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                      <h4 class="modal-title" id="myModalLabel">Detailed Report For :  <span class="selectedDate"></span> </h4>
                     
                                 </div>
-                                <div class="modal-body" style="    min-height: 500px;">
+                                <div class="modal-body" style="    min-height: 400px;">
                               
                                     <div class="">
                                           
@@ -306,7 +306,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                                   </ul>
                                                   <div class="clearfix"></div>
                                                 </div>
-                                                <div class="x_content" style="min-height: 450px">
+                                                <div class="x_content" style="min-height: 250px">
                                                             <canvas id="mybarChart"></canvas>
                                                             <div  class="loading" id="loadingtable" >
                                                                 <img   class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
@@ -430,6 +430,18 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
       {
            'date':$(this).attr('data-date')
       }
+
+    
+                  myChart.data.datasets[0].data=[];
+                  // re-render the chart
+                  myChart2.data.datasets[0].data=[];
+                  myChart1.data.labels=[];
+                  myChart1.data.datasets[0].data=[];
+                  myChart1.data.datasets.backgroundColor= [];
+                  
+                  myChart.update();
+                  myChart2.update();
+                  myChart1.update();  
       $(".selectedDate").text($(this).attr('data-date'))
            
              $.ajax({
