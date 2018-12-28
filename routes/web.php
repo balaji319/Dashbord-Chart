@@ -33,6 +33,11 @@ Route::get('logout', 'UserController@logout');
  */
 Route::group(['namespace' => 'Web'], function() {
 
+    /*
+    |--------------------------------------------------------------------------
+    |  Report Routes
+    |--------------------------------------------------------------------------
+    */
     Route::get('exe-summary', 'Report\ReportController@exeSummary');
     Route::get('network-summary', 'Report\ReportController@networkCallSummary');
     Route::get('statical-summary', 'Report\ReportController@staticalSummary');
@@ -46,6 +51,14 @@ Route::group(['namespace' => 'Web'], function() {
     Route::get('hour-log', 'Report\ReportController@hourLog');
     Route::get('map-calls', 'Report\ReportController@mapCalls');
     Route::get('hourly168', 'Report\ReportController@hourly168');
+
+ /*
+    |--------------------------------------------------------------------------
+    | CallData Report Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::get('downloaddata', 'Report\CallDataController@downloadData');
+    Route::get('callrecording', 'Report\CallDataController@callRecording');
 });
 
 
@@ -87,7 +100,6 @@ Route::group(['middleware' => ['userAuth']], function() {
 Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() {
     Route::post('executive-report', 'Api\Report\ReportController@executiveReport');
     Route::get('details-executive-report', 'Api\Report\ReportController@detailsExecutiveReport');
-    
     Route::get('campaign-list', 'Api\Report\ReportController@campaignList');
     Route::get('network-reports', 'Api\Report\ReportController@networkReports');
     Route::get('statistics', 'Api\Report\ReportController@statistics');
