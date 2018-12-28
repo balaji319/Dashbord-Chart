@@ -94,7 +94,13 @@ class Report extends Model {
                                     WHERE CONVERT(CHAR(10),hangupdate,101) = '".$daydate."' and companyid = '". session('user_info')->CompanyID ."'
                                     GROUP BY Campaigns.Geography";
             $get_countries = DB::select($sql);
-            
+
+            foreach ($get_countries as $k => $v) {
+        
+                $get_countries_arr['calls'][$k] = $v->Calls;
+                $get_countries_arr['Geography'][$k] = $v->Geography;
+            }
+         
             //Get top 20 cities calls count.
             $sql = "SELECT     TOP 20 COUNT(*) AS calls, RTRIM(LTRIM(fone3.City)) + ', ' + RTRIM(LTRIM(fone3.State)) AS Location
                     FROM         HangUps INNER JOIN
@@ -103,13 +109,13 @@ class Report extends Model {
                     GROUP BY RTRIM(LTRIM(fone3.City)) + ', ' + RTRIM(LTRIM(fone3.State))
                     order by count(*) desc";
             $get_cities = DB::select($sql);
-         
+            
             foreach ($get_cities as $k => $v) {
+   
                 $get_cities_arr['calls'][$k] = $v->calls;
                 $get_cities_arr['Location'][$k] = $v->Location;
             }
-            
-            $data = ["smallbarchart" => $small_arr, "get_stations" => $arr, "get_countries" => $get_countries, "get_cities" => $get_cities_arr];
+            $data = ["smallbarchart" => $small_arr, "get_stations" => $arr, "get_countries" => $get_countries_arr, "get_cities" => $get_cities_arr];
             return $data;
         } catch (Exception $ex) {
             throw $ex;

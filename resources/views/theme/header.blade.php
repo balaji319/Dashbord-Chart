@@ -37,8 +37,8 @@
                         <li><a href="{{ url('/network-summary') }}">Network Call Summary</a></li>
                         <li><a href="{{ url('/statical-summary') }}" >Statistical History</a></li>
                         <li><a href="{{ url('/web-summary') }}">Website Summary</a></li>
-                        <li><a href="{{ url('/top-cities') }}">Top Cities</a></li>
-                        <li><a href="{{ url('/top-countries') }}">Top Countries </a></li>
+                        <li><a href="{{ url('/topcities') }}">Top Cities</a></li>
+                        <li><a href="{{ url('/topcountries') }}">Top Countries </a></li>
                         <li><a href="{{ url('/stats-countries') }}">Country Station Breakdown</a></li>
                         <li><a href="{{ url('/top-prayers') }}">Top Prayers</a></li>
                         <li><a href="{{ url('/gender-break') }}">Gender Breakdown</a></li>

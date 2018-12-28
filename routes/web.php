@@ -37,8 +37,8 @@ Route::group(['namespace' => 'Web'], function() {
     Route::get('network-summary', 'Report\ReportController@networkCallSummary');
     Route::get('statical-summary', 'Report\ReportController@staticalSummary');
     Route::get('web-summary', 'Report\ReportController@webSummary');
-    Route::get('top-cities', 'Report\ReportController@topCities');
-    Route::get('top-countries', 'Report\ReportController@topCountries');
+    Route::get('topcities', 'Report\ReportController@topCities');
+    Route::get('topcountries', 'Report\ReportController@topCountries');
     Route::get('stats-countries', 'Report\ReportController@statsCountries');
     Route::get('top-prayers', 'Report\ReportController@topPrayers');
     Route::get('gender-break', 'Report\ReportController@genderBreak');

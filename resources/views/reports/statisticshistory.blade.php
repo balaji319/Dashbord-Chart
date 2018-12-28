@@ -7,17 +7,17 @@ date_default_timezone_set('America/Los_Angeles');
 $unixTime = time();
 $var_date = date("D - M. d Y", $unixTime);  ?>
       <div class="">
-            <div class="page-title">
+            {{-- <div class="page-title">
               <div class="title_left">
-                <h3>Home<small></small></h3>
+
               </div>
-            </div>
+            </div> --}}
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Advert Spikes Past Hour /  <?php echo $var_date ?><small></small></h2>
+                    <h2>Statistical Report <small></small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -60,8 +60,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
             </div>
             <div class="clearfix"></div>
             <div class="row">
-           \
-
+          
               <div class="clearfix"></div>
 
 
@@ -237,12 +236,13 @@ jQuery(document).ready(function($){
 function getAjax(url){
 
   $.ajax({url: url, success: function(result){
-
-
     //init_charts_home('mybarChart',result);
       $("#loadingadvert").hide();
-     myChart.data.labels=result.data.days_array;
-    myChart.data.datasets[0].data=result.data.fourteen_array;
+      var arrayData = result.data.days_array;
+      arrayData.pop();
+      arrayData.unshift(arrayData[arrayData.length -1]);  
+      myChart.data.labels= arrayData;
+      myChart.data.datasets[0].data=result.data.fourteen_array;
       myChart.data.datasets[1].data=result.data.twenty_one_array;
       myChart.data.datasets[2].data=result.data.week_array;
     //               // re-render the chart

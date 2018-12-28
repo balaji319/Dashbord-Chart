@@ -161,19 +161,14 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                       </div>
                      
                       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content"></div>
-                        </div>
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content"></div>
-                        </div>
-                        <div class="modal-dialog modal-lg" style=" width: 70%;">
+                      
+                        <div class="modal-dialog modal-lg" style=" width: 80%;">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true" class="">×   </span><span class="sr-only">Close</span>
                     
                                     </button>
-                                     <h4 class="modal-title" id="myModalLabel">Report</h4>
+                                     <h4 class="modal-title" id="myModalLabel">Detailed Report For :  <span class="selectedDate"></span> </h4>
                     
                                 </div>
                                 <div class="modal-body" style="    min-height: 500px;">
@@ -242,7 +237,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                                   <div class="clearfix"></div>
                                                 </div>
                                                 
-                                                <div class="x_content" style="overflow-y: scroll;height: 300px;">
+                                                <div class="x_content" style="overflow-y: scroll;height:300px">
                                                           
                                                             <table class="table table-hover" id="records_table1">
                                                                         <thead>
@@ -277,7 +272,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                               <div class="x_panel">
                                                 <div class="x_title">
-                                                  <h2>Most Recent Calls <small></small></h2>
+                                                  {{-- <h2>Most Recent Calls <small></small></h2> --}}
                                                   <ul class="nav navbar-right panel_toolbox">
                                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                     </li>
@@ -288,7 +283,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                                   <div class="clearfix"></div>
                                                 </div>
                                                 <div class="x_content">
-                                                            <div  class="loading" id="loadingbar" >
+                                                            <div  class="loading" id="loadingmybarChart1" >
                                                                 <img   class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
                                                             </div>
                                                         
@@ -301,7 +296,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                           <div class="col-md-6 col-sm-6 col-xs-12">
                                               <div class="x_panel">
                                                 <div class="x_title">
-                                                  <h2>Top Active Numbers / <?php echo $var_date?> <small></small></h2>
+                                                  {{-- <h2>Top Active Numbers /  <small></small></h2> --}}
                                                   <ul class="nav navbar-right panel_toolbox">
                                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                     </li>
@@ -445,9 +440,9 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
                         var trHTML = '';
                         $('#loadingtable1').hide();
                         $('#loadingadvert').hide();
-                        $('#loadingbar').hide();
+                        $('#loadingmybarChart1').hide();
                         $('#loadingtable').hide();
-
+                        
                         $.each(response.data.get_stations, function(i, item) {
                               
                         trHTML += '<tr><td>' + item.Name  + '</td><td>' + item.Campaign + '</td><td>' + item.Calls+ ' </td><td>' + item.Completed+ ' </td></tr>';
@@ -458,8 +453,13 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
                   // re-render the chart
                   myChart2.data.labels=response.data.get_cities.Location;
                   myChart2.data.datasets[0].data=response.data.get_cities.calls;
+                  myChart1.data.labels=response.data.get_countries.Geography;
+                  myChart1.data.datasets[0].data=response.data.get_countries.calls;
+                  myChart1.data.datasets.backgroundColor= getRandomColor(3);
+                  
                   myChart.update();
                   myChart2.update();
+                  myChart1.update();
                   }
                   });
 });
@@ -533,6 +533,7 @@ function init_active_table(min, max) {
 
  var myChart ='';
  var myChart2 ='';
+ var myChart1='';
 function init_charts_home(type,data) {
         console.log('run_charts  typeof [' + typeof (Chart) + ']');
         if( typeof (Chart) === 'undefined'){ return; }
@@ -683,28 +684,16 @@ else if(type=='mybarChart1'){
                 labelArray.push(i)
               }
               var oilData = {
-                        labels: [
-                              "Saudi Arabia",
-                              "Russia",
-                              "Iraq",
-                              "United Arab Emirates",
-                              "Canada"
-                        ],
+                        labels: [],
                         datasets: [
                               {
-                                    data: [133.3, 86.2, 52.2, 51.2, 50.2],
-                                    backgroundColor: [
-                                    "#FF6384",
-                                    "#63FF84",
-                                    "#84FF63",
-                                    "#8463FF",
-                                    "#6384FF"
-                                    ]
+                                    data: [],
+                                    backgroundColor:[]
                               }]
                         };
 
 
-              var myChart1 = new Chart(ctx_live1, {
+               myChart1 = new Chart(ctx_live1, {
                 type: 'pie',
                 data: oilData
               });
@@ -718,6 +707,14 @@ else if(type=='mybarChart1'){
 
    
 }
+function getRandomColor(len) {
+            var arr = [];
+            for (var i = 0; i < len; i++) {
+              
+                arr.push('rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')')
+            }
+            return arr;
+            }
 jQuery(document).ready(function($){
       var tempData='';
 
