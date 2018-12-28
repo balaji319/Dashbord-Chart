@@ -284,7 +284,7 @@ class ReportController extends Controller {
                     ->where('DateEntered','<', $enddate." 11:59:59 PM")
                     ->where('CompanyID',session('user_info')->CompanyID)
                     ->orderBy('DateEntered')
-                    ->paginate(30);
+                    ->get();
             return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $sql ], 200);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);

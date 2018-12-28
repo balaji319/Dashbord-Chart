@@ -95,20 +95,17 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                 Click on a record to listen to the call.
                               </p>
 
-                              <table id="datatable-keytable1" class="table table-striped table-bordered jambo_table bulk_actio">
+                              <table id="datatable-keytable1" class="table table-striped table-bordered ">
                                 <thead>
                                   <tr>
-                                        <th class="column-title">Day </th>
-                                        <th class="column-title"> Date </th>
-                                        <th class="column-title">Total Calls </th>
-                                        <th class="column-title">Complete </th>
-                                        <th class="column-title">Incomplete </th>
-                                        <th class="column-title">% Complete </th>
-                                        <th class="column-title">% Incomplete </th>
-                                        <th class="column-title">File 1 </th>
-                                        <th class="column-title">File 2 </th>
-                                        <th class="column-title">File 3 </th>
-                                        <th class="column-title">Web </th>
+                                        <th class="column-title">Reference# </th>
+                                        <th class="column-title"> Caller ID </th>
+                                        <th class="column-title">Call Date</th>
+                                        <th class="column-title">Call Time </th>
+                                        <th class="column-title">Call Duration  </th>
+                                        <th class="column-title">Number Called  </th>
+                                        <th class="column-title">Station</th>
+                                 
                                   </tr>
                                 </thead>
 
@@ -144,10 +141,10 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                           
                                           <div class="clearfix"></div>
                                           <div class="row">
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
                                               <div class="x_panel">
                                                 <div class="x_title">
-                                                  <h2>Hourly Call Breakdown for :  <span class="selectedDate"></span><small></small></h2>
+                                                  <h2>Audio  :  <span class="selectedDate"></span><small></small></h2>
                                                   <ul class="nav navbar-right panel_toolbox">
                                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                     </li>
@@ -177,115 +174,44 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                                     <div id="loadingadvert"  class="loading" >
                                                         <img  class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
                                                     </div>
-                                                  <canvas id="lineChart"></canvas>
+                                                    <div class="container">
+                                                      <div class="row">
+                                                      <center>
+                                                      <audio controls  id="player">
+                                                        <source src="http://wav10.f9group.com/18122808/FULL-70c58249-3bd3-46aa-89a0-377cdf724275.mp3" id="audio_ogg" type="audio/ogg">
+                                                        <source src="http://wav10.f9group.com/18122808/FULL-70c58249-3bd3-46aa-89a0-377cdf724275.mp3" id="audio_mp3" type="audio/mpeg">
+                                                      Your browser does not support the audio element.
+                                                      </audio>
+                                                      </center>
+                                                      </div>
+                                                      <div class="row">
+                                                      <center>
+                                                      <h3>To email this audio to someone else, please enter in an email address below, seperate multiple emails with a semi colon ;</h3>
+                                                       <div class="form-group">
+                                                          <br>
+                                                            <input type="text" class="form-control" id="usr" placeholder="Enter Your Email Address ">
+                                                          </div>
+                                                          </center>
+                                                      </div>
+                                                      <div class="row">
+                                                      <center>
+                                                      
+                                                       <div class="form-group">
+                                                            
+                                                             <input type="submit" class="btn btn-info" value="Send"> 
+                                                          </div>
+                                                          </center>
+                                                      </div>
+                                                      </div>
                                                 </div>
                                               </div>
                                             </div>
                               
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                              <div class="x_panel">
-                                                <div class="x_title">
-                                                  <h2>Calls by station for:  <span class="selectedDate"></span><small></small></h2>
-                                                  <ul class="nav navbar-right panel_toolbox">
-                                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                                    </li>
-                                                    {{-- <li class="dropdown">
-                                                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                                      <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="#">Settings 1</a>
-                                                        </li>
-                                                        <li><a href="#">Settings 2</a>
-                                                        </li>
-                                                      </ul>
-                                                    </li> --}}
-                                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                                    </li>
-                                                  </ul>
-                                                  <div class="clearfix"></div>
-                                                </div>
-                                                
-                                                <div class="x_content" style="overflow-y: scroll;height:300px">
-                                                          
-                                                            <table class="table table-hover" id="records_table1">
-                                                                        <thead>
-                                                                          <tr>
-                                                                            <th>Station</th>
-                                                                            <th>Number</th>
-                                                                            <th> Calls</th>
-                                                                            <th> Completed</th>
-                                                                          </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <div  class="loading" id="loadingtable1" >
-                                                                                <img   class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
-                                                                            </div>
-                                                  
-                                                                        </tbody>
-                                                                      </table>
-                                                </div>
-                                              </div>
-                                            </div>
+                                           
                                           </div>
-                                          <div class="clearfix"></div>
-                                          <div class="row">
-                              
-                                          </div>
-                                          <div class="clearfix"></div>
-                                          <div class="row">
+                                        
+                                          
                                          
-                              
-                                            <div class="clearfix"></div>
-                              
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                              <div class="x_panel">
-                                                <div class="x_title">
-                                                  {{-- <h2>Most Recent Calls <small></small></h2> --}}
-                                                  <ul class="nav navbar-right panel_toolbox">
-                                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                                    </li>
-                              
-                                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                                    </li>
-                                                  </ul>
-                                                  <div class="clearfix"></div>
-                                                </div>
-                                                <div class="x_content">
-                                                            <div  class="loading" id="loadingmybarChart1" >
-                                                                <img   class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
-                                                            </div>
-                                                        
-                                                          <canvas id="mybarChart1"></canvas>
-                                                        </div>
-                                              </div>
-
-                                            </div>
-                              
-                                          <div class="col-md-6 col-sm-6 col-xs-12">
-                                              <div class="x_panel">
-                                                <div class="x_title">
-                                                  {{-- <h2>Top Active Numbers /  <small></small></h2> --}}
-                                                  <ul class="nav navbar-right panel_toolbox">
-                                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                                    </li>
-                              
-                                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                                    </li>
-                                                  </ul>
-                                                  <div class="clearfix"></div>
-                                                </div>
-                                                <div class="x_content" style="min-height: 250px">
-                                                            <canvas id="mybarChart"></canvas>
-                                                            <div  class="loading" id="loadingtable" >
-                                                                <img   class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
-                                                            </div>
-
-                                                </div>
-                                              </div>
-                                            </div>
-                              
-                                            <div class="clearfix"></div>
-                              
-                                          </div>
                                         </div>
     
                               </div>
@@ -338,14 +264,14 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                   var startDate= $("#datepickerVal").val();
                   var endDate= $("#datepickerVal1").val();
 
-                  getAjax("/executive-report",startDate,endDate,true)            
+                  getAjax("/call-recording",startDate,endDate,true)            
       });
 });
 
 
 jQuery(document).ready(function($){
 
-      var myUrl = "/executive-report";
+      var myUrl = "/call-recording";
       getAjax(myUrl);
 
 
@@ -359,7 +285,7 @@ $('#datatable-keytable1').dataTable().fnDestroy();
 $("#loadingbar").show();
 $.ajax({
       url: url,  
-      type: "post", 
+      type: "get", 
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -368,25 +294,27 @@ $.ajax({
        var trHTML ='';
        var trHTML1='';
        $("#loadingbar").hide();
-       var item = result.data.today_array;
-        trHTML += '<tr><td>' + item.Web  + '</td><td>' + item.date + '</td><td>' + item.total_calls+ '</td><td>' + item.completed  + '</td><td>' + item.incomplete + '</td><td>' + item.per_comp+ '</td><td>' + item.per_incomp  + '</td><td>' + item.file_1 + '</td><td>' + item.file_2+ '</td><td>' + item.file_2 + '</td><td>' + item.Web+ '</td></tr>';
-       var total_report = result.data.total_report[0];
-       trHTML+= '<tr><td></td><td>' + total_report.totalcalls + '</td><td></td><td></td><td></td><td>' + total_report.PercentComplete+ '</td><td>' + total_report.PercentIncomplete  + '</td><td></td><td></td><td></td><td></td></tr>';
-       $('#today_records_table_tr').html(trHTML);
+      //  var item = result.data.today_array;
+      //   trHTML += '<tr><td>' + item.Web  + '</td><td>' + item.date + '</td><td>' + item.total_calls+ '</td><td>' + item.completed  + '</td><td>' + item.incomplete + '</td><td>' + item.per_comp+ '</td><td>' + item.per_incomp  + '</td><td>' + item.file_1 + '</td><td>' + item.file_2+ '</td><td>' + item.file_2 + '</td><td>' + item.Web+ '</td></tr>';
+      //  var total_report = result.data.total_report[0];
+      //  trHTML+= '<tr><td></td><td>' + total_report.totalcalls + '</td><td></td><td></td><td></td><td>' + total_report.PercentComplete+ '</td><td>' + total_report.PercentIncomplete  + '</td><td></td><td></td><td></td><td></td></tr>';
+      //  $('#today_records_table_tr').html(trHTML);
 
-       $.each(result.data.days_report, function(i, item) {
-        trHTML1 += '<tr  data-toggle="modal" class="tbl_row" data-target="#myModal" data-date="'+item.DayDate+'" ><td>' + item.dayname + '</td><td>' + item.DayDate + '</td><td>' + item.TotalCalls+ '</td><td>' + item.CompletedCalls + '</td><td>' + item.Hangups + '</td><td>' + item.PercentComplete + '</td><td>' + item.PercentIncomplete+ '</td><td>' + item.File1+ '</td><td>' + item.File2 + '</td><td>' + item.File3 + '</td><td>' + item.Web+ '</td></tr>';
+       $.each(result.data, function(i, item) {
+        trHTML1 += '<tr  data-toggle="modal" class="tbl_row" data-target="#myModal" data-Tracking_ID="'+item.Tracking_ID+'" ><td>' + item.Tracking_ID + '</td><td>' + item.ANI + '</td><td>' + item.DatePart+ '</td><td>' + item.TimePart + '</td><td>' + item.Duration + '</td><td>' + item.Number + '</td><td>' + item.Station+ '</td></tr>';
     });
+
     $('#datatable-keytable1').append(trHTML1);
+    
  
     $('#datatable-keytable1').DataTable({
         "paging": true,
-        "lengthChange": false,
-        "searching": false,
+        "searching": true,
         "ordering": true,
         "info": true,
         "autoWidth": false,
-        "sDom": 'lfrtip'
+        "sDom": 'lfrtip',
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
     });
 
   }});
@@ -395,56 +323,39 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
 
       var var_date = 
       {
-           'date':$(this).attr('data-date')
+           'TRacking_ID':$(this).attr('data-Tracking_ID')
       }
 
-                        $('#loadingtable1').show();
-                        $('#loadingadvert').show();
-                        $('#loadingmybarChart1').show();
-                        $('#loadingtable').show();
-                  myChart.data.datasets[0].data=[];
-                  // re-render the chart
-                  myChart2.data.datasets[0].data=[];
-                  myChart1.data.labels=[];
-                  myChart1.data.datasets[0].data=[];
-                  myChart1.data.datasets.backgroundColor= [];
-                  
-                  myChart.update();
-                  myChart2.update();
-                  myChart1.update();  
+       $('#loadingadvert').show();
       $(".selectedDate").text($(this).attr('data-date'))
            
              $.ajax({
-                  url: '/details-executive-report',
+                  url: '/call-recording-file',
                   data:var_date,
                 
                   success: function(response) {
                         var trHTML = '';
-                        $('#loadingtable1').hide();
+                      console.log(response.data[0].WavLocation)
                         $('#loadingadvert').hide();
-                        $('#loadingmybarChart1').hide();
-                        $('#loadingtable').hide();
+              
+                        change(response.data[0].WavLocation)
                         
-                        $.each(response.data.get_stations, function(i, item) {
-                              
-                        trHTML += '<tr><td>' + item.Name  + '</td><td>' + item.Campaign + '</td><td>' + item.Calls+ ' </td><td>' + item.Completed+ ' </td></tr>';
-                  });
-                  $('#records_table1').append(trHTML);
-                    
-                  myChart.data.datasets[0].data=response.data.smallbarchart;
-                  // re-render the chart
-                  myChart2.data.labels=response.data.get_cities.Location;
-                  myChart2.data.datasets[0].data=response.data.get_cities.calls;
-                  myChart1.data.labels=response.data.get_countries.Geography;
-                  myChart1.data.datasets[0].data=response.data.get_countries.calls;
-                  myChart1.data.datasets.backgroundColor= getRandomColor(3);
-                  
-                  myChart.update();
-                  myChart2.update();
-                  myChart1.update();
+                 
                   }
                   });
 });
+function change(sourceUrl) {
+  console.log(sourceUrl)
+    var audio = $("#player");      
+    $("#ogg_src").attr("src", sourceUrl);
+    /****************/
+    audio[0].pause();
+    audio[0].load();//suspends and restores all audio element
+
+    //audio[0].play(); changed based on Sprachprofi's comment below
+    audio[0].oncanplaythrough = audio[0].play();
+    /****************/
+}
 $('.modal-footer .btn-primary').click(function() {
    $('form[name="modalForm"]').submit();
 });
