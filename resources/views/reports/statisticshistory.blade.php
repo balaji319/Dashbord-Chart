@@ -129,7 +129,7 @@ function init_active_table(min, max) {
 getDataActiveCalls();
 }
 
-
+  var myChart ='';
 function init_charts_home(type,data) {
         console.log('run_charts  typeof [' + typeof (Chart) + ']');
         if( typeof (Chart) === 'undefined'){ return; }
@@ -141,7 +141,7 @@ function init_charts_home(type,data) {
         // Line chart
       if ($('#lineChart').length ){
            var ctx = document.getElementById("lineChart");
-            var myChart = new Chart(ctx, {
+             myChart = new Chart(ctx, {
               type: 'line',
               data: {
                 labels: [],
@@ -165,14 +165,24 @@ function init_charts_home(type,data) {
                       pointHoverBorderColor: "rgba(151,187,205,1)",
                       pointBorderWidth: 1,
                       data: []
+                      },{
+                      label: "My dataset",
+                      backgroundColor: "rgba(30, 8, 06, 0.5)",
+                      borderColor: "rgba(30, 8, 16, 0.70)",
+                      pointBorderColor: "rgba(30, 18, 16, 0.70)",
+                      pointBackgroundColor: "rgba(13, 98, 06, 0.70)",
+                      pointHoverBackgroundColor: "#fff",
+                      pointHoverBorderColor: "rgba(51,17,25,1)",
+                      pointBorderWidth: 1,
+                      data: []
                       }]
 
               },
               options: {
                 responsive: true,
                 title: {
-                  display: false,
-                  text: "Dynamically Update Chart Via Ajax Requests",
+                  display: true,
+                  text: "Statistical Comparison History",
                 },
                 legend: {
                   display: false
@@ -180,8 +190,8 @@ function init_charts_home(type,data) {
                 scales: {
                   yAxes: [{
                     ticks: {
-                              min:0,
-                              stepSize: 0.5,
+                              min:0
+                     
                           }
                   }]
                 }
@@ -204,111 +214,22 @@ function init_charts_home(type,data) {
             }
             postId =0;
             // logic to get new data
-            var getDataline = function() {
-              $.ajax({
-                url: '/advert-spikes-past-hour',
-                success: function(data) {
-                  $('#loadingadvert').hide();
-                  myChart.data.labels=data.data.min;
-                  myChart.data.datasets[1].data=data.data.count_arr;
-                  // re-render the chart
-                  myChart.update();
-                }
-              });
-            };
+           
 
-            getDataline();
-            // get new data every 3 seconds
-            var getDataInterval = setInterval(getDataline, 15000);
-            $("body").on( "click", ".lineStatus", function() {
-              clearInterval(getDataInterval);
-              var link_name = $(this).attr('data-time')
-              $( ".lineStatus" ).removeClass( "active_tab" );
-              $(this).addClass( "active_tab" );
-              getDataInterval = setInterval(getDataline,link_name*1000);
-            });
+            
+      
       }
 
-      }else if(type=='mybarChart'){
-        // Bar chart
-         if ($('#mybarChart').length ){
-
-              function getRandomIntInclusiveArray(len) {
-                var arr = [];
-              for (var i = 0, l = len; i < l; i++) {
-                  arr.push(Math.round(Math.random() * l))
-              }
-              return arr;
-              }
-              // create initial empty chart
-              var ctx_live = document.getElementById("mybarChart");
-              var labelArray = [];
-              for (var i = 0, l = 24; i < l; i++) {
-                labelArray.push(i)
-              }
-              var myChart = new Chart(ctx_live, {
-                type: 'bar',
-                data: {
-                  labels: labelArray,
-                  datasets: [{
-                        label: '# of Votes',
-                        backgroundColor: "#b5ced3",
-                        data: []
-                        }]
-                },
-                options: {
-                  responsive: true,
-                  title: {
-                    display: false,
-                    text: "Dynamically Update Chart Via Ajax Requests",
-                  },
-                  legend: {
-                    display: false
-                  },
-                  scales: {
-                    yAxes: [{
-
-                            ticks: {
-                                min: 0,
-                                stepSize: 10,
-                            }
-                    }]
-                  }
-
-                }
-              });
-
-            // logic to get new data
-            var getData = function() {
-              $.ajax({
-                url: '/hourly-calls',
-                success: function(data) {
-                  $('#loadingbar').hide();
-                  myChart.data.labels==data.data.hrs_calls;
-                  myChart.data.datasets[0].data=data.data.count_arr;
-                  // re-render the chart
-                  myChart.update();
-                }
-              });
-            };
-
-        getData();
-      // get new data every 3 seconds
-      setInterval(getData,10000);
-    }
-   }
+      }
 }
 jQuery(document).ready(function($){
 
-    var myUrl = "api/my-bar";
+    var myUrl = "/statistics";
       getAjax(myUrl);
       tempData = [];
 
-
-         init_charts_home('mybarChart',tempData);
          init_charts_home('lineChart',tempData);
-         init_recent_table('mybarChart');
-         init_active_table('lineChart');
+     
 
 
 });
@@ -316,15 +237,16 @@ jQuery(document).ready(function($){
 function getAjax(url){
 
   $.ajax({url: url, success: function(result){
-    var barChartData =JSON.parse(JSON.stringify(result))
+
 
     //init_charts_home('mybarChart',result);
-      console.log(mybarChart.data)
-      // myChart.data.labels.push("Post " + postId++);
-      // myChart.data.datasets[0].data.push(getRandomIntInclusive(1, 25));
-
-      // // re-render the chart
-      // myChart.update();
+      $("#loadingadvert").hide();
+     myChart.data.labels=result.data.days_array;
+    myChart.data.datasets[0].data=result.data.fourteen_array;
+      myChart.data.datasets[1].data=result.data.twenty_one_array;
+      myChart.data.datasets[2].data=result.data.week_array;
+    //               // re-render the chart
+      myChart.update();
 
     }});
 }
