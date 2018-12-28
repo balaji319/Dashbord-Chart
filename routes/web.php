@@ -65,20 +65,20 @@ Route::group(['middleware' => ['userAuth']], function() {
     | 7 Day call camparison route
     |--------------------------------------------------------------------------
     */
-    Route::get('call/comparison', 'Web\Report\CallController@callComparison');
+    Route::get('call/comparison', 'Api\Report\CallController@callComparison');
     /*
     |--------------------------------------------------------------------------
     | Hourly log route
     |--------------------------------------------------------------------------
     */
-    Route::get('hourly/log', 'Web\Report\CallController@hourlyLog');
-    Route::get('campaigns/option-list', 'Web\Report\CallController@campaignsOptionList');
+    Route::get('hourly/log', 'Api\Report\CallController@hourlyLog');
+    Route::get('campaigns/option-list', 'Api\Report\CallController@campaignsOptionList');
     /*
     |--------------------------------------------------------------------------
     | Minute log route
     |--------------------------------------------------------------------------
     */
-    Route::get('minute/log', 'Web\Report\CallController@minuteLog');
+    Route::get('minute/log', 'Api\Report\CallController@minuteLog');
 });
 
 /**
