@@ -72,6 +72,7 @@ Route::group(['middleware' => ['userAuth']], function() {
     |--------------------------------------------------------------------------
     */
     Route::get('hourly/log', 'Web\Report\CallController@hourlyLog');
+    Route::get('campaigns/option-list', 'Web\Report\CallController@campaignsOptionList');
     /*
     |--------------------------------------------------------------------------
     | Minute log route
@@ -93,5 +94,6 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
     Route::get('website-summery', 'Api\Report\ReportController@websiteSummery');
     Route::get('top-cities', 'Api\Report\ReportController@topCities');
     Route::get('top-countries', 'Api\Report\ReportController@topCountries');
+    Route::get('country-mtd', 'Api\Report\ReportController@countriesStationBreakdown');
     
 });
