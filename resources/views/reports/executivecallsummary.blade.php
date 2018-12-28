@@ -431,7 +431,10 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
            'date':$(this).attr('data-date')
       }
 
-    
+                        $('#loadingtable1').show();
+                        $('#loadingadvert').show();
+                        $('#loadingmybarChart1').show();
+                        $('#loadingtable').show();
                   myChart.data.datasets[0].data=[];
                   // re-render the chart
                   myChart2.data.datasets[0].data=[];
