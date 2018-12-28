@@ -14,7 +14,10 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>John Doe</h2>
+                <h2><?php 
+                  $user_info = Session::get('user_info');
+                  echo $user_info->FirstName." ".$user_info->LastName;
+                  ?></h2>
               </div>
             </div>
             <!-- /menu profile quick info -->

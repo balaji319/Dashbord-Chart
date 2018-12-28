@@ -9,8 +9,9 @@
 date_default_timezone_set('America/Los_Angeles');
 $unixTime = time();
 $var_date = date("D - M. d Y", $unixTime);  ?>
+
 <!-- /.row -->
-<div class="row" id="executivecallsummary">
+<div class="row" id="networkcallsummary">
         <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel" style="">
                         <div class="x_title">
@@ -40,7 +41,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                     <div class='col-sm-3'>
                                         
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Select</label>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Month</label>
                                             <div class="col-md-9 col-sm-9 col-xs-12">
                                               <select class="form-control" id='gMonth2'>
                                                   <option selected value='1'>Janaury</option>
@@ -62,39 +63,35 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                     <div class='col-sm-3'>
                                            
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Select</label>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Year</label>
                                             <div class="col-md-9 col-sm-9 col-xs-12">
                                               <select class="form-control" id='gtYear2' >
                                                   <option selected value='1'>2004</option>
-                                                  <option value='2'>2005</option>
-                                                  <option value='3'>2006</option>
-                                                  <option value='4'>2007</option>
-                                                  <option value='5'>2008</option>
-                                                  <option value='6'>2009</option>
-                                                  <option value='7'>2010</option>
-                                                  <option value='8'>2011</option>
-                                                  <option value='9'>2012</option>
-                                                  <option value='10'>2013</option>
-                                                  <option value='11'>2014</option>
-                                                  <option value='12'>2015</option>
-                                                  <option value='13'>2016</option>
-                                                  <option value='14'>2017</option>
-                                                  <option value='15'>2018</option>
-                                                  <option value='16'>2019</option>
+                                                  <option value='2005'>2005</option>
+                                                  <option value='2006'>2006</option>
+                                                  <option value='2007'>2007</option>
+                                                  <option value='2008'>2008</option>
+                                                  <option value='2009'>2009</option>
+                                                  <option value='2010'>2010</option>
+                                                  <option value='2011'>2011</option>
+                                                  <option value='2012'>2012</option>
+                                                  <option value='2013'>2013</option>
+                                                  <option value='2014'>2014</option>
+                                                  <option value='2015'>2015</option>
+                                                  <option value='2016'>2016</option>
+                                                  <option value='2017'>2017</option>
+                                                  <option value='2018'>2018</option>
+                                                  <option value='2019'>2019</option>
                                               </select>
                                             </div>
                                           </div>
                                         </div>
                                         <div class='col-sm-3'>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Select</label>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Campaign </label>
                                                 <div class="col-md-9 col-sm-9 col-xs-12">
                                                   <select class="form-control"  id='gtCampaign2' >
-                                                    <option>Choose option</option>
-                                                    <option>Option one</option>
-                                                    <option>Option two</option>
-                                                    <option>Option three</option>
-                                                    <option>Option four</option>
+                                   
                                                   </select>
                                                 </div>
                                               </div>
@@ -102,7 +99,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                   <div class='col-sm-3'>
                                       <div class="form-group" >
                                               <div class='input-group'>
-                                       <button type="submit" id= "submitBtn" class="btn btn-success">Submit</button>
+                                       <button type="submit" id= "submitBtn" class="btn btn-success">Filter</button>
                                    </div>
                               </div> 
                         </div>
@@ -124,9 +121,6 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                   </div>
 
                   <div class="x_content">
-
-               
-
                     <div class="table-responsive">
                       <table class="table table-striped jambo_table bulk_action" id="today_records_table">
                         <thead>
@@ -140,8 +134,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                         <tbody id="today_records_table_tr">
                           <tr class="even pointer">
 
-                         
-
+                      
                           </tr>
 
                         </tbody>
@@ -222,32 +215,50 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
         defaultDate:dateNow
     });
 
-    $("#executivecallsummary").on( "click", "#submitBtn", function() {
-                  var startDate= $("#datepickerVal").val();
-                  var endDate= $("#datepickerVal1").val();
+    $("#networkcallsummary").on( "click", "#submitBtn", function() {
 
-                  getAjax("/executive-report",startDate,endDate,true)            
+                  var gMonth2= $("#gMonth2").val();
+                  var gtYear2= $("#gtYear2").val();
+                  var gtCampaign2= $("#gtCampaign2").val();
+                  
+                  getAjax("/network-reports",gMonth2,gtYear2,gtCampaign2,true)            
       });
 });
 
 
 jQuery(document).ready(function($){
 
-      var myUrl = "/executive-report";
-     // getAjax(myUrl);
+      var myUrl = "/campaign-list";
+     getAjaxCampaignList(myUrl);
 
 
 });
 
-function getAjax(url,startDate,endDate,flag){
+function getAjaxCampaignList(url){
 
-var objData =  flag ? {"startdate":startDate,"enddate":endDate} :'';
-$('#datatable-keytable1').dataTable().fnClearTable();
-$('#datatable-keytable1').dataTable().fnDestroy();
+$.ajax({
+      url: url,  
+      success: function(response){
+
+          var trHTML = "";
+
+                    $.each(response.data, function(i, item) {
+                        trHTML +="<option value = '" + item.CampaignID + " '>" + item.Name + " </option>";
+                    });
+                    $('#gtCampaign2').append(trHTML);
+
+  }});
+};
+
+function getAjax(url,report_month,report_year,campaign_number,flag){
+
+var objData =  flag ? {"report_month":report_month,"report_year":report_year,"campaign_number":campaign_number} :'';
+// $('#datatable-keytable1').dataTable().fnClearTable();
+// $('#datatable-keytable1').dataTable().fnDestroy();
 $("#loadingbar").show();
 $.ajax({
       url: url,  
-      type: "post", 
+      type: "get", 
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -255,27 +266,27 @@ $.ajax({
       success: function(result){
        var trHTML ='';
        var trHTML1='';
-       $("#loadingbar").hide();
-       var item = result.data.today_array;
-        trHTML += '<tr><td>' + item.Web  + '</td><td>' + item.date + '</td><td>' + item.total_calls+ '</td><td>' + item.completed  + '</td><td>' + item.incomplete + '</td><td>' + item.per_comp+ '</td><td>' + item.per_incomp  + '</td><td>' + item.file_1 + '</td><td>' + item.file_2+ '</td><td>' + item.file_2 + '</td><td>' + item.Web+ '</td></tr>';
-       var total_report = result.data.total_report[0];
-       trHTML+= '<tr><td></td><td>' + total_report.totalcalls + '</td><td></td><td></td><td></td><td>' + total_report.PercentComplete+ '</td><td>' + total_report.PercentIncomplete  + '</td><td></td><td></td><td></td><td></td></tr>';
-       $('#today_records_table_tr').html(trHTML);
+      // $("#loadingbar").hide();
+     //  var item = result.data.today_array;
+       // trHTML += '<tr><td>' + item.Web  + '</td><td>' + item.date + '</td><td>' + item.total_calls+ '</td></tr>';
+    //    var total_report = result.data.total_report[0];
+    //    trHTML+= '<tr><td></td><td>' + total_report.totalcalls + '</td><td></td><td></td><td></td><td>' + total_report.PercentComplete+ '</td><td>' + total_report.PercentIncomplete  + '</td><td></td><td></td><td></td><td></td></tr>';
+    //    $('#today_records_table_tr').html(trHTML);
 
-       $.each(result.data.days_report, function(i, item) {
-        trHTML1 += '<tr  data-toggle="modal" class="tbl_row" data-target="#myModal" data-date="'+item.DayDate+'" ><td>' + item.dayname + '</td><td>' + item.DayDate + '</td><td>' + item.TotalCalls+ '</td><td>' + item.CompletedCalls + '</td><td>' + item.Hangups + '</td><td>' + item.PercentComplete + '</td><td>' + item.PercentIncomplete+ '</td><td>' + item.File1+ '</td><td>' + item.File2 + '</td><td>' + item.File3 + '</td><td>' + item.Web+ '</td></tr>';
-    });
-    $('#datatable-keytable1').append(trHTML1);
+    //    $.each(result.data.days_report, function(i, item) {
+    //     trHTML1 += '<tr  data-toggle="modal" class="tbl_row" data-target="#myModal" data-date="'+item.DayDate+'" ><td>' + item.dayname + '</td><td>' + item.DayDate + '</td><td>' + item.TotalCalls+ '</td><td>' + item.CompletedCalls + '</td><td>' + item.Hangups + '</td><td>' + item.PercentComplete + '</td><td>' + item.PercentIncomplete+ '</td><td>' + item.File1+ '</td><td>' + item.File2 + '</td><td>' + item.File3 + '</td><td>' + item.Web+ '</td></tr>';
+    // });
+    // $('#datatable-keytable1').append(trHTML1);
  
-    $('#datatable-keytable1').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "sDom": 'lfrtip'
-    });
+    // $('#datatable-keytable1').DataTable({
+    //     "paging": true,
+    //     "lengthChange": false,
+    //     "searching": false,
+    //     "ordering": true,
+    //     "info": true,
+    //     "autoWidth": false,
+    //     "sDom": 'lfrtip'
+    // });
 
   }});
 }
