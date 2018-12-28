@@ -268,24 +268,44 @@ class ReportController extends Controller {
             $startdate = $request->startdate;
             $enddate = $request->enddate;
             if (empty($startdate)) {
-                $startdate = date('m/01/Y');
+                $startdate = date('m/d/Y');
             }
             if (empty($enddate)) {
                 $enddate = date('m/d/Y');
             }
-            $sql ="SELECT IVRCounter.Tracking_ID, LEFT(IVRCounter.CallerID, 3) + '-' + SUBSTRING(IVRCounter.CallerID, 4, 3) + '-' + RIGHT(IVRCounter.CallerID, 4) AS ANI, CONVERT(varchar(10), 
-                    IVRCounter.DateEntered, 101) AS DatePart, CONVERT(VARCHAR, IVRCounter.DateEntered, 108) AS TimePart, CONVERT(varchar(6), IVRCounter.CallDuration / 3600) 
-                    + ':' + RIGHT('0' + CONVERT(varchar(2), IVRCounter.CallDuration % 3600 / 60), 2) + ':' + RIGHT('0' + CONVERT(varchar(2), IVRCounter.CallDuration % 60), 2) AS Duration, 
-                    Campaigns.Campaign as Number, Campaigns.Name as Station FROM IVRCounter INNER JOIN Campaigns ON IVRCounter.Campaign = Campaigns.Campaign
-                    WHERE    DateEntered >= '".$startdate."' AND DateEntered < '".$enddate." 11:59:59 PM' and (CompanyID = '".session('user_info')->CompanyID."') ORDER BY  DateEntered";
-            $summery = DB::select($sql);
-            
-            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $summery ], 200);
+            $sql = DB::table('IVRCounter')
+                    ->join('Campaigns', 'IVRCounter.Campaign', '=', 'Campaigns.Campaign')
+                    ->select(DB::raw("IVRCounter.Tracking_ID, LEFT(IVRCounter.CallerID, 3) + '-' + SUBSTRING(IVRCounter.CallerID, 4, 3) + '-' + RIGHT(IVRCounter.CallerID, 4) AS ANI, CONVERT(varchar(10), 
+                        IVRCounter.DateEntered, 101) AS DatePart, CONVERT(VARCHAR, IVRCounter.DateEntered, 108) AS TimePart, CONVERT(varchar(6), IVRCounter.CallDuration / 3600) 
+                        + ':' + RIGHT('0' + CONVERT(varchar(2), IVRCounter.CallDuration % 3600 / 60), 2) + ':' + RIGHT('0' + CONVERT(varchar(2), IVRCounter.CallDuration % 60), 2) AS Duration, 
+                        Campaigns.Campaign as Number, Campaigns.Name as Station"))
+                    ->where('DateEntered','>=',$startdate)
+                    ->where('DateEntered','<', $enddate." 11:59:59 PM")
+                    ->where('CompanyID',session('user_info')->CompanyID)
+                    ->orderBy('DateEntered')
+                    ->paginate(30);
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $sql ], 200);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
     
     
+    public function callRecordingFile(Request $request) {
+        try {
+            $tracking_id = $request->TRacking_ID;
+            if(empty($tracking_id)){
+                return response()->json(['status' => 400, 'message' => "Tracking id is required."], 400);
+            }
+            $startdate = $request->startdate;
+            $sql = DB::table('ivrcounter')
+                    ->select(DB::raw("Tracking_ID,WavLocation,TranscribedDate"))
+                    ->where('dateentered','>=','7/15/2009')
+                    ->where('Tracking_ID',$tracking_id)->get();
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $sql ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
     
 }
