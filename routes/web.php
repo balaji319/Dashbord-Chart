@@ -89,5 +89,7 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
     
     Route::get('campaign-list', 'Api\Report\ReportController@campaignList');
     Route::get('network-reports', 'Api\Report\ReportController@networkReports');
+    Route::get('statistics', 'Api\Report\ReportController@statistics');
+    Route::get('top-cities', 'Api\Report\ReportController@topCities');
     
 });
