@@ -226,4 +226,29 @@ class ReportController extends Controller {
     }
     
     
+    public function callRecording(Request $request) {
+        try {
+            $startdate = $request->startdate;
+            $enddate = $request->enddate;
+            if (empty($startdate)) {
+                $startdate = date('m/01/Y');
+            }
+            if (empty($enddate)) {
+                $enddate = date('m/d/Y');
+            }
+            $sql ="SELECT IVRCounter.Tracking_ID, LEFT(IVRCounter.CallerID, 3) + '-' + SUBSTRING(IVRCounter.CallerID, 4, 3) + '-' + RIGHT(IVRCounter.CallerID, 4) AS ANI, CONVERT(varchar(10), 
+                    IVRCounter.DateEntered, 101) AS DatePart, CONVERT(VARCHAR, IVRCounter.DateEntered, 108) AS TimePart, CONVERT(varchar(6), IVRCounter.CallDuration / 3600) 
+                    + ':' + RIGHT('0' + CONVERT(varchar(2), IVRCounter.CallDuration % 3600 / 60), 2) + ':' + RIGHT('0' + CONVERT(varchar(2), IVRCounter.CallDuration % 60), 2) AS Duration, 
+                    Campaigns.Campaign as Number, Campaigns.Name as Station FROM IVRCounter INNER JOIN Campaigns ON IVRCounter.Campaign = Campaigns.Campaign
+                    WHERE    DateEntered >= '".$startdate."' AND DateEntered < '".$enddate." 11:59:59 PM' and (CompanyID = '".session('user_info')->CompanyID."') ORDER BY  DateEntered";
+            $summery = DB::select($sql);
+            
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $summery ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+    
+    
+    
 }
