@@ -21,6 +21,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
+                      
                       <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                         <ul class="dropdown-menu" role="menu">
@@ -270,14 +271,6 @@ function init_charts_home(type,data) {
                 },
                 legend: {
                   display: false
-                },
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                              min:0,
-                              stepSize: 0.5,
-                          }
-                  }]
                 }
               }
             });
