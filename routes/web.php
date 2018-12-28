@@ -72,6 +72,7 @@ Route::group(['middleware' => ['userAuth']], function() {
     |--------------------------------------------------------------------------
     */
     Route::get('hourly/log', 'Web\Report\CallController@hourlyLog');
+    Route::get('campaigns/option-list', 'Web\Report\CallController@campaignsOptionList');
     /*
     |--------------------------------------------------------------------------
     | Minute log route
