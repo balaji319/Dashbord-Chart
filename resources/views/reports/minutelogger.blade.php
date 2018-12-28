@@ -147,8 +147,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
     });
 
     $("body").on( "click", "#submitBtn", function() {
-
-                    getAjax("/campaigns/minute/log",$("#datepickerVal").val(),$("#gtpsthour").val(),$("#gtCampaign2").val(),true);             
+                    getAjax("/minute/log",$("#datepickerVal").val(),$("#gtpsthour").val(),$("#gtCampaign2").val(),true);             
       });
 });
 
@@ -188,9 +187,9 @@ $.ajax({
   }});
 };
 
-function getAjax(url,startDate,campaign_id,flag){
+function getAjax(url,startDate,time,campaign_id,flag){
 
-var objData =  {"start_date":startDate,"campaign_id":campaign_id} ;
+var objData =  {"start_date":startDate,"start_time":time,"campaign_id":campaign_id} ;
 // $('#datatable-keytable1').dataTable().fnClearTable();
 // $('#datatable-keytable1').dataTable().fnDestroy();
 $("#loadingtable").show();
