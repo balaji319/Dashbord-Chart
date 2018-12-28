@@ -84,7 +84,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                 <img   class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
                             </div>
                         
-                          <canvas id="CountriesbarChart"></canvas>
+                          <canvas id="CountriesbarChart" height="100px"></canvas>
                         </div>
                            
                         </div>

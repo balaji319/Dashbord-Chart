@@ -56,41 +56,18 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                         </div>
                                     </div> </div>
                                 </div>
-                            </div>
+                               </div>
                         </div>
-                    </div>
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Data <small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-
-                  <div class="x_content">
-
-                   
-
-                    
-
-                  </div>
-
-                  <div class="x_content">
+                        <div class="container">
                         <div class="row">
                             <div id="loadingadvert"  class="loading" >
                                 <img  class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
                             </div>
-                          <canvas id="lineChart"  height="100"></canvas>
+                          <canvas id="lineChart"  height="100px"></canvas>
                         </div>
                       </div>
-                     
-                      
-                </div>
+                    </div>
+                
               </div>
 </div>
 
@@ -130,7 +107,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
     $("#executivecallsummary").on( "click", "#submitBtn", function() {
                   var startDate= $("#datepickerVal").val();
-                  getAjax("/executive-report",startDate,true)            
+                  getAjax("/call/comparison",startDate,true)            
       });
 });
 
@@ -147,7 +124,7 @@ function getAjax(url,startDate,flag){
 
 var objData =  flag ? {"start_date":startDate} :'';
 
-$("#loadingbar").show();
+$("#loadingadvert").show();
 $.ajax({
       url: url,  
       type: "get", 
@@ -159,6 +136,11 @@ $.ajax({
        var trHTML ='';
        var trHTML1='';
        $("#loadingadvert").hide();
+       var labelArray = [];
+              for (var i = 0, l = 24; i < l; i++) {
+                labelArray.push(i)
+              }
+       myChart.data.labels=labelArray;
        myChart.data.datasets[0].data=response.data.todays.data;
        myChart.data.datasets[1].data=response.data.before_seven_days.data;
        myChart.data.datasets[2].data=response.data.before_fourteen_days.data;
@@ -247,15 +229,12 @@ function init_charts_home(type,data) {
       if(type=='lineChart'){
         // Line chart
         if ($('#lineChart').length ){
-          var labelArray = [];
-              for (var i = 0, l = 24; i < l; i++) {
-                labelArray.push(i)
-              }
+  
            var ctx = document.getElementById("lineChart");
              myChart = new Chart(ctx, {
               type: 'line',
               data: {
-                labels: labelArray,
+                labels: [],
                 datasets:  [{
                       label: "My First dataset",
                       borderColor: "rgba(38, 185, 154, 0.7)",
@@ -304,46 +283,10 @@ function init_charts_home(type,data) {
                 }
               }
             });
-            function getRandomIntInclusive(min, max) {
-            var arr = [];
-            for (var i = 0, l = 20; i < l; i++) {
-                arr.push(Math.random() * (max - min + 1))
-            }
-            return arr;
-            }
+        
+          
 
-            function getRandomIntInclusiveArray(len) {
-              var arr = [];
-            for (var i = 0, l = len; i < l; i++) {
-                arr.push(Math.round(Math.random() * l))
-            }
-            return arr;
-            }
-            postId =0;
-            // logic to get new data
-            var getDataline = function() {
-              $.ajax({
-                url: '/advert-spikes-past-hour',
-                success: function(data) {
-                  $('#loadingadvert').hide();
-                  myChart.data.labels=data.data.min;
-                  myChart.data.datasets[1].data=data.data.count_arr;
-                  // re-render the chart
-                  myChart.update();
-                }
-              });
-            };
-
-           //getDataline();
-            // // get new data every 3 seconds
-            // var getDataInterval = setInterval(getDataline, 15000);
-            // $("body").on( "click", ".lineStatus", function() {
-            //   clearInterval(getDataInterval);
-            //   var link_name = $(this).attr('data-time')
-            //   $( ".lineStatus" ).removeClass( "active_tab" );
-            //   $(this).addClass( "active_tab" );
-            //   getDataInterval = setInterval(getDataline,link_name*1000);
-            // });
+ 
       }
       }
 }
@@ -380,6 +323,7 @@ jQuery(document).ready(function($){
 .loading-image {
   position: absolute;
   top: 40%;
+  right: 50%;
   z-index: 100;
 }
       </style>
