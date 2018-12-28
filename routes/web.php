@@ -97,3 +97,11 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
     Route::get('country-mtd', 'Api\Report\ReportController@countriesStationBreakdown');
     
 });
+
+
+/**
+ * Call Data tabs route.
+ */
+Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() {
+    Route::get('call-recording', 'Api\Report\ReportController@callRecording');
+});
