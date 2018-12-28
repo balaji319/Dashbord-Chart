@@ -93,5 +93,6 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
     Route::get('website-summery', 'Api\Report\ReportController@websiteSummery');
     Route::get('top-cities', 'Api\Report\ReportController@topCities');
     Route::get('top-countries', 'Api\Report\ReportController@topCountries');
+    Route::get('country-mtd', 'Api\Report\ReportController@countriesStationBreakdown');
     
 });

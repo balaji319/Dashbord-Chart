@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Report;
 use DB;
 use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
 
 class ReportController extends Controller {
 
@@ -212,6 +214,48 @@ class ReportController extends Controller {
             $date = "$month/1/$year";
             $sql = "SELECT Count(*) as Completed FROM IVRTranscriptions WHERE CompanyID = '".session('user_info')->CompanyID."' AND DateEntered >= '".$date."' AND GroupNumber = 'Web'";
             $summery = DB::select($sql);
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $summery ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+    
+    
+    public function countriesStationBreakdown(Request $request) {
+        try {
+            $month = $request->month;
+            $year = $request->year;
+            if (empty($month)) {
+                $month = date('m');
+            }
+            if (empty($year)) {
+                $year = date('Y');
+            }
+            $date = cal_days_in_month(CAL_GREGORIAN,$month,$year);
+            $now_date= "$month/$year";
+            if($now_date == date("m/Y")){
+                $date = date('d');
+            }
+            $start_date = "$month/01/$year";
+            $end_date = "$month/$date/$year";
+            
+            $sql = "SELECT Geography FROM Campaigns where CompanyID1 = '".session('user_info')->CompanyID."' and geography <> 'unknown' group by Geography Order By Geography";
+            $geography = DB::select($sql);
+            $str = "";
+            foreach ($geography as $k => $v) {
+                $str.= "'".$v->Geography."',";
+            }
+            $geogra = rtrim($str,',');
+            
+            $sql = "SELECT count(*) as Calls, Name
+                    FROM HangUps INNER JOIN
+                    Campaigns ON HangUps.CampaignID = Campaigns.CampaignID
+                    where CompanyID = '".session('user_info')->CompanyID."'  AND Hangupdate >= '".$start_date."'
+                    AND Hangupdate < '".$end_date."'
+                    and Campaigns.Geography IN (".$geogra.") 
+                    Group by Name";
+            $summery = DB::select($sql);
+    
             return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $summery ], 200);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
