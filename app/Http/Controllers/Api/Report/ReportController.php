@@ -7,6 +7,7 @@ use App\Report;
 use DB;
 use Illuminate\Http\Request;
 use Session;
+use App\Http\Controllers\MailController;
 
 class ReportController extends Controller
 {
@@ -344,5 +345,28 @@ class ReportController extends Controller
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
-
+    
+    public function requestNumber(Request $request) {
+        try {
+            
+            $name = $request->name;
+            $email = $request->email;
+            $station_name = $request->station_name;
+            $urgent = $request->urgent;
+            $country = $request->country;
+            $number_type = $request->number_type;
+            $comments = $request->comments;
+            
+            $data = ["name"=>$name, "email"=>$email,"station_name"=>$station_name,
+                "urgent"=>$urgent,"country"=>$country,"number_type"=>$number_type,
+                "comments"=>$comments,"company"=>session('user_info')->CompanyID];
+            $info = MailController::requestNewNumber($data);
+            
+            return response()->json([ 'status' => 200, 'message' => 'Success'], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+    
 }
+
