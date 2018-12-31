@@ -55,39 +55,43 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
                           </div>
                         <br />
-                        <form class="form-horizontal form-label-left">
+                        <form class="form-horizontal form-label-left" id="requestform">
 
                           <div class="form-group  col-md-6 col-sm-6 col-xs-12">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Your Name:</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input">
+                              <input type="text" class="form-control" name="name" placeholder="Enter Your Name">
                             </div>
                           </div>
                           <div class="form-group col-md-6 col-sm-6 col-xs-12 ">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Your Email:                                </label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control"  placeholder="Disabled Input">
+                              <input type="text" class="form-control" name="email" placeholder="Enter Your Name">
                             </div>
                           </div>
                           <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Station Name:</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control"  placeholder="Read-Only Input">
+                              <input type="text" class="form-control" name="sname" placeholder="Enter Station Name">
                             </div>
                           </div>
-                          <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group col-md-6 col-sm-6 col-xs-12" style="margin-top: -5px;">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Is This Urgent ?</label>
                                 <div class="col-md-9 col-sm-9 col-xs-12">
-                                        <div class="checkbox">
-                                                <label>
-                                                  <input type="checkbox" value=""> Yes
-                                                </label>
-                                              </div>
-                                              <div class="checkbox">
-                                                <label>
-                                                  <input type="checkbox" value="">  No
-                                                </label>
-                                              </div>
+
+                                              <div class="container" style="    display: inline-flex;">
+                                                  <div class="radio">
+                                                    <input id="isUrgent-1" name="isUrgent" type="radio" checked value="1">
+                                                    <label for="isUrgent-1" class="radio-label">Yes</label>
+                                                  </div>
+
+                                                  <div class="radio">
+                                                    <input id="isUrgent-2" name="isUrgent" type="radio" value="0">
+                                                    <label  for="isUrgent-2" class="radio-label">No</label>
+                                                  </div>
+
+                                                </div>
+
                                     </div>
 
 
@@ -96,7 +100,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                           <div class="form-group col-md-6 col-sm-6 col-xs-12 ">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Country:</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <select class="form-control">
+                              <select class="form-control" name="country" >
                                 <option>Choose option</option>
                                 <option>Option one</option>
                                 <option>Option two</option>
@@ -109,41 +113,36 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
 
                           <div class="form-group  col-md-6 col-sm-6 col-xs-12">
-                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Checkboxes and radios
-                              <br>
-                              <small class="text-navy">Number Type:</small>
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Number Type:
+
+
                             </label>
 
-                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                    <div class="checkbox">
-                                            <label>
-                                              <input type="checkbox" value="">  Local DID
-                                            </label>
-                                          </div>
-                                          <div class="checkbox">
-                                            <label>
-                                              <input type="checkbox" value="">   Toll Free
-                                            </label>
-                                          </div>
-                                          <div class="checkbox">
-                                                <label>
-                                                  <input type="checkbox" value="">Both (extra cost may apply)
-                                                </label>
-                                              </div>
+                            <div class="col-md-9 col-sm-9 col-xs-12" style="margin-top: -5px;">
+                                <div class="container" style="    display: inline-flex;">
+                                    <div class="radio">
+                                      <input id="numType-1" name="numType" type="radio" value="0" checked>
+                                      <label for="numType-1" class="radio-label" >Local DID</label>
+                                    </div>
+
+                                    <div class="radio">
+                                      <input id="numType-2" name="numType" type="radio" value="1">
+                                      <label  for="numType-2" class="radio-label">Toll Free</label>
+                                    </div>
+
+                                    <div class="radio">
+                                      <input id="numType-3" name="numType" type="radio"  value="2">
+                                      <label for="numType-3" class="radio-label">Both (extra cost may apply)</label>
+                                    </div>
+                                  </div>
+
                             </div>
                           </div>
 
-
-
-
-
-
-
                           <div class="form-group">
                             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                              <button type="button" class="btn btn-primary">Cancel</button>
-                              <button type="reset" class="btn btn-primary">Reset</button>
-                              <button type="submit" class="btn btn-success">Submit</button>
+
+                              <button type="submit" class="btn btn-success" id="sendRequest">Send Request </button>
                             </div>
                           </div>
 
@@ -153,4 +152,76 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                   </div>
   </div>
 </div>
+<script src="{!! asset('vendors/jquery/dist/jquery.min.js') !!}"></script>
+<script>
+jQuery(document).ready(function($){
+
+$("body").on( "submit", "#requestform", function(event) {
+  event.preventDefault();
+
+
+       $.ajax({
+            url: '/details-executive-report',
+            data: $('#requestform').serialize(),
+            headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                  var trHTML = '';
+                  $('#loadingtable1').hide();
+                  $.each(response.data, function(i, item) {
+                  trHTML += '<tr><td>' + item.Name  + '</td><td>' + item.Calls + '</td><td>' + item.LastCall+ '</td></tr>';
+            });
+            $('#records_table1').append(trHTML);
+
+            }
+            });
+});
+
+});
+
+  </script>
+<style>
+
+.radio {
+  margin: 0.5rem;
+}
+.radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+.radio input[type="radio"] + .radio-label:before {
+  content: '';
+  background: #f4f4f4;
+  border-radius: 100%;
+  border: 1px solid #b4b4b4;
+  display: inline-block;
+  width: 1.4em;
+  height: 1.4em;
+  position: relative;
+  top: -0.2em;
+  margin-right: 1em;
+  vertical-align: top;
+  cursor: pointer;
+  text-align: center;
+  transition: all 250ms ease;
+}
+.radio input[type="radio"]:checked + .radio-label:before {
+  background-color: #3197ee;
+  box-shadow: inset 0 0 0 4px #f4f4f4;
+}
+.radio input[type="radio"]:focus + .radio-label:before {
+  outline: none;
+  border-color: #3197ee;
+}
+.radio input[type="radio"]:disabled + .radio-label:before {
+  box-shadow: inset 0 0 0 4px #f4f4f4;
+  border-color: #b4b4b4;
+  background: #b4b4b4;
+}
+.radio input[type="radio"] + .radio-label:empty:before {
+  margin-right: 0;
+}
+
+  </style>
 @endsection

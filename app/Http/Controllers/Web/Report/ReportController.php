@@ -33,7 +33,7 @@ class ReportController extends Controller
     }
 
     public function statsCountries() {
-        return view('reports.executivecallsummary');
+        return view('reports.countrybreakdown');
     }
 
     public function topPrayers() {
