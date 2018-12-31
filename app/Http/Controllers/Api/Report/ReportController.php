@@ -313,6 +313,7 @@ class ReportController extends Controller
 
     public function activeNumbers(Request $request) {
         try {
+            $array_min = [] ;
             $startdate = $request->startdate;
             $enddate = $request->enddate;
             if (empty($startdate)) {
@@ -337,9 +338,10 @@ class ReportController extends Controller
                 $new_date = strtotime($v->LastUpdated);
                 $datediff = $now - $new_date;
                 $v->last_updated = round($datediff / (60 * 60 * 24));
+                $array_min[] = round($datediff / (60 * 60 * 24));;
                 $arr[$k] = $v;
             }
-            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $arr ], 200);
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $arr ,'min_value'=> min($array_min) ], 200);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
