@@ -14,7 +14,7 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2><?php 
+                <h2><?php
                   $user_info = Session::get('user_info');
                   echo $user_info->FirstName." ".$user_info->LastName;
                   ?></h2>
@@ -46,7 +46,7 @@
                         <li><a href="{{ url('/hour-log') }}">Hourly Log</a></li>
                         <li><a href="{{ url('/map-calls') }}">Map Calls</a></li>
                         <li><a href="{{ url('/hourly168') }}">7 Day Call Comparison</a></li>
-                        
+
                     </ul>
                   </li>
                   <li><a><i class="fa fa-desktop"></i> Call Data <span class="fa fa-chevron-down"></span></a>
@@ -55,10 +55,10 @@
                       <li><a href="{{ url('callrecording') }}">Call Recording </a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-table"></i> administrator <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-table"></i> Administrator <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="tables.html">Request Number </a></li>
-                      <li><a href="tables_dynamic.html">Active  Number</a></li>
+                      <li><a href="{{ url('requestnumber') }}">Request Number </a></li>
+                      <li><a href="{{ url('activenumbers') }}">Active  Number</a></li>
                     </ul>
                   </li>
 

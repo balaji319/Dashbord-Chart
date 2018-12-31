@@ -48,7 +48,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                         <div class='col-sm-4'>
                                                 <div class="form-group" style="margin-top: 3.5%;">
                                                         <div class='input-group'>
@@ -67,7 +67,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                         </div>
                       </div>
                     </div>
-                
+
               </div>
 </div>
 
@@ -107,7 +107,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
     $("#executivecallsummary").on( "click", "#submitBtn", function() {
                   var startDate= $("#datepickerVal").val();
-                  getAjax("/call/comparison",startDate,true)            
+                  getAjax("/call/comparison",startDate,true)
       });
 });
 
@@ -126,8 +126,8 @@ var objData =  flag ? {"start_date":startDate} :'';
 
 $("#loadingadvert").show();
 $.ajax({
-      url: url,  
-      type: "get", 
+      url: url,
+      type: "get",
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -137,7 +137,7 @@ $.ajax({
        var trHTML1='';
        $("#loadingadvert").hide();
        var labelArray = [];
-              for (var i = 0, l = 24; i < l; i++) {
+              for (var i = 0, l = 25; i < l; i++) {
                 labelArray.push(i)
               }
        myChart.data.labels=labelArray;
@@ -152,13 +152,6 @@ $.ajax({
 $('.modal-footer .btn-primary').click(function() {
    $('form[name="modalForm"]').submit();
 });
-
-
-
-
-
-
-
 
 
 
@@ -229,7 +222,7 @@ function init_charts_home(type,data) {
       if(type=='lineChart'){
         // Line chart
         if ($('#lineChart').length ){
-  
+
            var ctx = document.getElementById("lineChart");
              myChart = new Chart(ctx, {
               type: 'line',
@@ -277,24 +270,31 @@ function init_charts_home(type,data) {
                   yAxes: [{
                     ticks: {
                               min:0
-                            
+
+                          }
+                  }],
+                  xAxes: [{
+                    ticks: {
+                      beginAtZero:0,
+                      offset: true
+
                           }
                   }]
                 }
               }
             });
-        
-          
 
- 
+
+
+
       }
       }
 }
 jQuery(document).ready(function($){
       var tempData='';
          init_charts_home('lineChart',tempData);
-  
-    
+
+
 });
 
 

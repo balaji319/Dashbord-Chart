@@ -59,6 +59,14 @@ Route::group(['namespace' => 'Web'], function() {
     */
     Route::get('downloaddata', 'Report\CallDataController@downloadData');
     Route::get('callrecording', 'Report\CallDataController@callRecording');
+
+ /*
+    |--------------------------------------------------------------------------
+    | Administrator Report Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::get('activenumbers', 'Report\AdministratorController@activeNumbers');
+    Route::get('requestnumber', 'Report\AdministratorController@requestNumber');
 });
 
 
@@ -107,7 +115,7 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
     Route::get('top-cities', 'Api\Report\ReportController@topCities');
     Route::get('top-countries', 'Api\Report\ReportController@topCountries');
     Route::get('country-mtd', 'Api\Report\ReportController@countriesStationBreakdown');
-    
+
 });
 
 

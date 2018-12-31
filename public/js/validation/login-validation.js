@@ -1,28 +1,25 @@
-$("input").keyup(function(){
-    alert('121122222221');
-	var email=$('#email').val();
-	var password=$('#Password').val();
+$("input").keyup(function () {
+    var email = $('#email').val();
+    var password = $('#Password').val();
 
-	if(email != 0)
-        {
-            if(isValidEmailAddress(email))
-            {
-                $(".error1").html("");
-            } else {
-                $(".error1").html("Please enter valid email address.");
-            }
+    if (email != 0) {
+        if (isValidEmailAddress(email)) {
+            $(".error1").html("");
         } else {
-            $(".error1").html("Please enter your email.");         
+            $(".error1").html("Please enter valid email address.");
+        }
+    } else {
+        $(".error1").html("Please enter your email.");
     }
 
-	if (password!='') {
-		if (password.length<8) {
-		$(".error2").html("The password must be at least 8 characters.");
-		} else {
-			$(".error2").html("");
-		}
+    if (password != '') {
+        if (password.length < 8) {
+            $(".error2").html("The password must be at least 8 characters.");
+        } else {
+            $(".error2").html("");
+        }
 
-	}
+    }
 
 });
 
