@@ -54,9 +54,9 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                       <div class="form-group">
                                           <div class='input-group date col-md-12 col-sm-12 col-xs-12' id='gtpsthourselect'>
                                              <select class="form-control"  id='gtpsthour' >
-                                 
+
                                                 </select>
-                                             
+
                                           </div>
                                       </div>
                                   </div>
@@ -65,28 +65,28 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                         <div class="form-group">
                                             <div class='input-group date col-md-12 col-sm-12 col-xs-12' id='myDatepicker'>
                                                <select class="form-control"  id='gtCampaign2' >
-                                   
+
                                                   </select>
-                                               
+
                                             </div>
                                         </div>
                                     </div>
-                                       
+
                                   <div class='col-sm-3'>
                                     Filter
                                       <div class="form-group" >
                                               <div class='input-group col-md-12 col-sm-12 col-xs-12'>
                                        <button type="submit" id= "submitBtn" class="btn btn-success">Show Call Breakdown By Minute</button>
                                    </div>
-                              </div> 
+                              </div>
                         </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <div class="x_panel">
+                <div class="x_panel" style="height: 100vh;">
                   <div class="x_title">
-                
+
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -97,17 +97,17 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     <div class="clearfix"></div>
                   </div>
 
-                 
+
 
                   <div class="x_content">
                         <div class="row">
-                            <canvas id="HourlChart" height="100px"></canvas>
+                              <div id="echart_line1" style="height:450px;"></div>
                             <div  class="loading" id="loadingtable"  >
                                 <img   class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
                             </div>
                         </div>
                       </div>
-                     
+
                 </div>
               </div>
 </div>
@@ -136,6 +136,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
   <script>
 
     $(document).ready(function() {
+      $("#loadingtable").hide();
       var dateNow = new Date();
       $('#myDatepicker2').datetimepicker({
         format: 'MM/DD/YYYY ',
@@ -147,7 +148,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
     });
 
     $("body").on( "click", "#submitBtn", function() {
-                    getAjax("/minute/log",$("#datepickerVal").val(),$("#gtpsthour").val(),$("#gtCampaign2").val(),true);             
+                    getAjax("/minute/log",$("#datepickerVal").val(),$("#gtpsthour").val(),$("#gtCampaign2").val(),true);
       });
 });
 
@@ -157,7 +158,7 @@ jQuery(document).ready(function($){
      getAjaxCampaignList('/campaign-list');
      init_charts_home('HourlChart');
      gtpsthour();
-     
+
 });
 
       function gtpsthour() {
@@ -171,19 +172,20 @@ jQuery(document).ready(function($){
 function getAjaxCampaignList(url){
 
 $.ajax({
-      url: url,  
+      url: url,
       success: function(response){
 
               var trHTML = "";
                     $("#loadingbar").hide();
-                   
+                    $('#gtCampaign2').append('<option value = "all">ALL</option>');
                     $.each(response.data, function(i, item) {
                         trHTML +="<option value = '" + item.CampaignID + " '>" + item.Name + " </option>";
                     });
                     $('#gtCampaign2').append(trHTML);
                     var startDate= $("#datepickerVal").val();
                     var gtCampaign2= $("#gtCampaign2").val();
-                   /// getAjax("/hourly/log",startDate,gtCampaign2,true);     
+                     $("#loadingtable").hide();
+                   /// getAjax("/hourly/log",startDate,gtCampaign2,true);
   }});
 };
 
@@ -192,22 +194,142 @@ function getAjax(url,startDate,time,campaign_id,flag){
 var objData =  {"start_date":startDate,"start_time":time,"campaign_id":campaign_id} ;
 // $('#datatable-keytable1').dataTable().fnClearTable();
 // $('#datatable-keytable1').dataTable().fnDestroy();
+var myChart1 = echarts.init(document.getElementById('echart_line1'));
+
+// loading---------------------
+// myChart1.showLoading({
+//     text: "please wait!!!... ",
+// });
 $("#loadingtable").show();
 
 $.ajax({
-      url: url,  
-      type: "get", 
+      url: url,
+      type: "get",
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
       success: function(response){
                   //myChart2.data.labels=response.data.City ;
-                  myChart2.data.datasets[0].data=response.data.hangups_data;
+                  // myChart2.data.datasets[0].data=response.data.befor_forteen_days.data;
           $("#loadingtable").hide();
-                  myChart2.update();
-                  myChart2.options.title.text='Top 25 Cities For 12/01/2018 - 12/27/2018';
-                  myChart2.update();
+                  // myChart2.update();
+
+      var first_day = response.data.first_day.data;
+      var befor_forteen_days = response.data.befor_forteen_days.data;
+      var befor_twenty_one_days = response.data.befor_twenty_one_days.data;
+      var befor_seven_days = response.data.befor_seven_days.data;
+
+      var lableArraydata =[response.data.first_day.date,response.data.befor_forteen_days.date,response.data.befor_twenty_one_days.date,response.data.befor_seven_days.date] ;
+
+
+// ajax callback
+// myChart1.hideLoading();
+ var labelArray = [];
+              for (var i = 0, l = 24; i < l; i++) {
+                labelArray.push(i)
+              }
+
+// use the chart-------------------
+var option =
+
+
+
+{
+title: {
+  text: 'Minute Reports',
+  subtext: ''
+},
+tooltip: {
+  trigger: 'axis'
+},
+legend: {
+  x: 420,
+  y: 20,
+  data: lableArraydata
+},
+toolbox: {
+  show: true,
+  feature: {
+  magicType: {
+    show: true,
+    title: {
+    line: 'Line',
+    bar: 'Bar',
+    stack: 'Stack',
+    tiled: 'Tiled'
+    },
+    type: ['line', 'bar', 'stack', 'tiled']
+  },
+  restore: {
+    show: true,
+    title: "Restore"
+  },
+  saveAsImage: {
+    show: true,
+    title: "Save Image"
+  }
+  }
+},
+
+xAxis: [{
+  type: 'category',
+  data: labelArray
+}],
+yAxis: [{
+  type: 'value'
+}],
+series: [{
+  name: response.data.first_day.date,
+  type: 'line',
+  itemStyle: {
+  normal: {
+    areaStyle: {
+    type: 'default'
+    }
+  }
+  },
+  data:  first_day
+}, {
+  name: response.data.befor_forteen_days.date,
+  type: 'line',
+  itemStyle: {
+  normal: {
+    areaStyle: {
+    type: 'default'
+    }
+  }
+  },
+  data: befor_forteen_days
+}, {
+  name:response.data.befor_twenty_one_days.date,
+  type: 'line',
+  itemStyle: {
+  normal: {
+    areaStyle: {
+    type: 'default'
+    }
+  }
+  },
+  data: befor_twenty_one_days
+},{
+  name: response.data.befor_seven_days.date,
+  type: 'line',
+  itemStyle: {
+  normal: {
+    areaStyle: {
+    type: 'default'
+    }
+  }
+  },
+  data: befor_seven_days
+}]
+}
+
+myChart1.setOption(option);
+
+
+
 
   }});
 }
@@ -215,7 +337,7 @@ $.ajax({
 $("#executivecallsummary").on( "click", ".tbl_row", function() {
 
       var var_date = $(this).attr('data-date')
-      
+
              $.ajax({
                   url: '/details-executive-report',
                   dara:var_date,
@@ -283,7 +405,7 @@ function init_charts_home(type,data) {
                   scales: {
                     yAxes: [{
 
-                            
+
                     }]
                   }
 
@@ -293,7 +415,7 @@ function init_charts_home(type,data) {
     }
    }
 
-  
+
 }
 
 

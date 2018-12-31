@@ -12,7 +12,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 <!-- /.row -->
 <div class="row" id="executivecallsummary">
         <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel" style="">
+                <div class="x_panel x_panel_custom" style="">
                         <div class="x_title">
                             <h2>Filter <small></small></h2>
                             <ul class="nav navbar-right panel_toolbox">
@@ -69,7 +69,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                             </div>
                         </div>
                     </div>
-                <div class="x_panel">
+                <div class="x_panel" style="    height: 100vh;">
                   <div class="x_title">
                     <h2>Data <small>Todays call volume is still in process and dynamically changing.</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -105,16 +105,16 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                         <th class="column-title">Call Duration  </th>
                                         <th class="column-title">Number Called  </th>
                                         <th class="column-title">Station</th>
-                                 
+
                                   </tr>
                                 </thead>
 
 
                                 <tbody id="datatable-keytable_tr">
-                                        
-                                         
+
+
                                 </tbody>
-                                
+
                               </table>
                             </div>
                             <div  class="loading" id="loadingbar" >
@@ -123,22 +123,22 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                           </div>
                         </div>
                       </div>
-                     
+
                       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                      
+
                         <div class="modal-dialog modal-lg" style=" width: 50%;">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close closeBtn" data-dismiss="modal"> <span aria-hidden="true" class="">×   </span><span class="sr-only">Close</span>
-                    
+
                                     </button>
                                      <h4 class="modal-title" id="myModalLabel">Detailed Report For :  <span class="selectedDate"></span> </h4>
-                    
+
                                 </div>
                                 <div class="modal-body" style="    min-height: 400px;">
-                              
+
                                     <div class="">
-                                          
+
                                           <div class="clearfix"></div>
                                           <div class="row">
                                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -195,10 +195,10 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                                       </div>
                                                       <div class="row">
                                                       <center>
-                                                      
+
                                                        <div class="form-group">
-                                                            
-                                                             <input type="submit" class="btn btn-info" value="Send"> 
+
+                                                             <input type="submit" class="btn btn-info" value="Send">
                                                           </div>
                                                           </center>
                                                       </div>
@@ -206,18 +206,18 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                                 </div>
                                               </div>
                                             </div>
-                              
-                                           
+
+
                                           </div>
-                                        
-                                          
-                                         
+
+
+
                                         </div>
-    
+
                               </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default closeBtn" data-dismiss="modal">Close</button>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -253,8 +253,8 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
       var dateNow = new Date();
 
 $("#executivecallsummary").on( "click", ".closeBtn", function() {
-                 var audio = $("#player");  
-                  audio[0].pause();      
+                 var audio = $("#player");
+                  audio[0].pause();
       });
 
       $('#myDatepicker2').datetimepicker({
@@ -270,7 +270,7 @@ $("#executivecallsummary").on( "click", ".closeBtn", function() {
                   var startDate= $("#datepickerVal").val();
                   var endDate= $("#datepickerVal1").val();
 
-                  getAjax("/call-recording",startDate,endDate,true)            
+                  getAjax("/call-recording",startDate,endDate,true)
       });
 
 
@@ -292,8 +292,8 @@ $('#datatable-keytable1').dataTable().fnClearTable();
 $('#datatable-keytable1').dataTable().fnDestroy();
 $("#loadingbar").show();
 $.ajax({
-      url: url,  
-      type: "get", 
+      url: url,
+      type: "get",
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -313,8 +313,8 @@ $.ajax({
     });
 
     $('#datatable-keytable1').append(trHTML1);
-    
- 
+
+
     $('#datatable-keytable1').DataTable({
         "paging": true,
         "searching": true,
@@ -329,32 +329,32 @@ $.ajax({
 }
 $("#executivecallsummary").on( "click", ".tbl_row", function() {
 
-      var var_date = 
+      var var_date =
       {
            'TRacking_ID':$(this).attr('data-Tracking_ID')
       }
 
        $('#loadingadvert').show();
       $(".selectedDate").text($(this).attr('data-date'))
-           
+
              $.ajax({
                   url: '/call-recording-file',
                   data:var_date,
-                
+
                   success: function(response) {
                         var trHTML = '';
                       console.log(response.data[0].WavLocation)
                         $('#loadingadvert').hide();
-              
+
                         change(response.data[0].WavLocation)
-                        
-                 
+
+
                   }
                   });
 });
 function change(sourceUrl) {
   console.log(sourceUrl)
-    var audio = $("#player");      
+    var audio = $("#player");
     $("#audio_ogg").attr("src", sourceUrl);
     $("#audio_mp3").attr("src", sourceUrl);
     /****************/
@@ -483,7 +483,7 @@ function init_charts_home(type,data) {
 
                             ticks: {
                                 min: 0
-                        
+
                             }
                     }]
                   }
@@ -508,9 +508,9 @@ function init_charts_home(type,data) {
             }
             return arr;
             }
-          
 
-         
+
+
       }
 
       }else if(type=='mybarChart'){
@@ -562,7 +562,7 @@ function init_charts_home(type,data) {
                 }
               });
 
-          
+
       //  getData();
       // get new data every 3 seconds
       //setInterval(getData,10000);
@@ -600,19 +600,19 @@ else if(type=='mybarChart1'){
                 data: oilData
               });
 
-          
+
       //  getData();
       // get new data every 3 seconds
       //setInterval(getData,10000);
     }
    }
 
-   
+
 }
 function getRandomColor(len) {
             var arr = [];
             for (var i = 0; i < len; i++) {
-              
+
                 arr.push('rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')')
             }
             return arr;
@@ -624,7 +624,7 @@ jQuery(document).ready(function($){
          init_charts_home('lineChart',tempData);
          init_charts_home('mybarChart1',tempData);
          init_active_table();
-         
+
 
 });
 

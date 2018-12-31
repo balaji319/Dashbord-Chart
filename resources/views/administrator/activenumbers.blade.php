@@ -12,7 +12,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 <!-- /.row -->
 <div class="row" id="executivecallsummary">
         <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel" style="">
+                <div class="x_panel" >
                         <div class="x_title">
                             <h2>Filter <small></small></h2>
                             <ul class="nav navbar-right panel_toolbox">
@@ -69,7 +69,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                             </div>
                         </div>
                     </div>
-                <div class="x_panel">
+                <div class="x_panel" style="height: 100vh;">
                   <div class="x_title">
                     <h2>Active Phone Numbers <small></small></h2>
                     <ul class="nav navbar-right panel_toolbox">

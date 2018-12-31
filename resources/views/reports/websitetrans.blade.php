@@ -39,7 +39,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                 <div class="row">
 
                                     <div class='col-sm-3'>
-                                        
+
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Month</label>
                                             <div class="col-md-9 col-sm-9 col-xs-12">
@@ -61,7 +61,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                           </div>
                                     </div>
                                     <div class='col-sm-3'>
-                                           
+
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Year</label>
                                             <div class="col-md-9 col-sm-9 col-xs-12">
@@ -86,21 +86,21 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                             </div>
                                           </div>
                                         </div>
-                                        
+
                                   <div class='col-sm-3'>
                                       <div class="form-group" >
                                               <div class='input-group'>
                                        <button type="submit" id= "submitBtn" class="btn btn-success">Filter</button>
                                    </div>
-                              </div> 
+                              </div>
                         </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <div class="x_panel">
+                <div class="x_panel"  style="height: 100vh;">
                   <div class="x_title">
-                
+
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -120,28 +120,28 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                           </tr>
                         </thead>
                       </table>
-                      
+
                     </div>
                     <div class="col-sm-12">
                         <div class="card-box table-responsive">
                           <p class="text-muted font-13 m-b-30">
-                               
+
                           </p>
 
                           <table id="datatable-keytable1" class="table table-striped table-bordered">
                             <thead>
                               <tr>
                                     <th class="column-title">Date </th>
-                                    <th class="column-title"> 	Total Posts</th>       
+                                    <th class="column-title"> 	Total Posts</th>
                               </tr>
                             </thead>
-                            <tbody id="datatable-keytable_tr">  
+                            <tbody id="datatable-keytable_tr">
                                 <tr>
                                     <th class="column-title" >Total </th>
-                                    <th class="column-title" id="total_value"> 0</th>       
+                                    <th class="column-title" id="total_value"> 0</th>
                               </tr>
                             </tbody>
-                            
+
                           </table>
                         </div>
                         <div  class="loading" id="loadingbar" >
@@ -150,8 +150,8 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                         </div>
                   </div>
 
-                  
-                     
+
+
                 </div>
               </div>
 </div>
@@ -196,7 +196,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                   var gMonth2= $("#gMonth2").val();
                   var gtYear2= $("#gtYear2").val();
 
-                  getAjax("/website-summery",gMonth2,gtYear2,true)            
+                  getAjax("/website-summery",gMonth2,gtYear2,true)
       });
 });
 
@@ -209,8 +209,8 @@ var objData =  flag ? {"month":report_month,"year":report_year} :'';
 $("#loadingbar").show();
 $('#datatable-keytable_t').html("");
 $.ajax({
-      url: url,  
-      type: "get", 
+      url: url,
+      type: "get",
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -219,14 +219,14 @@ $.ajax({
 
        $("#loadingbar").hide();
        $("#total_value").text(result.data[0].Completed);
-    
+
 
   }});
 }
 $("#executivecallsummary").on( "click", ".tbl_row", function() {
 
       var var_date = $(this).attr('data-date')
-      
+
              $.ajax({
                   url: '/details-executive-report',
                   dara:var_date,

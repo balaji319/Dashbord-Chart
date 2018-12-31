@@ -49,34 +49,34 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class='col-sm-3'>
                                         Campaign ::
                                         <div class="form-group">
                                             <div class='input-group date col-md-12 col-sm-12 col-xs-12' id='myDatepicker'>
                                                <select class="form-control"  id='gtCampaign2' >
-                                   
+
                                                   </select>
-                                               
+
                                             </div>
                                         </div>
                                     </div>
-                                       
+
                                   <div class='col-sm-3'>
                                     Filter
                                       <div class="form-group" >
                                               <div class='input-group col-md-12 col-sm-12 col-xs-12'>
                                        <button type="submit" id= "submitBtn" class="btn btn-success">Update Graph </button>
                                    </div>
-                              </div> 
+                              </div>
                         </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <div class="x_panel">
+                <div class="x_panel"  style="height: 100vh;">
                   <div class="x_title">
-                
+
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -87,7 +87,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     <div class="clearfix"></div>
                   </div>
 
-                 
+
 
                   <div class="x_content">
                         <div class="row">
@@ -97,7 +97,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                             </div>
                         </div>
                       </div>
-                     
+
                 </div>
               </div>
 </div>
@@ -138,7 +138,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
     $("body").on( "click", "#submitBtn", function() {
 
-                    getAjax("/hourly/log",$("#datepickerVal").val(),$("#gtCampaign2").val(),true);             
+                    getAjax("/hourly/log",$("#datepickerVal").val(),$("#gtCampaign2").val(),true);
       });
 });
 
@@ -147,25 +147,25 @@ jQuery(document).ready(function($){
   $("#loadingtable").show();
      getAjaxCampaignList('/campaign-list');
      init_charts_home('HourlChart');
-     
+
 });
 
 function getAjaxCampaignList(url){
 
 $.ajax({
-      url: url,  
+      url: url,
       success: function(response){
 
               var trHTML = "";
                     $("#loadingbar").hide();
-                   
+
                     $.each(response.data, function(i, item) {
                         trHTML +="<option value = '" + item.CampaignID + " '>" + item.Name + " </option>";
                     });
                     $('#gtCampaign2').append(trHTML);
                     var startDate= $("#datepickerVal").val();
                     var gtCampaign2= $("#gtCampaign2").val();
-                    getAjax("/hourly/log",startDate,gtCampaign2,true);     
+                    getAjax("/hourly/log",startDate,gtCampaign2,true);
   }});
 };
 
@@ -177,8 +177,8 @@ var objData =  {"start_date":startDate,"campaign_id":campaign_id} ;
 $("#loadingtable").show();
 
 $.ajax({
-      url: url,  
-      type: "get", 
+      url: url,
+      type: "get",
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -197,7 +197,7 @@ $.ajax({
 $("#executivecallsummary").on( "click", ".tbl_row", function() {
 
       var var_date = $(this).attr('data-date')
-      
+
              $.ajax({
                   url: '/details-executive-report',
                   dara:var_date,
@@ -265,7 +265,7 @@ function init_charts_home(type,data) {
                   scales: {
                     yAxes: [{
 
-                            
+
                     }]
                   }
 
@@ -275,7 +275,7 @@ function init_charts_home(type,data) {
     }
    }
 
-  
+
 }
 
 

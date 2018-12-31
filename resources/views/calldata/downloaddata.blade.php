@@ -15,7 +15,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
         <div class="clearfix"></div>
     <div class="row">
 
-        <div class="x_panel" style="">
+        <div class="x_panel x_panel_custom" style="">
             <div class="x_title">
               <h2>	PUFC Data Files <small></small></h2>
               <ul class="nav navbar-right panel_toolbox">
@@ -35,7 +35,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
               </ul>
               <div class="clearfix"></div>
             </div>
-            <div class="x_content">
+            <div class="x_content" style="    height: 100vh;">
               <div class="container">
                 <div class="row">
 

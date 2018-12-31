@@ -13,7 +13,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 <!-- /.row -->
 <div class="row" id="Countriessummary">
         <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel" style="">
+                <div class="x_panel"  style="height: 100vh;">
                         <div class="x_title">
                             <h2>Top Countries <small> </small></h2>
                             <ul class="nav navbar-right panel_toolbox">
@@ -77,20 +77,20 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                               </tr>
                             </thead>
                           </table>
-                          
+
                         </div>
                         <div class="col-sm-12">
                             <div  class="loading" id="loadingbar" >
                                 <img   class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
                             </div>
-                        
+
                           <canvas id="CountriesbarChart" height="100px"></canvas>
                         </div>
-                           
+
                         </div>
                       </div>
                     </div>
-                
+
               </div>
 </div>
 
@@ -133,7 +133,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
                   var startDate= $("#datepickerVal").val();
                   var endDate= $("#datepickerVal1").val();
-                  getAjax("/top-countries",startDate,endDate,true)              
+                  getAjax("/top-countries",startDate,endDate,true)
       });
 
       var myUrl = "/top-countries";
@@ -149,8 +149,8 @@ var objData =  flag ? {"startdate":startDate,"enddate":endDate} :'';
 $("#loadingbar").show();
 
 $.ajax({
-      url: url,  
-      type: "get", 
+      url: url,
+      type: "get",
       data:objData,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -160,7 +160,7 @@ $.ajax({
        $("#loadingbar").hide();
                   myChart2.data.labels=response.data.City ;
                   myChart2.data.datasets[0].data=response.data.CallCount;
-          
+
                   myChart2.update();
                   myChart2.options.title.text='Top 25 Cities For 12/01/2018 - 12/27/2018';
                   myChart2.update();
@@ -170,7 +170,7 @@ $.ajax({
 $("#executivecallsummary").on( "click", ".tbl_row", function() {
 
       var var_date = $(this).attr('data-date')
-      
+
              $.ajax({
                   url: '/details-executive-report',
                   dara:var_date,
@@ -236,7 +236,7 @@ function init_charts_home(type,data) {
                   scales: {
                     yAxes: [{
 
-                            
+
                     }]
                   }
 
@@ -246,14 +246,14 @@ function init_charts_home(type,data) {
     }
    }
 
-  
+
 }
 jQuery(document).ready(function($){
       var tempData='';
 
          init_charts_home('CountriesbarChart');
-    
-         
+
+
 
 });
 </script>
