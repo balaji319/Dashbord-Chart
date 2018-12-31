@@ -51,9 +51,8 @@
                   </li>
                   <li><a><i class="fa fa-desktop"></i> Call Data <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="general_elements.html">Download Data</a></li>
-                      <li><a href="media_gallery.html">Call Recording </a></li>
-
+                      <li><a href="{{ url('downloaddata') }}">Download Data</a></li>
+                      <li><a href="{{ url('callrecording') }}">Call Recording </a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-table"></i> administrator <span class="fa fa-chevron-down"></span></a>

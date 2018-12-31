@@ -58,6 +58,7 @@ class ReportController extends Controller {
         try {
             $report_month = $request->report_month;
             $report_year = $request->report_year;
+            $report_month = count($report_month)==1 ? '0'.$report_month:$report_month;  
             $campaign_number = $request->campaign_number;
             if(empty($report_month) || empty($report_year) || empty($campaign_number)) {
                 return response()->json([ 'status' => 400, 'message' => 'Please enter all details.', ], 400);
@@ -283,7 +284,7 @@ class ReportController extends Controller {
                     ->where('DateEntered','<', $enddate." 11:59:59 PM")
                     ->where('CompanyID',session('user_info')->CompanyID)
                     ->orderBy('DateEntered')
-                    ->paginate(30);
+                    ->get();
             return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $sql ], 200);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
