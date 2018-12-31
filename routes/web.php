@@ -125,5 +125,13 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
 Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() {
     Route::get('call-recording', 'Api\Report\ReportController@callRecording');
     Route::get('call-recording-file', 'Api\Report\ReportController@callRecordingFile');
-    Route::post('call-recording', 'Api\Report\ReportController@callRecordingDetails');
+    Route::post('call-recording-email', 'Api\Report\ReportController@callRecordingDetails');
+});
+
+
+/**
+ * Call Data tabs route.
+ */
+Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() {
+    Route::get('active-numbers', 'Api\Report\ReportController@activeNumbers');
 });

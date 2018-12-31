@@ -267,7 +267,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
 jQuery(document).ready(function($){
 
-      var myUrl = "/call-recording";
+      var myUrl = "/active-numbers";
       getAjax(myUrl);
 
 

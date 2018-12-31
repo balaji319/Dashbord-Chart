@@ -310,4 +310,39 @@ class ReportController extends Controller
         }
     }
 
+
+    public function activeNumbers(Request $request) {
+        try {
+            $startdate = $request->startdate;
+            $enddate = $request->enddate;
+            if (empty($startdate)) {
+                $startdate = date('m/d/Y');
+            }
+            if (empty($enddate)) {
+                $enddate = date('m/d/Y');
+            }
+            $now = time();
+            $sql = DB::table('Campaigns')
+                    ->where('isactive','=','1')
+                    ->where('CompanyID1',session('user_info')->CompanyID)->orderBy('name')->get();
+            foreach($sql as $k => $v) {
+                $sql = DB::table('hangups')
+                    ->where('hangupdate','>=',$startdate)
+                    ->where('hangupdate','<', $enddate." 11:59:59 PM")
+                    ->where('CompanyID',session('user_info')->CompanyID)
+                    ->where('campaign',$v->Campaign)->count();
+                $station_id = str_replace("-","",$v->Campaign);
+                $v->station_id = "A".$station_id;
+                $v->count = $sql;
+                $new_date = strtotime($v->LastUpdated);
+                $datediff = $now - $new_date;
+                $v->last_updated = round($datediff / (60 * 60 * 24));
+                $arr[$k] = $v;
+            }
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $arr ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+
 }
