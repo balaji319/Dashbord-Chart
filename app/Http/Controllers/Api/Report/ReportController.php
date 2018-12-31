@@ -312,7 +312,6 @@ class ReportController extends Controller {
     
     public function activeNumbers(Request $request) {
         try {
-            echo "<pre/>";
             $startdate = $request->startdate;
             $enddate = $request->enddate;
             if (empty($startdate)) {
