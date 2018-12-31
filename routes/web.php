@@ -126,4 +126,5 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
  */
 Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() {
     Route::get('active-numbers', 'Api\Report\ReportController@activeNumbers');
+    Route::get('request-number', 'Api\Report\ReportController@requestNumber');
 });

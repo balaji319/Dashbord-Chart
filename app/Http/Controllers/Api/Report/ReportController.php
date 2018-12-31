@@ -344,4 +344,20 @@ class ReportController extends Controller {
         }
     }
     
+    
+    public function requestNumber(Request $request) {
+        try {
+            echo "<pre/>";
+            $startdate = $request->startdate;
+            $enddate = $request->enddate;
+            
+            
+            
+            die;
+            return response()->json([ 'status' => 200, 'message' => 'Success', 'data' => $arr ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+    
 }
