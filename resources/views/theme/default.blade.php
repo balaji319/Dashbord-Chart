@@ -32,6 +32,9 @@
     <link href="{!! asset('vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') !!}" rel="stylesheet">
     <!-- bootstrap-datetimepicker -->
     <link href="{!! asset('vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') !!}" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet">
+
+
 
 
     <link href="{!! asset('build/css/custom.min.css') !!}" rel="stylesheet">
