@@ -73,7 +73,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                           <table class="table table-striped jambo_table bulk_action" id="today_records_table">
                             <thead>
                               <tr class="headings">
-                              <th class="column-title" colspan="9"> <center> <span id="selectedMonth"></span>PUFC Top 25 Cities Report Graph </center></th>
+                              <th class="column-title" colspan="9"> <center> <span id="selectedMonth"></span>PUFC Top 25 Cities Report Graph <span id="selectDate"></span> </center></th>
                               </tr>
                             </thead>
                           </table>
@@ -228,7 +228,7 @@ function init_charts_home(type,data) {
                   responsive: true,
                   title: {
                     display: true,
-                    text: "Top 25 Countries (Web Requests Included) ",
+                    text: "Top 25 Cities For  ",
                   },
                   legend: {
                     display: false

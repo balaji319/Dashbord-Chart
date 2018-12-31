@@ -36,7 +36,7 @@ class Report extends Model {
             $today_array['Web'] = 'In Process';
 
             $total = "SELECT sum(TotalCalls) as totalcalls,sum(CompletedCalls) as CompletedCalls,Sum(Hangups) as Hangups,Sum(File1) as file1,sum(File2) as File2,Sum(File3) as File3,
-                Sum(Web) as web,case when sum(TotalCalls) <> 0 then cast(cast(round((cast(sum(CompletedCalls) as float) / cast(sum(TotalCalls) As float)) * cast(100 as float),2) as decimal) as varchar) + '%' 
+                Sum(Web) as web,case when sum(TotalCalls) <> 0 then cast(cast(round((cast(sum(CompletedCalls) as float) / cast(sum(TotalCalls) As float)) * cast(100 as float),2) as decimal) as varchar) + '%'
                 else '0%' end as PercentComplete,case when sum(TotalCalls) <> 0 then cast(cast(round((cast(Sum(Hangups) as float) / cast(sum(TotalCalls) As float)) * cast(100 as float),2) as decimal) as varchar) + '%' else '0%' end as PercentIncomplete
                 FROM ExecutiveReport
                 WHERE    DayDate >= '" . $startdate . "' AND DayDate <= '" . $enddate . "' and (CompanyID =  '" . session('user_info')->CompanyID . "') and daydate <> '" . $current_time . "'";
@@ -46,10 +46,10 @@ class Report extends Model {
                 case when totalcalls <> 0 then cast(cast(round((cast(CompletedCalls as float) / cast(TotalCalls As float)) * cast(100 as float),2) as decimal) as varchar) + '%' else '0%' end as PercentComplete,
                 case when totalcalls <> 0 then cast(cast(round((cast(Hangups as float) / cast(TotalCalls As float)) * cast(100 as float),2) as decimal) as varchar) + '%' else '0%' end as PercentIncomplete
                 FROM ExecutiveReport
-                WHERE    DayDate >= '" . $startdate . "' AND 
-                DayDate <= '" . $enddate . "' and 
+                WHERE    DayDate >= '" . $startdate . "' AND
+                DayDate <= '" . $enddate . "' and
                 (CompanyID = '" . session('user_info')->CompanyID . "') and daydate <> '" . $current_time . "'
-                ORDER BY  DayDate asc";
+                ORDER BY  DayDate desc";
             $days_report = DB::select($date_report);
 
             $arr = ["today_array" => $today_array, "total_report" => $total_report, "days_report" => $days_report];
@@ -59,21 +59,21 @@ class Report extends Model {
         }
     }
 
-    
+
     public static function detailsExecutiveReport(Request $request) {
         try {
             $daydate = $request->date;
             if (empty($daydate)) {
                 $daydate = date('m/d/Y');
             }
-            
+
             //Bar chart.
             $sql = "SELECT count(*) as Calls FROM hangups where CONVERT(CHAR(10),hangupdate,101) = '".$daydate."' and CompanyID = '". session('user_info')->CompanyID ."'group by DATEPART(hour, hangupdate)";
             $smallbarchart = DB::select($sql);
             foreach ($smallbarchart as $k => $v) {
                 $small_arr[] = $v->Calls;
             }
-            
+
             //list of all stations.
             $sql = "SELECT Campaigns.Name, HangUps.Campaign, COUNT(*) AS Calls FROM HangUps INNER JOIN Campaigns ON HangUps.Campaign = Campaigns.Campaign
                     WHERE (CONVERT(CHAR(10), HangUps.HangUpDate, 101) = '".$daydate."') AND (HangUps.companyid = '". session('user_info')->CompanyID ."')
@@ -88,7 +88,7 @@ class Report extends Model {
                 $info = DB::select($query);
                 $arr[$key]['Completed'] = $info[0]->Calls;
             }
-            
+
             //Get all countries counts.
             $sql = "SELECT     COUNT(*) AS Calls, Campaigns.Geography FROM HangUps INNER JOIN Campaigns ON HangUps.Campaign = Campaigns.Campaign
                                     WHERE CONVERT(CHAR(10),hangupdate,101) = '".$daydate."' and companyid = '". session('user_info')->CompanyID ."'
@@ -96,11 +96,11 @@ class Report extends Model {
             $get_countries = DB::select($sql);
 
             foreach ($get_countries as $k => $v) {
-        
+
                 $get_countries_arr['calls'][$k] = $v->Calls;
                 $get_countries_arr['Geography'][$k] = $v->Geography;
             }
-         
+
             //Get top 20 cities calls count.
             $sql = "SELECT     TOP 20 COUNT(*) AS calls, RTRIM(LTRIM(fone3.City)) + ', ' + RTRIM(LTRIM(fone3.State)) AS Location
                     FROM         HangUps INNER JOIN
@@ -109,9 +109,9 @@ class Report extends Model {
                     GROUP BY RTRIM(LTRIM(fone3.City)) + ', ' + RTRIM(LTRIM(fone3.State))
                     order by count(*) desc";
             $get_cities = DB::select($sql);
-            
+
             foreach ($get_cities as $k => $v) {
-   
+
                 $get_cities_arr['calls'][$k] = $v->calls;
                 $get_cities_arr['Location'][$k] = $v->Location;
             }
@@ -121,6 +121,6 @@ class Report extends Model {
             throw $ex;
         }
     }
-    
-    
+
+
 }

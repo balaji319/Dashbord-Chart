@@ -5,7 +5,7 @@
 <?php
 date_default_timezone_set('America/Los_Angeles');
 $unixTime = time();
-$var_date = date("D - M. d Y", $unixTime);  ?>
+$var_date = date("D - M. d , Y", $unixTime);  ?>
       <div class="">
             {{-- <div class="page-title">
               <div class="title_left">
@@ -21,7 +21,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
-
+{{--
                       <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                         <ul class="dropdown-menu" role="menu">
@@ -38,7 +38,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                            <li><a href="#"  class="lineStatus" data-time='360'>5 min</a>
                           </li>
                         </ul>
-                      </li>
+                      </li> --}}
                       <li><a class="close-link"><i class="fa fa-close"></i></a>
                       </li>
                     </ul>

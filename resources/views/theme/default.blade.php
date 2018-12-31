@@ -34,9 +34,8 @@
     <link href="{!! asset('vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') !!}" rel="stylesheet">
 
 
-
-
     <link href="{!! asset('build/css/custom.min.css') !!}" rel="stylesheet">
+    <link href="{!! asset('css/custom.css') !!}" rel="stylesheet">
   </head>
 
   <body class="nav-md">
