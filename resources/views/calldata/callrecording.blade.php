@@ -126,10 +126,10 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                      
                       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                       
-                        <div class="modal-dialog modal-lg" style=" width: 80%;">
+                        <div class="modal-dialog modal-lg" style=" width: 50%;">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true" class="">×   </span><span class="sr-only">Close</span>
+                                    <button type="button" class="close closeBtn" data-dismiss="modal"> <span aria-hidden="true" class="">×   </span><span class="sr-only">Close</span>
                     
                                     </button>
                                      <h4 class="modal-title" id="myModalLabel">Detailed Report For :  <span class="selectedDate"></span> </h4>
@@ -216,7 +216,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
     
                               </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default closeBtn" data-dismiss="modal">Close</button>
                                     
                                 </div>
                             </div>
@@ -251,6 +251,12 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
     $(document).ready(function() {
       var dateNow = new Date();
+
+$("#executivecallsummary").on( "click", ".closeBtn", function() {
+                 var audio = $("#player");  
+                  audio[0].pause();      
+      });
+
       $('#myDatepicker2').datetimepicker({
         format: 'MM/DD/YYYY ',
         defaultDate:dateNow
@@ -266,6 +272,8 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
                   getAjax("/call-recording",startDate,endDate,true)            
       });
+
+
 });
 
 
@@ -347,7 +355,8 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
 function change(sourceUrl) {
   console.log(sourceUrl)
     var audio = $("#player");      
-    $("#ogg_src").attr("src", sourceUrl);
+    $("#audio_ogg").attr("src", sourceUrl);
+    $("#audio_mp3").attr("src", sourceUrl);
     /****************/
     audio[0].pause();
     audio[0].load();//suspends and restores all audio element
