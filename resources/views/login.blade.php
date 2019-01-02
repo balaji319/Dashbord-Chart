@@ -61,8 +61,16 @@
 <script src="{{ asset('js/validation/login-validation.js') }}"></script>
 <style>
   body {
-        background: whitesmoke;
+        background-image: url(images/loginbg2.jpg);
         background-repeat: round;
+    }
+    .login-panel .panel-heading{
+     background-color: #62bae4 !important;
+    border-color: #62bae4 !important;
+    color: white!important;
+    }
+    .login-panel .panel-body{
+        background: #f7f7f7;
     }
 </style>
 
