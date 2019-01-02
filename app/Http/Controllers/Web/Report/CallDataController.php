@@ -11,16 +11,16 @@ class CallDataController extends Controller
 
 
     public function downloadData() {
-    $manuals = [];
-    $manuals1 = [];
-    $filesInFolder = \File::files('manual');
+    $files = [];
+    $filesize = [];
+    $filesInFolder = \File::files('Files/localuser');
     foreach($filesInFolder as $path)
         {
-            $manuals[] = pathinfo($path);
-            $manuals1[] = round(filesize($path) / 1024, 2);
+            $files[] = pathinfo($path);
+            $filesize[] = round(filesize($path) / 1024, 2);
 
         }
-            return view('calldata.downloaddata',compact('manuals','manuals1'));
+            return view('calldata.downloaddata',compact('files','filesize'));
         }
 
 

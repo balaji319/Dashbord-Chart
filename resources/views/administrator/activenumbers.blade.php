@@ -324,15 +324,6 @@ $('.modal-footer .btn-primary').click(function() {
    $('form[name="modalForm"]').submit();
 });
 
-
-
-
-
-
-
-
-
-
 function init_recent_table(min, max) {
 
 // logic to get new data
@@ -582,13 +573,7 @@ jQuery(document).ready(function($){
 
 
 });
-
-
-
-
-
-
-      </script>
+</script>
 
 <style>
       .active_tab{

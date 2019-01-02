@@ -373,9 +373,9 @@ class ReportController extends Controller
     public function downoad(Request $request) {
         try {
             $filename=$request->filename;
-            $filesInFolder = \File::files('manual');
+            $filesInFolder = \File::files('Files/localuser');
             header("Content-type: text/csv");
-            $file = public_path('/manual/'.$filename);
+            $file = public_path('/Files/localuser/'.$filename);
             readfile( $file);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
