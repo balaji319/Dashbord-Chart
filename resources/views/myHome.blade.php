@@ -1,5 +1,4 @@
 @extends('theme.default')
-
 @section('title', 'Call-Q Reporting Service')
 @section('content')
 <?php
@@ -173,7 +172,6 @@ var getDataRecentCalls = function() {
 getDataRecentCalls();
 }
 
-
 function convertTime(sec) {
     var hours = Math.floor(sec/3600);
     (hours >= 1) ? sec = sec - (hours*3600) : hours = '00';
@@ -186,7 +184,6 @@ function convertTime(sec) {
 
     return hours+':'+min+':'+sec;
 }
-
 
 function init_active_table(min, max) {
   // logic to get new data
@@ -206,7 +203,6 @@ function init_active_table(min, max) {
 };
 getDataActiveCalls();
 }
-
 
 function init_charts_home(type,data) {
         console.log('run_charts  typeof [' + typeof (Chart) + ']');
@@ -369,8 +365,6 @@ function init_charts_home(type,data) {
    }
 }
 jQuery(document).ready(function($){
-
-
       tempData = [];
          init_charts_home('mybarChart',tempData);
          init_charts_home('lineChart',tempData);
@@ -379,8 +373,6 @@ jQuery(document).ready(function($){
 
 
 });
-
-
 </script>
 <style>
 .active_tab{
@@ -404,4 +396,4 @@ jQuery(document).ready(function($){
   z-index: 100;
 }
   </style>
-          @endsection
+ @endsection

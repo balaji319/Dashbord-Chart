@@ -7,7 +7,7 @@
         <div class="col-md-4 col-md-offset-4">
             <div class="login-panel panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">CALL-Q LOGIN
+                    <h3 class="panel-title" id="tilte-call-q">
                     </h3>
                 </div>
                 <div class="panel-body">
@@ -57,10 +57,11 @@
 @endsection
 
 @section('After_Script')
+@include('comman.plugins')
 <script src="{{ asset('js/validation/login-validation.js') }}"></script>
 <style>
   body {
-        background-image: url(images/loginbg1.jpeg);
+        background: whitesmoke;
         background-repeat: round;
     }
 </style>

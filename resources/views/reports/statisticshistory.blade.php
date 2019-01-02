@@ -21,23 +21,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          {{-- <li><a href="#" class="lineStatus" data-time='1' >Live </a>
-                          </li> --}}
-                          <li><a href="#"  class="lineStatus " data-time='5' >5 Second</a>
-                          </li>
-                          <li><a href="#"  class="lineStatus active_tab" data-time='15'>15 Second </a>
-                          </li>
-                          <li><a href="#"  class="lineStatus" data-time='30'>30 Second</a>
-                          </li>
-                          <li><a href="#"  class="lineStatus" data-time='60'>1 min</a>
-                          </li>
-                           <li><a href="#"  class="lineStatus" data-time='360'>5 min</a>
-                          </li>
-                        </ul>
-                      </li>
+
                       <li><a class="close-link"><i class="fa fa-close"></i></a>
                       </li>
                     </ul>

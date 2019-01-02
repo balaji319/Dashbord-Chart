@@ -52,6 +52,8 @@ Route::group(['namespace' => 'Web'], function() {
     Route::get('map-calls', 'Report\ReportController@mapCalls');
     Route::get('hourly168', 'Report\ReportController@hourly168');
 
+
+
  /*
     |--------------------------------------------------------------------------
     | CallData Report Routes
@@ -115,7 +117,7 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
     Route::get('top-cities', 'Api\Report\ReportController@topCities');
     Route::get('top-countries', 'Api\Report\ReportController@topCountries');
     Route::get('country-mtd', 'Api\Report\ReportController@countriesStationBreakdown');
-
+    Route::get('downoad', 'Api\Report\ReportController@downoad');
 });
 
 
@@ -137,8 +139,8 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
     Route::post('request-number', 'Api\Report\ReportController@requestNumber');
 });
 
-    
-    
+
+
 Route::get('sendbasicemail','MailController@basic_email');
 Route::get('sendhtmlemail','MailController@html_email');
 Route::get('sendattachmentemail','MailController@attachment_email');

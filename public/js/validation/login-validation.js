@@ -1,3 +1,7 @@
+$(document).ready(function() {
+    $("#tilte-call-q").html("CALL-Q LOGIN")
+
+  });
 $("input").keyup(function () {
     var email = $('#email').val();
     var password = $('#Password').val();
