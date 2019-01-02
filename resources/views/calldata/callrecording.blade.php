@@ -338,7 +338,7 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
 });
 
 
-  $("body").on( "submit", "#requestform", function(event) {
+$("body").on( "submit", "#requestform", function(event) {
   event.preventDefault();
 var email_data =
 {
@@ -346,19 +346,17 @@ var email_data =
      'email': $("#useremail").val()
 }
 
- $('#loadingadvert').show();
+  $('#SuccessDiv').hide();
+  $('#ErrorDiv').hide();
 $(".selectedDate").text($(this).attr('data-date'))
 
        $.ajax({
             url: '/call-recording-email',
             data:email_data,
-
             success: function(response) {
                   var trHTML = '';
-                console.log(response.data[0].WavLocation)
-                  $('#loadingadvert').hide();
-                  change(response.data[0].WavLocation)
                   $('#SuccessDiv').show();
+                  $("#useremail").val('')
 
             },
             error: function(xhr){
