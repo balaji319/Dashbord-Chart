@@ -359,6 +359,14 @@ class ReportController extends Controller
             $number_type = $request->number_type;
             $comments = $request->comments;
 
+            $name = "harshal";//$request->name;
+           $email = "harshal@xoyal.com";//$request->email;
+           $station_name = "asfsda";//$request->station_name;
+           $urgent = "665";//$request->urgent;
+           $country = "country";//$request->country;
+           $number_type = "number_type";//$request->number_type;
+           $comments = "comments";//$request->comments;
+           
             $data = ["name"=>$name, "email"=>$email,"station_name"=>$station_name,
                 "urgent"=>$urgent,"country"=>$country,"number_type"=>$number_type,
                 "comments"=>$comments,"company"=>session('user_info')->CompanyID];
