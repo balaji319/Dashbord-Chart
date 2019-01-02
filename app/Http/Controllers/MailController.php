@@ -21,11 +21,10 @@ class MailController extends Controller {
    }
 
    public static function requestNewNumber($e_request) {
-       
       Mail::send('mail', $e_request, function($message)  use ($e_request) {
-         $message->to($e_request['email'], 'CALLQ')->subject
+         $message->to(env('MAIL_TO_ADDRESS'), 'CALLQ')->subject
             ($e_request['name']. " is requesting a new Call-Q number");
-         $message->from('balajipastapure@gmail.com','BALAJI');
+         $message->from(env('MAIL_FROM_ADMIN'),env('MAIL_FROM_NAME'));
          
       });
    }

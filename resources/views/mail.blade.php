@@ -1,4 +1,3 @@
-<h1>Hi, {{ $name }}</h1>
 <p>
  
 Name:  {{ $name }} <br/>

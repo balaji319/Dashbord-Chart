@@ -132,5 +132,12 @@ return [
     */
 
     'log_channel' => env('MAIL_LOG_CHANNEL'),
-
+    
+    
+    /*
+     * Send email details in report.
+     */
+    'MAIL_TO_ADDRESS' => env('MAIL_TO_ADDRESS','harshal@xoyal.com'), //support@ytel.com
+    'MAIL_FROM_ADMIN' => env('MAIL_FROM_NAME','Matt@f9group.com'),
+    'MAIL_FROM_NAME' => env('MAIL_FROM_NAME','YTEL Team'),
 ];
