@@ -41,8 +41,10 @@
     <link href="{!! asset('css/custom.css') !!}" rel="stylesheet">
   </head>
 
-  <body class="nav-md">
+  <body class="">
+
     <div class="container body">
+
       <div class="main_container">
 
                     @include('theme.header')
@@ -50,11 +52,17 @@
                     @include('theme.sidebar')
 
         <!-- page content -->
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" style="position: relative;
+        left: 75px;
+        top: 50px;
+        width: calc(100% - 74px);
+        min-height: 871px;">
+<div style="position: absolute;width: 100%;
+padding-left: 1%;
+padding-top: 1%;    padding-right: 1%;">
              @yield('content')
-             <div id="app">
-  <router-view></router-view>
- </div>
+            </div>
+
         </div>
         <!-- page content -->
 

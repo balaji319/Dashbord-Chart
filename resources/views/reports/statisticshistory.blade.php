@@ -563,7 +563,7 @@ myChart1.showLoading({
 // ajax getting data...............
 
 // ajax callback
-myChart1.hideLoading();
+
 
 
 // use the chart-------------------
