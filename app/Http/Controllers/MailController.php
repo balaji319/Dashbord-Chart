@@ -11,7 +11,7 @@ class MailController extends Controller {
 
    public function basic_email() {
       $data = array('name'=>"BALAJI ");
-      
+
       Mail::send(['text'=>'mail'], $data, function($message) {
          $message->to('harshal@xoyal.com', 'CALLQ')->subject
             ('Laravel Basic Testing Mail');
@@ -21,11 +21,12 @@ class MailController extends Controller {
    }
 
    public static function requestNewNumber($e_request) {
+
       Mail::send('mail', $e_request, function($message)  use ($e_request) {
          $message->to(env('MAIL_TO_ADDRESS'), 'CALLQ')->subject
             ($e_request['name']. " is requesting a new Call-Q number");
          $message->from(env('MAIL_FROM_ADMIN'),env('MAIL_FROM_NAME'));
-         
+
       });
    }
 
