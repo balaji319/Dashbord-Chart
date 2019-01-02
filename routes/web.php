@@ -102,6 +102,13 @@ Route::group(['middleware' => ['userAuth']], function() {
     |--------------------------------------------------------------------------
     */
     Route::get('minute/log', 'Api\Report\CallController@minuteLog');
+    /*
+    |--------------------------------------------------------------------------
+    | Top player route
+    |--------------------------------------------------------------------------
+    */
+    Route::get('top-player', 'Api\Report\PlayerController@topPlayer');
+
 });
 
 /**
