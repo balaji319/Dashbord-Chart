@@ -119,16 +119,19 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     </div>
 
               </div>
+
               <div class="form-group  col-md-6 col-sm-6 col-xs-12">
               <label for="message">Comments: </label>
               <textarea id="message"  class="form-control" name="comments" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.."
                 data-parsley-validation-threshold="10"></textarea>
               </div>
-              <div class="form-group">
-                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+              <div class="form-group  col-md-6 col-sm-6 col-xs-12">
+                  <label for="message">Submit: </label><br>
                   <button type="submit" class="btn btn-success" id="sendRequest">Send Request </button>
-                </div>
-              </div>
+                  </div>
+              <div class="form-group col-md-6 col-sm-6 col-xs-12 ">
+
+            </div>
             </form>
           </div>
         </div>
