@@ -69,7 +69,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                             </div>
                         </div>
                     </div>
-                <div class="x_panel" style="height: 100vh;">
+                <div class="x_panel" style="min-height: 100vh;">
                   <div class="x_title">
                     <h2>Active Phone Numbers <small></small></h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -297,7 +297,10 @@ $.ajax({
       //  $('#today_records_table_tr').html(trHTML);
 
        $.each(result.data, function(i, item) {
-        trHTML1 += '<tr    data-Tracking_ID="'+item.Tracking_ID+'" ><td>' + item.Tracking_ID + '</td><td>' + item.ANI + '</td><td>' + item.DatePart+ '</td><td>' + item.TimePart + '</td><td>' + item.Duration + '</td><td>' + item.Number + '</td></tr>';
+
+        var isUK = item.Geography=='United Kingdom' ? 'style="background: rgb(255, 255, 153)"':"";
+        var isLeast = result.min_value==item.last_updated ? 'style="background:red;color:white"':"";
+        trHTML1 += '<tr  data-Tracking_ID="'+item.station_id+'"  '+isUK+' ><td>' + item.station_id + '</td><td>' + item.Name + '</td><td>' + item.count+ '</td><td>' + item.Geography + '</td><td>' + item.Campaign + '</td><td '+isLeast+'>' + item.last_updated + '</td></tr>';
     });
 
     $('#datatable-keytable1').append(trHTML1);
@@ -608,6 +611,6 @@ jQuery(document).ready(function($){
   top: 40%;
   z-index: 100;
 }
-      </style>
+</style>
 
 @endsection
