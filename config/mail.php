@@ -140,4 +140,7 @@ return [
     'MAIL_TO_ADDRESS' => env('MAIL_TO_ADDRESS','harshal@xoyal.com'), //support@ytel.com
     'MAIL_FROM_ADMIN' => env('MAIL_FROM_NAME','Matt@f9group.com'),
     'MAIL_FROM_NAME' => env('MAIL_FROM_NAME','YTEL Team'),
+    
+    'RECORDING_MAIL_FROM' => env('RECORDING_MAIL_FROM','Recordings@f9group.com'),
+    'RECORDING_MAIL_NAME' => env('RECORDING_MAIL_NAME','Audio Recording'),
 ];

@@ -28,6 +28,17 @@ class MailController extends Controller {
          
       });
    }
+   
+   
+   public static function sentcallRecording($e_request) {
+       
+      Mail::send('recordingmail', $e_request, function($message)  use ($e_request) {
+         $message->to($e_request['email'], 'CALLQ')->subject
+            ("You have been sent an audio recording");
+         $message->from(env('RECORDING_MAIL_FROM'),env('RECORDING_MAIL_NAME'));
+         
+      });
+   }
 
    public function html_email() {
     $data = array('name'=>"Virat Gandhi");

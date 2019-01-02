@@ -310,6 +310,27 @@ class ReportController extends Controller
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
+    
+    public function callRecordingDetails(Request $request)
+    {
+        try {
+            $tracking_id = $request->TRacking_ID;
+            $email = $request->email;
+            if (empty($tracking_id)) {
+                return response()->json(['status' => 400, 'message' => "Tracking id is required."], 400);
+            }
+            $startdate = $request->startdate;
+            $sql = DB::table('ivrcounter')
+                ->select(DB::raw("Tracking_ID,WavLocation,CallerID,TranscribedDate"))
+                ->where('dateentered', '>=', '7/15/2009')
+                ->where('Tracking_ID', $tracking_id)->first();
+            $data = ["email"=>$email, "download_link"=>$sql->WavLocation,"caller_id"=>$sql->CallerID,"date"=>$sql->TranscribedDate];
+            $info = MailController::sentcallRecording($data);
+            return response()->json(['status' => 200, 'message' => 'Success'], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
 
 
     public function activeNumbers(Request $request) {
