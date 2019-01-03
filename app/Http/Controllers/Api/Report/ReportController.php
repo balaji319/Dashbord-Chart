@@ -402,5 +402,76 @@ class ReportController extends Controller
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
+    
+    public function googleMap(Request $request) {
+        try {
+            $data_type= $request->data_type;
+            $app_hour=$request->app_hour;
+            // Creates an array of strings to hold the lines of the KML file.
+            $kml = array('<?xml version="1.0" encoding="UTF-8"?>');
+            $kml[] = '<kml xmlns="http://earth.google.com/kml/2.1">';
+            $kml[] = ' <Document>';
+            $kml[] = ' <Folder>';
+            if($data_type == 1) {
+                $date = date("m/d/Y g:i:s A",strtotime("-$app_hour hour"));
+                $sql = "SELECT DISTINCT FONE1.Col003 AS City1, FONE1.Col004 AS State1, FONE1.Col005 AS Lat, FONE1.Col006 AS Long,hangups.CallerID
+                        FROM hangups INNER JOIN FONE1 ON LEFT(REPLACE(hangups.callerID,'-',''), 6) = CAST(FONE1.Col001 AS varchar) + '' + CAST(FONE1.Col002 AS varchar)
+                        WHERE (hangups.hangupdate >= '$date') AND (hangups.CompanyID = '".session('user_info')->CompanyID."')";
+                $summery = DB::select($sql);
+                // Iterates through the rows, printing a node for each row.
+                foreach ($summery as $k => $v ) {
+                    $kml[] = ' <altitudeMode>relativeToGround</altitudeMode>';
+                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',50</coordinates>';
+                    $kml[] = ' <Placemark>';
+                    $kml[] = ' <name>' . htmlentities( $v->CallerID) . '</name>';
+                    $kml[] = ' <description>'.$v->City1.','.$v->State1.'</description>';
+                    $kml[] = ' <LookAt><longitude>99</longitude><latitude>-40</latitude><range>27</range><tilt>73.51179687707364</tilt><heading>-171.0039963981923</heading></LookAt> ';
+                    $kml[] = ' <Style><IconStyle><scale>0.6</scale><Icon><href>http://66.193.54.196/Dot.png</href></Icon></IconStyle></Style>';
+                    $kml[] = ' <Point>';
+                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',0</coordinates>';
+                    $kml[] = ' </Point>';
+                    $kml[] = ' </Placemark>';
+                }
+            } else {
+                $date = date('m/d/Y', strtotime("-$app_hour days"));
+                $sql = "SELECT distinct IVRTranscriptions.FirstName + ' ' + IVRTranscriptions.LastName AS FullName, IVRTranscriptions.Address, IVRTranscriptions.City,
+                      IVRTranscriptions.State, IVRTranscriptions.Zip, IVRTranscriptions.Country, LatLong.Lat, LatLong.Long, IVRTranscriptions.DateEntered,
+                      IVRTranscriptions.CompanyID FROM IVRTranscriptions INNER JOIN LatLong ON IVRTranscriptions.IVR_ID = LatLong.IVR_ID
+                      WHERE (IVRTranscriptions.City <> '') AND (IVRTranscriptions.City IS NOT NULL) AND (IVRTranscriptions.Address <> '') AND
+                      (IVRTranscriptions.Address IS NOT NULL) AND (Dateentered >= '$date') AND (CompanyID = '".session('user_info')->CompanyID."')";
+                $summery = DB::select($sql);
+                
+                // Iterates through the rows, printing a node for each row.
+                foreach ($summery as $k => $v ) {
+                    $kml[] = ' <altitudeMode>relativeToGround</altitudeMode>';
+                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',50</coordinates>';
+                    $kml[] = ' <Placemark>';
+                    $kml[] = ' <name>' . htmlentities( $v->FullName) . '</name>';
+                    $kml[] = ' <description>'.$v->FullName.'\n'.$v->address.'\n'.$v->city.'\n'.$v->State.'\n'.$v->Country.'\n</description>';
+                    $kml[] = ' <LookAt><longitude>99</longitude><latitude>-40</latitude><range>27</range><tilt>73.51179687707364</tilt><heading>-171.0039963981923</heading></LookAt> ';
+                    $kml[] = ' <Style><IconStyle><scale>0.6</scale><Icon><href>http://66.193.54.196/Dot.png</href></Icon></IconStyle></Style>';
+                    $kml[] = ' <Point>';
+                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',0</coordinates>';
+                    $kml[] = ' </Point>';
+                    $kml[] = ' </Placemark>';
+                }
+            }
+            // End XML file
+            $kml[] = '</Folder>';
+            $kml[] = '</Document>';
+            $kml[] = '</kml>';
+            $kmlOutput = join("\n", $kml);
+            $filename = md5(uniqid(rand(), true));
+            header('Content-type: application/kml');
+            header('Content-Disposition: inline; filename='."$filename.kml".';');
+            echo $kmlOutput;
+
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+    
+    
+    
 }
 

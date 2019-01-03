@@ -125,6 +125,7 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Api']], function() 
     Route::get('top-countries', 'Api\Report\ReportController@topCountries');
     Route::get('country-mtd', 'Api\Report\ReportController@countriesStationBreakdown');
     Route::get('downoad', 'Api\Report\ReportController@downoad');
+    Route::get('google-map', 'Api\Report\ReportController@googleMap');
 });
 
 
