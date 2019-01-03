@@ -61,7 +61,7 @@ class ReportController extends Controller
         try {
             $report_month = $request->report_month;
             $report_year = $request->report_year;
-            $report_month = $report_month <= 9 ? '0' . $report_month : $report_month;
+            $report_month = count($report_month) == 1 ? '0' . $report_month : $report_month;
             $campaign_number = $request->campaign_number;
             if (empty($report_month) || empty($report_year) || empty($campaign_number)) {
                 return response()->json(['status' => 400, 'message' => 'Please enter all details.'], 400);
@@ -410,8 +410,6 @@ class ReportController extends Controller
 
     public function googleMap(Request $request) {
         try {
-
-
             $data_type= $request->data_type;
             $app_hour=$request->app_hour;
             // Creates an array of strings to hold the lines of the KML file.
@@ -463,7 +461,6 @@ class ReportController extends Controller
                     $kml[] = ' </Placemark>';
                 }
             }
-
             // End XML file
             $kml[] = '</Folder>';
             $kml[] = '</Document>';
@@ -483,10 +480,10 @@ class ReportController extends Controller
     public function genderReport(Request $request)
     {
         try {
+            $gender_report =[];
             $startdate = $request->startdate;
             $enddate = $request->enddate;
             $campaign_id = $request->campaign_number;
-            $gender_report= [];
             if (empty($startdate)) {
                 $startdate = date('m/01/Y');
             }
@@ -494,7 +491,7 @@ class ReportController extends Controller
                 $enddate = date('m/d/Y');
             }
             $sql = "SELECT COUNT(*) AS Calls, IVRTranscriptions.Gender FROM IVRTranscriptions INNER JOIN IVRCounter ON IVRTranscriptions.GroupNumber = IVRCounter.GroupNumber
-                    WHERE (IVRTranscriptions.DateEntered >  $startdate) AND (IVRTranscriptions.DateEntered < '$enddate') AND (IVRCounter.CampaignID = '$campaign_id')
+                    WHERE (IVRTranscriptions.DateEntered > '12/01/2018') AND (IVRTranscriptions.DateEntered < '$enddate') AND (IVRCounter.CampaignID = '$campaign_id')
                     AND (IVRCounter.companyID ='".session('user_info')->CompanyID."') GROUP BY IVRTranscriptions.Gender";
             $gender= DB::select($sql);
             foreach ($gender as $k => $v) {

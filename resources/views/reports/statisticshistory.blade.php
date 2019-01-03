@@ -1,65 +1,66 @@
 @extends('theme.default')
-
 @section('title', 'Call-Q Reporting Service')
 @section('content')
 <?php
 date_default_timezone_set('America/Los_Angeles');
 $unixTime = time();
 $var_date = date("D - M. d Y", $unixTime);  ?>
-      <div class="">
-            {{-- <div class="page-title">
-              <div class="title_left">
+  <div class="">
+    {{--
+    <div class="page-title">
+      <div class="title_left">
 
-              </div>
-            </div> --}}
+      </div>
+    </div> --}}
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="min-height: 100vh;">
+          <div class="x_title">
+            <h2>Statistical Report <small></small></h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
             <div class="clearfix"></div>
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel"style="min-height: 100vh;">
-                  <div class="x_title">
-                    <h2>Statistical Report <small></small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                      <div id="loadingadvert"  class="loading" >
-                          <img  class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
-                      </div> 
-                    {{-- <canvas id="lineChart"></canvas> --}}
-
-                    <div id="echart_line1" style="height:450px;"></div>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-            <div class="clearfix"></div>
-            <div class="row">
-
-            </div>
-            <div class="clearfix"></div>
-            <div class="row">
-
-              <div class="clearfix"></div>
-
-
-              <div class="clearfix"></div>
-
-            </div>
           </div>
+          <div class="x_content">
+            {{--
+            <div id="loadingadvert" class="loading">
+              <img class="loading-image" src="{!! asset('images/ajax-loader.gif') !!}" alt="Loading..." />
+            </div> --}} {{-- <canvas id="lineChart"></canvas> --}}
+            <div class="loading" id="loadingbar">
+              <img class="loading-image" src="{!! asset('images/ajax-loader.gif') !!}" alt="Loading..." />
+            </div>
+            <div id="echart_line1" style="height:450px;"></div>
+          </div>
+        </div>
+      </div>
 
-    <!-- jQuery -->
-    <script src="{!! asset('vendors/jquery/dist/jquery.min.js') !!}"></script>
-            <script type="text/javascript">
 
-function init_recent_table(min, max) {
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+
+      <div class="clearfix"></div>
+
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="{!! asset('vendors/jquery/dist/jquery.min.js') !!}"></script>
+  <script type="text/javascript">
+    function init_recent_table(min, max) {
 
 // logic to get new data
 var getDataRecentCalls = function() {
@@ -528,50 +529,33 @@ jQuery(document).ready(function($){
 
 });
 
-
 function getAjax(url){
   var myChart1 = echarts.init(document.getElementById('echart_line1'));
-$("#loadingadvert").show();
+
 // loading---------------------
 // myChart1.showLoading({
 //     text: "please wait!!!... ",
 // });
+$("#loadingbar").show();
 
   $.ajax({url: url, success: function(result){
     //init_charts_home('mybarChart',result);
      // $("#loadingadvert").hide();
       var arrayData = result.data.days_array;
-      arrayData.unshift(arrayData[arrayData.length -1]);
-      arrayData.pop();
      // myChart.data.labels= arrayData;
       var arrayData1 = result.data.fourteen_array;
-      arrayData1.unshift(arrayData1[arrayData1.length -1]);
-      arrayData1.pop();
     //  myChart.data.datasets[0].data=arrayData1;
-         var arrayData2 = result.data.twenty_one_array;
-      arrayData2.unshift(arrayData2[arrayData2.length -1]);
-      arrayData2.pop();
+      var arrayData2 = result.data.twenty_one_array;
      // myChart.data.datasets[1].data=arrayData2;
       var arrayData3 = result.data.week_array;
-      arrayData3.unshift(arrayData3[arrayData3.length -1]);
-      arrayData3.pop();
      // myChart.data.datasets[1].data=arrayData3;
-$("#loadingadvert").hide();
-
     // //               // re-render the chart
     //   myChart.update();
-
 // ajax getting data...............
-
 // ajax callback
-
-
-
+$("#loadingbar").hide();
 // use the chart-------------------
 var option =
-
-
-
 {
 title: {
   text: 'Statistical Report',
@@ -657,27 +641,28 @@ myChart1.setOption(option);
 }});
 }
 
-</script>
-<style>
-.active_tab{
-  color: #00afaa !important;
-}
-.loading {
-   width: 100%;
-   height: 100%;
-   top: 0;
-   left: 0;
-   display: block;
-   opacity: 0.7;
-   background-color: #fff;
-   z-index: 99;
-   text-align: center;
-}
+  </script>
+  <style>
+    .active_tab {
+      color: #00afaa !important;
+    }
 
-.loading-image {
-  position: absolute;
-  top: 40%;
-  z-index: 100;
-}
+    .loading {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: block;
+      opacity: 0.7;
+      background-color: #fff;
+      z-index: 99;
+      text-align: center;
+    }
+
+    .loading-image {
+      position: absolute;
+      top: 40%;
+      z-index: 100;
+    }
   </style>
-          @endsection
+@endsection

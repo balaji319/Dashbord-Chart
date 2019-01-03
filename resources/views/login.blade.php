@@ -30,7 +30,7 @@
                       <?php if(isset($error) && $error[0] !=''){?>
                        <div class="alert alert-danger">
                         <ul>
-                            <a href="#" class="close" data-dismiss="alert">&times;</a> 
+                            <a href="#" class="close" data-dismiss="alert">&times;</a>
                             <li>
                                 <p><?php echo $error[0]; ?></p>
                             </li>

@@ -14,7 +14,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
         <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel"  style="min-height: 100vh;">
                         <div class="x_title">
-                            <h2>Filter <small></small></h2>
+                            <h2>Minute Wise Report <small></small></h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -158,7 +158,7 @@ $.ajax({
       var first_day =response.data.todays.data;
       var  befor_seven_days = response.data.before_seven_days.data;
       var  befor_forteen_days = response.data.before_fourteen_days.data;
-      
+
       var lableArraydata =[response.data.todays.date,response.data.before_seven_days.date,response.data.before_fourteen_days.date] ;
 
 

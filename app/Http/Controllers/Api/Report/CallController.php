@@ -143,7 +143,7 @@ class CallController extends Controller
         }
     }
 
-    /**
+     /**
      * Minute log
      *
      * @param Request $request
@@ -292,5 +292,6 @@ class CallController extends Controller
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
+
 
 }

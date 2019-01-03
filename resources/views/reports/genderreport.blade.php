@@ -78,14 +78,11 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                                   </div>
 
                                 </div>
-
-
-
                                 </div>
                             </div>
                         </div>
                     </div>
-                <div class="x_panel" style="height: 100vh;">
+                <div class="x_panel" style="min-height: 100vh;">
                   <div class="x_title">
 
                     <ul class="nav navbar-right panel_toolbox">
@@ -103,7 +100,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                       <table class="table table-striped jambo_table bulk_action" id="today_records_table">
                         <thead>
                           <tr class="headings">
-                           <th class="column-title" colspan="9"> <center> <span id="selectedMonth"></span>- Gender Report </center></th>
+                           <th class="column-title" colspan="9"> <center> <span id="selectedMonth"></span> Gender Report </center></th>
                           </tr>
                         </thead>
                       </table>
@@ -221,72 +218,66 @@ $.ajax({
        $("#loadingbar").hide();
        var int_completed=0;
        var int_total_calls=0;
-
-
-        var myChart11 = echarts.init(document.getElementById('echart_line1'));
+var myChart11 = echarts.init(document.getElementById('echart_line1'));
 // use the chart-------------------
-var option =
+var voption=({
+				tooltip: {
+				  trigger: 'item',
+				  formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				legend: {
+				  x: 'center',
+				  y: 'bottom',
+				  data: ['Direct Access', 'E-mail Marketing', 'Union Ad', 'Video Ads']
+				},
+				toolbox: {
+				  show: true,
+				  feature: {
+					magicType: {
+					  show: true,
+					  type: ['pie', 'funnel'],
+					  option: {
+						funnel: {
+						  x: '25%',
+						  width: '50%',
+						  funnelAlign: 'left',
+						  max: 1548
+						}
+					  }
+					},
+					restore: {
+					  show: true,
+					  title: "Restore"
+					},
+					saveAsImage: {
+					  show: true,
+					  title: "Save Image"
+					}
+				  }
+				},
+				calculable: true,
+				series: [{
+				  name: '访问来源',
+				  type: 'pie',
+				  radius: '55%',
+				  center: ['50%', '48%'],
+				  data: [{
+					value: result.data.Calls[0],
+					name: result.data.Gender[0]
+				  }, {
+					value: result.data.Calls[1],
+					name: result.data.Gender[1]
+				  }, {
+					value: result.data.Calls[2],
+					name: result.data.Gender[2]
+				  }, {
+					value: result.data.Calls[3],
+					name: result.data.Gender[3]
+				  }]
+				}]
+			  });
 
 
-{
-title: {
-  text: 'Minute Reports',
-  subtext: ''
-},
-tooltip: {
-  trigger: 'axis'
-},
-legend: {
-  x: 420,
-  y: 20,
-  data: result.data.Gender
-},
-toolbox: {
-  show: true,
-  feature: {
-
-  restore: {
-    show: true,
-    title: "Restore"
-  },
-  saveAsImage: {
-    show: true,
-    title: "Save Image"
-  }
-  }
-},
-
-xAxis: [{
-  type: 'category',
-  data: []
-}],
-yAxis: [{
-  type: 'value'
-}],
-series: [{
-  name: 'UNKNOWN',
-  type: 'pie',
-  itemStyle: dataStyle,
-  data: result.data.Calls
-}, {
-  name:  'MALE',
-  type: 'pie',
-  itemStyle: dataStyle,
-  data: result.data.Calls
-},
-{
-  name:  'FEMALE',
-  type: 'pie',
-  itemStyle: dataStyle,
-  data: result.data.Calls
-},
-{
-  name:  'BOTH',
-  type: 'pie',
-  itemStyle: dataStyle,
-  data:result.data.Calls
-}]
-}
 var dataStyle = {
 				normal: {
 				  label: {
@@ -312,7 +303,7 @@ var dataStyle = {
 				  color: 'rgba(0,0,0,0)'
 				}
 			  };
-myChart11.setOption(option);
+myChart11.setOption(voption);
 
   }});
 }
