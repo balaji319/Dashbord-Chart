@@ -21,15 +21,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
               <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Settings 1</a>
-                    </li>
-                    <li><a href="#">Settings 2</a>
-                    </li>
-                  </ul>
-                </li>
+
                 <li><a class="close-link"><i class="fa fa-close"></i></a>
                 </li>
               </ul>
@@ -49,9 +41,9 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                           </tr>
                         </thead>
                         <tbody id="today_records_table_tr">
-                            @foreach($manuals as $file=>$f)
-                            @php($filePath=$manuals[$file]["dirname"]."\\".$manuals[$file]["basename"])
-                            <tr class="even pointer" colspan="4"><td> <a   title="{{url('/')}}\{{$filePath}}" class="recImg">File {{$manuals[$file]['basename']}} ( {{$manuals1[$file]}} KB )</a></td><td class="downloadCsv" data-name= {{$manuals[$file]['basename']}}> <i class="fa fa-download" aria-hidden="true"></i></td></tr>
+                            @foreach($files as $file=>$f)
+                            @php($filePath=$files[$file]["dirname"]."\\".$files[$file]["basename"])
+                            <tr class="even pointer" colspan="4"><td> <a   title="{{url('/')}}\{{$filePath}}" class="recImg">File {{$files[$file]['basename']}} ( {{$filesize[$file]}} KB )</a></td><td class="downloadCsv" data-name= {{$files[$file]['basename']}}> <i class="fa fa-download" aria-hidden="true"></i></td></tr>
                             @endforeach
 
                         </tbody>

@@ -379,7 +379,7 @@ class ReportController extends Controller
             $country = $request->country;
             $number_type = $request->number_type;
             $comments = $request->comments;
-           
+
             $data = ["name"=>$name, "email"=>$email,"station_name"=>$station_name,
                 "urgent"=>$urgent,"country"=>$country,"number_type"=>$number_type,
                 "comments"=>$comments,"company"=>session('user_info')->CompanyID];
@@ -394,9 +394,9 @@ class ReportController extends Controller
     public function downoad(Request $request) {
         try {
             $filename=$request->filename;
-            $filesInFolder = \File::files('manual');
+            $filesInFolder = \File::files('Files/localuser');
             header("Content-type: text/csv");
-            $file = public_path('/manual/'.$filename);
+            $file = public_path('/Files/localuser/'.$filename);
             readfile( $file);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
