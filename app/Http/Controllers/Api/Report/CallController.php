@@ -197,7 +197,7 @@ class CallController extends Controller
             $results['first_day']['data'] = $first_day_res;
 
             // Before 7 days
-            $befor_seven_days_date = $start_date->subDays(7)->format('m/d/Y');
+            $befor_seven_days_date = date('m/d/Y', strtotime('-7 days'));
             $query = "SELECT { fn HOUR(hangups.hangupdate) } AS HourTime, { fn MINUTE(hangups.hangupdate) } AS MinuteTime, { fn HOUR(hangups.hangupdate) } AS ScheduleHour,
                 COUNT(hangups.hangupid) AS totalCount FROM hangups
                 WHERE CONVERT(varchar(24), hangups.hangupdate, 101) = '$befor_seven_days_date'
@@ -227,7 +227,8 @@ class CallController extends Controller
             $results['befor_seven_days']['data'] = $befor_seven_days_res;
 
             // Before 14 days
-            $befor_forteen_days_date = $start_date->subDays(14)->format('m/d/Y');
+            $befor_forteen_days_date = date('m/d/Y', strtotime('-14 days'));
+            
             $query = "SELECT { fn HOUR(hangups.hangupdate) } AS HourTime, { fn MINUTE(hangups.hangupdate) } AS MinuteTime, { fn HOUR(hangups.hangupdate) } AS ScheduleHour,
                 COUNT(hangups.hangupid) AS totalCount FROM hangups
                 WHERE CONVERT(varchar(24), hangups.hangupdate, 101) = '$befor_forteen_days_date'
@@ -252,12 +253,12 @@ class CallController extends Controller
                     $befor_forteen_days_res[] = 0;
                 }
             }
-            $results['befor_forteen_days']['color'] = 'yellow';
+            $results['befor_forteen_days']['color'] = 'green';
             $results['befor_forteen_days']['date'] = $befor_forteen_days_date;
             $results['befor_forteen_days']['data'] = $befor_forteen_days_res;
 
             // Before 21 days
-            $befor_twenty_one_days_date = $start_date->subDays(21)->format('m/d/Y');
+            $befor_twenty_one_days_date = date('m/d/Y', strtotime('-21 days'));
             $query = "SELECT { fn HOUR(hangups.hangupdate) } AS HourTime, { fn MINUTE(hangups.hangupdate) } AS MinuteTime, { fn HOUR(hangups.hangupdate) } AS ScheduleHour,
                 COUNT(hangups.hangupid) AS totalCount FROM hangups
                 WHERE CONVERT(varchar(24), hangups.hangupdate, 101) = '$befor_twenty_one_days_date'
@@ -282,10 +283,10 @@ class CallController extends Controller
                     $befor_twenty_one_days_res[] = 0;
                 }
             }
-            $results['befor_twenty_one_days']['color'] = 'green';
+            $results['befor_twenty_one_days']['color'] = 'yellow';
             $results['befor_twenty_one_days']['date'] = $befor_twenty_one_days_date;
             $results['befor_twenty_one_days']['data'] = $befor_twenty_one_days_res;
-
+            
             return response()->json(['status' => 200, 'data' => $results]);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
