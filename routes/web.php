@@ -31,7 +31,7 @@ Route::get('logout', 'UserController@logout');
  * all routes.
  * @author Balaji  .
  */
-Route::group(['namespace' => 'Web'], function() {
+Route::group(['middleware' => ['userAuth'], ['namespace' => 'Web']] , function() {
 
     /*
     |--------------------------------------------------------------------------
