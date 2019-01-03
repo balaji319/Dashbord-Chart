@@ -61,7 +61,7 @@ class ReportController extends Controller
         try {
             $report_month = $request->report_month;
             $report_year = $request->report_year;
-            $report_month = $report_month <= 9 ? '0' . $report_month : $report_month;
+            $report_month = count($report_month) == 1 ? '0' . $report_month : $report_month;
             $campaign_number = $request->campaign_number;
             if (empty($report_month) || empty($report_year) || empty($campaign_number)) {
                 return response()->json(['status' => 400, 'message' => 'Please enter all details.'], 400);
@@ -106,12 +106,13 @@ class ReportController extends Controller
 
             $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
                 FROM HangUps INNER JOIN Campaigns ON HangUps.CampaignID = Campaigns.CampaignID WHERE HangUps.CompanyID = '" . session('user_info')->CompanyID . "'
-                AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) > '" . $seven_day . "' AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) <= '" . $current_time . "'
+                AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) >= '" . $seven_day . "' AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) <= '" . $current_time . "'
                 GROUP BY day(HangUps.hangupdate),CONVERT(CHAR(10), HangUps.hangupdate, 101)
                 Order By day(HangUps.hangupdate)";
             $last_week = DB::select($sql);
             foreach ($last_week as $k => $v) {
-                $week_array[] = $v->CallCount;
+                $week_array[date('l', strtotime($v->hangupdate))] = $v->CallCount;
+                $days_array[] = date('l', strtotime($v->hangupdate));
             }
 
             $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
@@ -121,7 +122,7 @@ class ReportController extends Controller
                 Order By day(HangUps.hangupdate)";
             $last_fourteen = DB::select($sql);
             foreach ($last_fourteen as $k => $v) {
-                $fourteen_array[] = $v->CallCount;
+                $fourteen_array[date('l', strtotime($v->hangupdate))] = $v->CallCount;
             }
 
             $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
@@ -131,12 +132,16 @@ class ReportController extends Controller
                 Order By day(HangUps.hangupdate)";
             $twenty_one = DB::select($sql);
             foreach ($twenty_one as $k => $v) {
-                $twenty_one_array[] = $v->CallCount;
-                $days_array[] = date('l', strtotime($v->hangupdate));
+                $twenty_one_array[date('l', strtotime($v->hangupdate))] = $v->CallCount;
             }
-
-            $arr = ["days_array" => $days_array, "week_array" => $week_array, "fourteen_array" => $fourteen_array, "twenty_one_array" => $twenty_one_array];
-
+            
+            $date = array_unique($days_array);
+            foreach ($date  as $k => $v) {
+                $arr['week_array'][] = $week_array[$v];
+                $arr['fourteen_array'][] = $fourteen_array[$v];
+                $arr['twenty_one_array'][] = $twenty_one_array[$v];
+                $arr['days_array'][] = $v;
+            }
             return response()->json(['status' => 200, 'message' => 'Success', 'data' => $arr], 200);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
@@ -402,5 +407,103 @@ class ReportController extends Controller
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
+    
+    public function googleMap(Request $request) {
+        try {
+            $data_type= $request->data_type;
+            $app_hour=$request->app_hour;
+            // Creates an array of strings to hold the lines of the KML file.
+            $kml = array('<?xml version="1.0" encoding="UTF-8"?>');
+            $kml[] = '<kml xmlns="http://earth.google.com/kml/2.1">';
+            $kml[] = ' <Document>';
+            $kml[] = ' <Folder>';
+            if($data_type == 1) {
+                $date = date("m/d/Y g:i:s A",strtotime("-$app_hour hour"));
+                $sql = "SELECT DISTINCT FONE1.Col003 AS City1, FONE1.Col004 AS State1, FONE1.Col005 AS Lat, FONE1.Col006 AS Long,hangups.CallerID
+                        FROM hangups INNER JOIN FONE1 ON LEFT(REPLACE(hangups.callerID,'-',''), 6) = CAST(FONE1.Col001 AS varchar) + '' + CAST(FONE1.Col002 AS varchar)
+                        WHERE (hangups.hangupdate >= '$date') AND (hangups.CompanyID = '".session('user_info')->CompanyID."')";
+                $summery = DB::select($sql);
+                // Iterates through the rows, printing a node for each row.
+                foreach ($summery as $k => $v ) {
+                    $kml[] = ' <altitudeMode>relativeToGround</altitudeMode>';
+                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',50</coordinates>';
+                    $kml[] = ' <Placemark>';
+                    $kml[] = ' <name>' . htmlentities( $v->CallerID) . '</name>';
+                    $kml[] = ' <description>'.$v->City1.','.$v->State1.'</description>';
+                    $kml[] = ' <LookAt><longitude>99</longitude><latitude>-40</latitude><range>27</range><tilt>73.51179687707364</tilt><heading>-171.0039963981923</heading></LookAt> ';
+                    $kml[] = ' <Style><IconStyle><scale>0.6</scale><Icon><href>http://66.193.54.196/Dot.png</href></Icon></IconStyle></Style>';
+                    $kml[] = ' <Point>';
+                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',0</coordinates>';
+                    $kml[] = ' </Point>';
+                    $kml[] = ' </Placemark>';
+                }
+            } else {
+                $date = date('m/d/Y', strtotime("-$app_hour days"));
+                $sql = "SELECT distinct IVRTranscriptions.FirstName + ' ' + IVRTranscriptions.LastName AS FullName, IVRTranscriptions.Address, IVRTranscriptions.City,
+                      IVRTranscriptions.State, IVRTranscriptions.Zip, IVRTranscriptions.Country, LatLong.Lat, LatLong.Long, IVRTranscriptions.DateEntered,
+                      IVRTranscriptions.CompanyID FROM IVRTranscriptions INNER JOIN LatLong ON IVRTranscriptions.IVR_ID = LatLong.IVR_ID
+                      WHERE (IVRTranscriptions.City <> '') AND (IVRTranscriptions.City IS NOT NULL) AND (IVRTranscriptions.Address <> '') AND
+                      (IVRTranscriptions.Address IS NOT NULL) AND (Dateentered >= '$date') AND (CompanyID = '".session('user_info')->CompanyID."')";
+                $summery = DB::select($sql);
+                
+                // Iterates through the rows, printing a node for each row.
+                foreach ($summery as $k => $v ) {
+                    $kml[] = ' <altitudeMode>relativeToGround</altitudeMode>';
+                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',50</coordinates>';
+                    $kml[] = ' <Placemark>';
+                    $kml[] = ' <name>' . htmlentities( $v->FullName) . '</name>';
+                    $kml[] = ' <description>'.$v->FullName.'\n'.$v->address.'\n'.$v->city.'\n'.$v->State.'\n'.$v->Country.'\n</description>';
+                    $kml[] = ' <LookAt><longitude>99</longitude><latitude>-40</latitude><range>27</range><tilt>73.51179687707364</tilt><heading>-171.0039963981923</heading></LookAt> ';
+                    $kml[] = ' <Style><IconStyle><scale>0.6</scale><Icon><href>http://66.193.54.196/Dot.png</href></Icon></IconStyle></Style>';
+                    $kml[] = ' <Point>';
+                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',0</coordinates>';
+                    $kml[] = ' </Point>';
+                    $kml[] = ' </Placemark>';
+                }
+            }
+            // End XML file
+            $kml[] = '</Folder>';
+            $kml[] = '</Document>';
+            $kml[] = '</kml>';
+            $kmlOutput = join("\n", $kml);
+            $filename = md5(uniqid(rand(), true));
+            header('Content-type: application/kml');
+            header('Content-Disposition: inline; filename='."$filename.kml".';');
+            echo $kmlOutput;
+
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+    
+    
+    public function genderReport(Request $request)
+    {
+        try {
+            $startdate = $request->startdate;
+            $enddate = $request->enddate;
+            $campaign_id = $request->campaign_id;
+            if (empty($startdate)) {
+                $startdate = date('m/01/Y');
+            }
+            if (empty($enddate)) {
+                $enddate = date('m/d/Y');
+            }
+            $sql = "SELECT COUNT(*) AS Calls, IVRTranscriptions.Gender FROM IVRTranscriptions INNER JOIN IVRCounter ON IVRTranscriptions.GroupNumber = IVRCounter.GroupNumber
+                    WHERE (IVRTranscriptions.DateEntered > '12/01/2018') AND (IVRTranscriptions.DateEntered < '$enddate') AND (IVRCounter.CampaignID = '$campaign_id') 
+                    AND (IVRCounter.companyID ='".session('user_info')->CompanyID."') GROUP BY IVRTranscriptions.Gender";
+            $gender= DB::select($sql);
+            foreach ($gender as $k => $v) {
+                $gender_report['Calls'][] = $v->Calls;
+                if($v->Gender == 1 ){ $gener_name = "MALE";} else if($v->Gender == 2 ){ $gener_name = "FEMALE";} else { $gener_name = "Unknown";}
+                $gender_report['Gender'][] = $gener_name;
+            }
+            return response()->json(['status' => 200, 'message' => 'Success', 'data' => $gender_report], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+
+    
 }
 
