@@ -26,7 +26,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
       </div>
       <div class="x_content">
           <div class="container">
-              <form action="LoadReport2.cfm" method="post" target="_blank">
+              <form action="./google-map" method="get" >
                   <table width="400" border="1" align="center" cellpadding="2" class="table table-striped table-bordered" cellspacing="0" bordercolor="#c0c0c0">
                       <tbody><tr>
                           <td colspan="2" style="background: #1a1051"><div align="CENTER" class="Bold11FontWhite" style="color:white">Call Map Generation</div></td>
@@ -34,7 +34,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                       <tr>
                           <td class="Bold11Font"><div align="RIGHT" class="control-label">I would like to map:</div></td>
                           <td><label>
-                              <select name="DataType" class="form-control" id="DataType" onchange="getAppHour()">
+                              <select name="data_type" class="form-control" id="DataType" >
                                   <option value="1">Partner Phone Numbers</option>
                                   <option value="2">Partner Download Addresses</option>
                               </select>
@@ -42,7 +42,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                       </tr>
                       <tr>
                           <td class="Bold11Font"><div align="RIGHT" >Within the past:</div></td>
-                          <td><select name="AppHour" class="form-control" id="AppHour" style="vertical-align:top;">
+                          <td><select name="app_hour" class="form-control" id="AppHour" style="vertical-align:top;">
                                   <option value="1" selected="">1 Hour</option>
                                   <option value="2" selected="">2 Hours</option>
                                   <option value="6" selected="">6 Hours</option>
