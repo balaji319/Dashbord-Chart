@@ -134,7 +134,7 @@ class ReportController extends Controller
             foreach ($twenty_one as $k => $v) {
                 $twenty_one_array[date('l', strtotime($v->hangupdate))] = $v->CallCount;
             }
-            
+
             $date = array_unique($days_array);
             foreach ($date  as $k => $v) {
                 $arr['week_array'][] = $week_array[$v];
@@ -315,7 +315,7 @@ class ReportController extends Controller
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
-    
+
     public function callRecordingDetails(Request $request)
     {
         try {
@@ -407,7 +407,7 @@ class ReportController extends Controller
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
-    
+
     public function googleMap(Request $request) {
         try {
             $data_type= $request->data_type;
@@ -445,7 +445,7 @@ class ReportController extends Controller
                       WHERE (IVRTranscriptions.City <> '') AND (IVRTranscriptions.City IS NOT NULL) AND (IVRTranscriptions.Address <> '') AND
                       (IVRTranscriptions.Address IS NOT NULL) AND (Dateentered >= '$date') AND (CompanyID = '".session('user_info')->CompanyID."')";
                 $summery = DB::select($sql);
-                
+
                 // Iterates through the rows, printing a node for each row.
                 foreach ($summery as $k => $v ) {
                     $kml[] = ' <altitudeMode>relativeToGround</altitudeMode>';
@@ -470,19 +470,20 @@ class ReportController extends Controller
             header('Content-type: application/kml');
             header('Content-Disposition: inline; filename='."$filename.kml".';');
             echo $kmlOutput;
-
+            return redirect('map-calls');
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
     }
-    
-    
+
+
     public function genderReport(Request $request)
     {
         try {
+            $gender_report =[];
             $startdate = $request->startdate;
             $enddate = $request->enddate;
-            $campaign_id = $request->campaign_id;
+            $campaign_id = $request->campaign_number;
             if (empty($startdate)) {
                 $startdate = date('m/01/Y');
             }
@@ -490,12 +491,12 @@ class ReportController extends Controller
                 $enddate = date('m/d/Y');
             }
             $sql = "SELECT COUNT(*) AS Calls, IVRTranscriptions.Gender FROM IVRTranscriptions INNER JOIN IVRCounter ON IVRTranscriptions.GroupNumber = IVRCounter.GroupNumber
-                    WHERE (IVRTranscriptions.DateEntered > '12/01/2018') AND (IVRTranscriptions.DateEntered < '$enddate') AND (IVRCounter.CampaignID = '$campaign_id') 
+                    WHERE (IVRTranscriptions.DateEntered > '12/01/2018') AND (IVRTranscriptions.DateEntered < '$enddate') AND (IVRCounter.CampaignID = '$campaign_id')
                     AND (IVRCounter.companyID ='".session('user_info')->CompanyID."') GROUP BY IVRTranscriptions.Gender";
             $gender= DB::select($sql);
             foreach ($gender as $k => $v) {
                 $gender_report['Calls'][] = $v->Calls;
-                if($v->Gender == 1 ){ $gener_name = "MALE";} else if($v->Gender == 2 ){ $gener_name = "FEMALE";} else { $gener_name = "Unknown";}
+                if($v->Gender == 1 ){ $gener_name = "MALE";} else if($v->Gender == 2 ){ $gener_name = "FEMALE";} else if($v->Gender == 0 ){ $gener_name = "UNKNOWN";}else  { $gener_name = "BOTH";}
                 $gender_report['Gender'][] = $gener_name;
             }
             return response()->json(['status' => 200, 'message' => 'Success', 'data' => $gender_report], 200);
@@ -504,6 +505,6 @@ class ReportController extends Controller
         }
     }
 
-    
+
 }
 
