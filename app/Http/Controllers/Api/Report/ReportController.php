@@ -106,12 +106,13 @@ class ReportController extends Controller
 
             $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
                 FROM HangUps INNER JOIN Campaigns ON HangUps.CampaignID = Campaigns.CampaignID WHERE HangUps.CompanyID = '" . session('user_info')->CompanyID . "'
-                AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) > '" . $seven_day . "' AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) <= '" . $current_time . "'
+                AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) >= '" . $seven_day . "' AND CAST(CONVERT(CHAR(10), HangUps.hangupdate, 101) AS DATETIME) <= '" . $current_time . "'
                 GROUP BY day(HangUps.hangupdate),CONVERT(CHAR(10), HangUps.hangupdate, 101)
                 Order By day(HangUps.hangupdate)";
             $last_week = DB::select($sql);
             foreach ($last_week as $k => $v) {
-                $week_array[] = $v->CallCount;
+                $week_array[date('l', strtotime($v->hangupdate))] = $v->CallCount;
+                $days_array[] = date('l', strtotime($v->hangupdate));
             }
 
             $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
@@ -121,7 +122,7 @@ class ReportController extends Controller
                 Order By day(HangUps.hangupdate)";
             $last_fourteen = DB::select($sql);
             foreach ($last_fourteen as $k => $v) {
-                $fourteen_array[] = $v->CallCount;
+                $fourteen_array[date('l', strtotime($v->hangupdate))] = $v->CallCount;
             }
 
             $sql = "SELECT COUNT(HangUps.hangupid) AS CallCount, day(HangUps.hangupdate) CallDate,CONVERT(CHAR(10), HangUps.hangupdate, 101) as hangupdate
@@ -131,12 +132,16 @@ class ReportController extends Controller
                 Order By day(HangUps.hangupdate)";
             $twenty_one = DB::select($sql);
             foreach ($twenty_one as $k => $v) {
-                $twenty_one_array[] = $v->CallCount;
-                $days_array[] = date('l', strtotime($v->hangupdate));
+                $twenty_one_array[date('l', strtotime($v->hangupdate))] = $v->CallCount;
             }
-
-            $arr = ["days_array" => $days_array, "week_array" => $week_array, "fourteen_array" => $fourteen_array, "twenty_one_array" => $twenty_one_array];
-
+            
+            $date = array_unique($days_array);
+            foreach ($date  as $k => $v) {
+                $arr['week_array'][] = $week_array[$v];
+                $arr['fourteen_array'][] = $fourteen_array[$v];
+                $arr['twenty_one_array'][] = $twenty_one_array[$v];
+                $arr['days_array'][] = $v;
+            }
             return response()->json(['status' => 200, 'message' => 'Success', 'data' => $arr], 200);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
@@ -472,6 +477,33 @@ class ReportController extends Controller
     }
     
     
+    public function genderReport(Request $request)
+    {
+        try {
+            $startdate = $request->startdate;
+            $enddate = $request->enddate;
+            $campaign_id = $request->campaign_id;
+            if (empty($startdate)) {
+                $startdate = date('m/01/Y');
+            }
+            if (empty($enddate)) {
+                $enddate = date('m/d/Y');
+            }
+            $sql = "SELECT COUNT(*) AS Calls, IVRTranscriptions.Gender FROM IVRTranscriptions INNER JOIN IVRCounter ON IVRTranscriptions.GroupNumber = IVRCounter.GroupNumber
+                    WHERE (IVRTranscriptions.DateEntered > '12/01/2018') AND (IVRTranscriptions.DateEntered < '$enddate') AND (IVRCounter.CampaignID = '$campaign_id') 
+                    AND (IVRCounter.companyID ='".session('user_info')->CompanyID."') GROUP BY IVRTranscriptions.Gender";
+            $gender= DB::select($sql);
+            foreach ($gender as $k => $v) {
+                $gender_report['Calls'][] = $v->Calls;
+                if($v->Gender == 1 ){ $gener_name = "MALE";} else if($v->Gender == 2 ){ $gener_name = "FEMALE";} else { $gener_name = "Unknown";}
+                $gender_report['Gender'][] = $gener_name;
+            }
+            return response()->json(['status' => 200, 'message' => 'Success', 'data' => $gender_report], 200);
+        } catch (Exception $ex) {
+            return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
+        }
+    }
+
     
 }
 
