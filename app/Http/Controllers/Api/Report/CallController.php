@@ -99,44 +99,57 @@ class CallController extends Controller
     public function hourlyLog(Request $request)
     {
         try {
-
             $results = [];
             $company_id = session('user_info')->CompanyID;
             $campaign_id = $request->get('campaign_id', NULL);
             $start_date = $request->get('start_date', NULL);
-
+            $end_date = NULL;
             if($start_date == NULL){
-                $start_date = Carbon::today();
-            }else{
-                $start_date = Carbon::parse($start_date);
+                $start_date = date('m/d/Y');
+                $end_date = date('m/d/Y g:i A' );
+            } else {
+                $end_date = $start_date. " 11:59:59 PM";
             }
-            $date_array = [$start_date->toDateTimeString(), $start_date->addHours(24)->toDateTimeString()];
-
-            $hangups = DB::table('hangups')
-                            ->selectRaw('Campaigns.Name, Campaigns.CampaignID, COUNT(hangups.hangupid) AS Expr1')
-                            ->join('Campaigns', 'hangups.CampaignID', '=','Campaigns.CampaignID')
-                            ->where('hangups.CompanyID', $company_id)
-                            ->where('Campaigns.CampaignID', $campaign_id)
-                            ->whereBetween('hangupdate', $date_array)
-                            ->groupBy('Campaigns.Name')
-                            ->groupBy('Campaigns.CampaignID')
-                            ->get();
+            
+            $date_array = [$start_date. " 12:00 AM", $end_date];
+            
+//            $hangups = DB::table('hangups')
+//                            ->selectRaw('Campaigns.Name, Campaigns.CampaignID, COUNT(hangups.hangupid) AS Expr1')
+//                            ->join('Campaigns', 'hangups.CampaignID', '=','Campaigns.CampaignID')
+//                            ->where('hangups.CompanyID', $company_id)
+//                            ->where('Campaigns.CampaignID', $campaign_id)
+//                            ->whereBetween('hangupdate', $date_array)
+//                            ->groupBy('Campaigns.Name')
+//                            ->groupBy('Campaigns.CampaignID')
+//                            ->get();
+            $sql = "SELECT     Campaigns.Name,Campaigns.CampaignID, COUNT(hangups.hangupid) AS Expr1
+                    FROM         hangups INNER JOIN Campaigns ON hangups.CampaignID = Campaigns.CampaignID
+                    WHERE     (hangups.CompanyID = '$company_id') AND (hangupdate >= '$start_date 12:00 AM') and Campaigns.CampaignID = '$campaign_id' and 
+                    hangupdate < '$end_date' GROUP BY Campaigns.Name,Campaigns.CampaignID";
+            $hangups = DB::select($sql);
+   
             $results['hangup'] = $hangups;
-
+            
             for($i=0; $i<24; $i++){
-                $start_date_temp = Carbon::parse($start_date)->addHours($i)->toDateTimeString();
-                $end_date = Carbon::parse($start_date)->addHours($i+1)->toDateTimeString();
-                $date_array = [$start_date_temp, $end_date];
-                $count = DB::table('hangups')
-                                ->join('Campaigns', 'hangups.CampaignID', '=','Campaigns.CampaignID')
-                                ->where('hangups.CompanyID', $company_id)
-                                ->where('Campaigns.CampaignID', $campaign_id)
-                                ->whereBetween('hangups.hangupdate', $date_array)
-                                ->groupBy('Campaigns.Name')
-                                ->count('hangups.hangupid');
-                $results['hangups_data'][] = $count;
+//                $start_date_temp = Carbon::parse($start_date)->addHours($i)->toDateTimeString();
+//                $end_date = Carbon::parse($start_date)->addHours($i+1)->toDateTimeString();
+//                $date_array = [$start_date_temp, $end_date];
+//                $count = DB::table('hangups')
+//                                ->join('Campaigns', 'hangups.CampaignID', '=','Campaigns.CampaignID')
+//                                ->where('hangups.CompanyID', $company_id)
+//                                ->where('Campaigns.CampaignID', $campaign_id)
+//                                ->whereBetween('hangups.hangupdate', $date_array)
+//                                ->groupBy('Campaigns.Name')
+//                                ->count('hangups.hangupid');
+                 $sql = "SELECT COUNT(hangups.hangupid) AS totalCount, Campaigns.Name FROM         hangups INNER JOIN
+                        Campaigns ON  hangups.CampaignID = Campaigns.CampaignID
+                    WHERE     (hangupdate >= '$start_date 12:00 AM') AND  (Campaigns.CampaignID= '$campaign_id')
+                    and hangupdate < '$end_date' 
+                    AND { fn HOUR(hangups.hangupdate) } = '$i' AND hangups.CompanyID = '$company_id'
+                    GROUP BY { fn HOUR(hangups.hangupdate) }, Campaigns.Name";
+                $hangups = DB::select($sql);
+                $results['hangups_data'][] = isset($hangups[0]) ? $hangups[0]->totalCount : 0;
             }
-
             return response()->json(['status' => 200, 'data' => $results]);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
@@ -197,7 +210,7 @@ class CallController extends Controller
             $results['first_day']['data'] = $first_day_res;
 
             // Before 7 days
-            $befor_seven_days_date = date('m/d/Y', strtotime('-7 days'));
+            $befor_seven_days_date = date('m/d/Y', strtotime('-7 days', strtotime($start_date)));
             $query = "SELECT { fn HOUR(hangups.hangupdate) } AS HourTime, { fn MINUTE(hangups.hangupdate) } AS MinuteTime, { fn HOUR(hangups.hangupdate) } AS ScheduleHour,
                 COUNT(hangups.hangupid) AS totalCount FROM hangups
                 WHERE CONVERT(varchar(24), hangups.hangupdate, 101) = '$befor_seven_days_date'
@@ -227,7 +240,7 @@ class CallController extends Controller
             $results['befor_seven_days']['data'] = $befor_seven_days_res;
 
             // Before 14 days
-            $befor_forteen_days_date = date('m/d/Y', strtotime('-14 days'));
+            $befor_forteen_days_date = date('m/d/Y', strtotime('-14 days', strtotime($start_date)));
             
             $query = "SELECT { fn HOUR(hangups.hangupdate) } AS HourTime, { fn MINUTE(hangups.hangupdate) } AS MinuteTime, { fn HOUR(hangups.hangupdate) } AS ScheduleHour,
                 COUNT(hangups.hangupid) AS totalCount FROM hangups
@@ -258,7 +271,7 @@ class CallController extends Controller
             $results['befor_forteen_days']['data'] = $befor_forteen_days_res;
 
             // Before 21 days
-            $befor_twenty_one_days_date = date('m/d/Y', strtotime('-21 days'));
+            $befor_twenty_one_days_date = date('m/d/Y', strtotime('-21 days', strtotime($start_date)));
             $query = "SELECT { fn HOUR(hangups.hangupdate) } AS HourTime, { fn MINUTE(hangups.hangupdate) } AS MinuteTime, { fn HOUR(hangups.hangupdate) } AS ScheduleHour,
                 COUNT(hangups.hangupid) AS totalCount FROM hangups
                 WHERE CONVERT(varchar(24), hangups.hangupdate, 101) = '$befor_twenty_one_days_date'
@@ -270,7 +283,7 @@ class CallController extends Controller
             }
             $query .= " GROUP BY { fn HOUR(hangups.hangupdate) }, { fn MINUTE(hangups.hangupdate) }, CONVERT(varchar(24), hangups.hangupdate, 101)";
             $befor_twenty_one_days = DB::select($query);
-
+            
             $minute_array = array_column($befor_twenty_one_days, 'MinuteTime');
             $count_array = array_column($befor_twenty_one_days, 'totalCount');
 
@@ -287,6 +300,11 @@ class CallController extends Controller
             $results['befor_twenty_one_days']['date'] = $befor_twenty_one_days_date;
             $results['befor_twenty_one_days']['data'] = $befor_twenty_one_days_res;
             
+            for ($i=0;$i<60;$i++){
+                $stime = $i < 9 ? "$start_time:0$i" :  "$start_time:$i";
+                $time[] = date("g:i a", strtotime($stime));
+            }
+            $results['time_arr'] = $time; 
             return response()->json(['status' => 200, 'data' => $results]);
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
