@@ -59,10 +59,10 @@ $.ajax({
       "paging": true,
       "lengthChange": false,
       "searching": false,
-      "ordering": true,
       "info": true,
       "autoWidth": false,
-      "sDom": 'lfrtip'
+      "sDom": 'lfrtip',
+      "order": [[ 2, "desc" ]]
   });
 
 }});
@@ -83,7 +83,7 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
                 myChart2.data.datasets[0].data=[];
                 myChart1.data.labels=[];
                 myChart1.data.datasets[0].data=[];
-                myChart1.data.datasets.backgroundColor= [];
+                myChart1.data.datasets[0].backgroundColor= [];
 
                 myChart.update();
                 myChart2.update();
@@ -111,7 +111,7 @@ $("#executivecallsummary").on( "click", ".tbl_row", function() {
                 myChart2.data.datasets[0].data=response.data.get_cities.calls;
                 myChart1.data.labels=response.data.get_countries.Geography;
                 myChart1.data.datasets[0].data=response.data.get_countries.calls;
-                myChart1.data.datasets.backgroundColor= getRandomColor(3);
+                myChart1.data.datasets[0].backgroundColor= ['#F5211E','#F3811F','#F5847F']
 
                 myChart.update();
                 myChart2.update();
@@ -318,28 +318,28 @@ else if(type=='mybarChart1'){
             return arr;
             }
             // create initial empty chart
-            var ctx_live1 = document.getElementById("mybarChart1");
-            var labelArray = [];
-            for (var i = 0, l = 24; i < l; i++) {
-              labelArray.push(i)
-            }
-            var oilData = {
-                      labels: [],
-                      datasets: [
-                            {
-                                  data: [],
-                                  backgroundColor:[]
-                            }]
-                      };
-             myChart1 = new Chart(ctx_live1, {
-              type: 'pie',
-              data: oilData
-            });
+            var ctx_live11 = document.getElementById("mybarChart1");
+myChart1 = new Chart(ctx_live11,{
+    type: 'pie',
+    data: {
+    datasets: [{
+        data: [],
+        backgroundColor:[]
+    }],
+
+    // These labels appear in the legend and in the tooltips when hovering different arcs
+    labels: [
+        
+    ]
+}
+});
     //  getData();
     // get new data every 3 seconds
     //setInterval(getData,10000);
   }
  }
+
+
 
 
 }

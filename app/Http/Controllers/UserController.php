@@ -67,8 +67,9 @@ class UserController extends Controller {
                 print_r(session('user_info'));
                 return redirect('/my-home');
             } else {
-                $error[] = 'Something went wrong';
-                return view('login');
+                $error[] = 'Please enter valid credentials';
+
+                return view('login',compact('error'));
             }
         } catch (Exception $ex) {
             throw $ex;

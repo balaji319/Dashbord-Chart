@@ -18,15 +18,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Settings 1</a>
-                </li>
-                <li><a href="#">Settings 2</a>
-                </li>
-              </ul>
-            </li>
+     
             <li><a class="close-link"><i class="fa fa-close"></i></a>
             </li>
           </ul>
@@ -36,7 +28,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
           <div class="container">
             <div class="row">
               <div class='col-sm-4'>
-                From ::
+                From :
                 <div class="form-group">
                   <div class='input-group date' id='myDatepicker'>
                     <input type='text' class="form-control" id="datepickerVal" />
@@ -188,16 +180,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                           <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
-                            {{--
-                            <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                              <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Settings 1</a>
-                                </li>
-                                <li><a href="#">Settings 2</a>
-                                </li>
-                              </ul>
-                            </li> --}}
+                       
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
                           </ul>
@@ -239,8 +222,8 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <div class="x_panel">
                         <div class="x_title">
-                          {{--
-                          <h2>Most Recent Calls <small></small></h2> --}}
+                          
+                          <h2>Country Wise Breakdown <small></small></h2>
                           <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -264,8 +247,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <div class="x_panel">
                         <div class="x_title">
-                          {{--
-                          <h2>Top Active Numbers / <small></small></h2> --}}
+                           <h2>Country Wise Breakdown <small></small></h2>
                           <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>

@@ -65,7 +65,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                           <table class="table table-striped jambo_table bulk_action" id="today_records_table">
                             <thead>
                               <tr class="headings">
-                              <th class="column-title" colspan="9"> <center> <span id="selectedMonth"></span>PUFC Top 25 Countries Report Graph  </center></th>
+                              <th class="column-title" colspan="9"> <center> <span id="selectedMonth"></span>PUFC Top 25 Countries Report Graph  <span id="selectDate"></span> </center></th>
                               </tr>
                             </thead>
                           </table>
@@ -152,7 +152,7 @@ $.ajax({
        $("#loadingbar").hide();
                   myChart2.data.labels=response.data.City ;
                   myChart2.data.datasets[0].data=response.data.CallCount;
-
+                   $("#selectDate").html("("+$("#datepickerVal").val()+" to  "+$("#datepickerVal1").val()+")")  
                   myChart2.update();
                   myChart2.options.title.text='Top 25 Cities For 12/01/2018 - 12/27/2018';
                   myChart2.update();
@@ -219,7 +219,7 @@ function init_charts_home(type,data) {
                 options: {
                   responsive: true,
                   title: {
-                    display: true,
+                    display: false,
                     text: "Top 25 Countries (Web Requests Included) ",
                   },
                   legend: {

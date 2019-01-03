@@ -111,6 +111,8 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
 
     $(document).ready(function() {
       $("#loadingbar").hide();
+
+                  
       var dateNow = new Date();
       $('#myDatepicker2').datetimepicker({
         format: 'MM/DD/YYYY ',
@@ -126,6 +128,7 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                   var startDate= $("#datepickerVal").val();
                   var endDate= $("#datepickerVal1").val();
                   getAjax("/top-cities",startDate,endDate,true)
+                  $("#selectDate").html("("+startDate+" to  "+endDate+")")
       });
 
       var myUrl = "/top-cities";
@@ -150,10 +153,11 @@ $.ajax({
       success: function(response){
 
        $("#loadingbar").hide();
-
+                  $("#selectDate").html("("+$("#datepickerVal").val()+" to  "+$("#datepickerVal1").val()+")")
 
                   myChart2.data.labels=response.data.City ;
                   myChart2.data.datasets[0].data=response.data.CallCount;
+                  //myChart2.options.title.text="aaaaaaaaaa";
                   myChart2.update();
 
 
@@ -219,7 +223,7 @@ function init_charts_home(type,data) {
                 options: {
                   responsive: true,
                   title: {
-                    display: true,
+                    display: false,
                     text: "Top 25 Cities For  ",
                   },
                   legend: {

@@ -237,6 +237,7 @@ var objData =  flag ? {"report_month":report_month,"report_year":report_year,"ca
 // $('#datatable-keytable1').dataTable().fnDestroy();
 $("#loadingbar").show();
 $('#datatable-keytable_t').html("");
+$("#datatable-keytable1 > tbody").empty();
 $.ajax({
       url: url,
       type: "get",

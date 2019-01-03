@@ -63,7 +63,9 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                             <div id="loadingadvert"  class="loading" >
                                 <img  class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
                             </div>
-                          <canvas id="lineChart"  height="100px"></canvas>
+                         <!--  <canvas id=""  height="100px"></canvas> -->
+                            <div id="lineChart" style="height:450px;     position: inherit !important;;
+"></div>
                         </div>
                       </div>
                     </div>
@@ -123,8 +125,10 @@ jQuery(document).ready(function($){
 function getAjax(url,startDate,flag){
 
 var objData =  flag ? {"start_date":startDate} :'';
+var myChart1 = echarts.init(document.getElementById('lineChart'));
 
 $("#loadingadvert").show();
+
 $.ajax({
       url: url,
       type: "get",
@@ -140,11 +144,117 @@ $.ajax({
               for (var i = 0, l = 25; i < l; i++) {
                 labelArray.push(i)
               }
-       myChart.data.labels=labelArray;
-       myChart.data.datasets[0].data=response.data.todays.data;
-       myChart.data.datasets[1].data=response.data.before_seven_days.data;
-       myChart.data.datasets[2].data=response.data.before_fourteen_days.data;
-       myChart.update();
+       // myChart.data.labels=labelArray;
+       // myChart.data.datasets[0].data=response.data.todays.data;
+       // myChart.data.datasets[1].data=response.data.before_seven_days.data;
+       // myChart.data.datasets[2].data=response.data.before_fourteen_days.data;
+       // myChart.update();
+
+
+
+
+
+
+      var first_day =response.data.todays.data;
+      var  befor_seven_days = response.data.before_seven_days.data;
+      var  befor_forteen_days = response.data.before_fourteen_days.data;
+      
+      var lableArraydata =[response.data.todays.date,response.data.before_seven_days.date,response.data.before_fourteen_days.date] ;
+
+
+// ajax callback
+// myChart1.hideLoading();
+ var labelArray = [];
+              for (var i = 0, l = 24; i < l; i++) {
+                labelArray.push(i)
+              }
+
+// use the chart-------------------
+var option =
+
+
+
+{
+title: {
+  text: 'Minute Reports',
+  subtext: ''
+},
+tooltip: {
+  trigger: 'axis'
+},
+legend: {
+  x: 420,
+  y: 20,
+  data: lableArraydata
+},
+toolbox: {
+  show: true,
+  feature: {
+  magicType: {
+    show: true,
+    title: {
+    line: 'Line',
+    bar: 'Bar',
+    stack: 'Stack',
+    tiled: 'Tiled'
+    },
+    type: ['line', 'bar', 'stack', 'tiled']
+  },
+  restore: {
+    show: true,
+    title: "Restore"
+  },
+  saveAsImage: {
+    show: true,
+    title: "Save Image"
+  }
+  }
+},
+
+xAxis: [{
+  type: 'category',
+  data: labelArray
+}],
+yAxis: [{
+  type: 'value'
+}],
+series: [{
+  name: response.data.todays.date,
+  type: 'line',
+  itemStyle: {
+  normal: {
+    areaStyle: {
+    type: 'default'
+    }
+  }
+  },
+  data:  first_day
+}, {
+  name: response.data.before_seven_days.date,
+  type: 'line',
+  itemStyle: {
+  normal: {
+    areaStyle: {
+    type: 'default'
+    }
+  }
+  },
+  data:  befor_seven_days
+}, {
+  name:response.data.before_fourteen_days.date,
+  type: 'line',
+  itemStyle: {
+  normal: {
+    areaStyle: {
+    type: 'default'
+    }
+  }
+  },
+  data: befor_forteen_days
+}]
+}
+
+myChart1.setOption(option);
 
   }});
 }

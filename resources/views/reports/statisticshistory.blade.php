@@ -28,9 +28,9 @@ $var_date = date("D - M. d Y", $unixTime);  ?>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                      {{-- <div id="loadingadvert"  class="loading" >
+                      <div id="loadingadvert"  class="loading" >
                           <img  class="loading-image"  src="{!! asset('images/ajax-loader.gif') !!}"  alt="Loading..." />
-                      </div> --}}
+                      </div> 
                     {{-- <canvas id="lineChart"></canvas> --}}
 
                     <div id="echart_line1" style="height:450px;"></div>
@@ -528,13 +528,14 @@ jQuery(document).ready(function($){
 
 });
 
+
 function getAjax(url){
   var myChart1 = echarts.init(document.getElementById('echart_line1'));
-
+$("#loadingadvert").show();
 // loading---------------------
-myChart1.showLoading({
-    text: "please wait!!!... ",
-});
+// myChart1.showLoading({
+//     text: "please wait!!!... ",
+// });
 
   $.ajax({url: url, success: function(result){
     //init_charts_home('mybarChart',result);
@@ -555,7 +556,7 @@ myChart1.showLoading({
       arrayData3.unshift(arrayData3[arrayData3.length -1]);
       arrayData3.pop();
      // myChart.data.datasets[1].data=arrayData3;
-
+$("#loadingadvert").hide();
 
     // //               // re-render the chart
     //   myChart.update();

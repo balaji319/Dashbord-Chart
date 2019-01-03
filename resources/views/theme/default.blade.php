@@ -57,10 +57,10 @@
         top: 50px;
         width: calc(100% - 74px);
         min-height: 871px;">
-<div style="position: absolute;width: 100%;
-padding-left: 1%;
-padding-top: 1%;    padding-right: 1%;">
+        <div style="position: absolute;width: 100%;padding-left: 1%;padding-top: 1%;padding-right: 1%;">
              @yield('content')
+            </div>
+            <div id="app">
             </div>
 
         </div>
