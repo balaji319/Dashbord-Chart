@@ -61,7 +61,7 @@ class ReportController extends Controller
         try {
             $report_month = $request->report_month;
             $report_year = $request->report_year;
-            $report_month = count($report_month) == 1 ? '0' . $report_month : $report_month;
+            $report_month = $report_month <=9 ? '0' . $report_month : $report_month;
             $campaign_number = $request->campaign_number;
             if (empty($report_month) || empty($report_year) || empty($campaign_number)) {
                 return response()->json(['status' => 400, 'message' => 'Please enter all details.'], 400);

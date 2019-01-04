@@ -80,7 +80,7 @@ function getAjax(url, startDate, flag) {
 
                 {
                     title: {
-                        text: 'Minute Reports',
+                        text: '7 Day Call Comparision Report ',
                         subtext: ''
                     },
                     tooltip: {
