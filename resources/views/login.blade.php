@@ -33,16 +33,18 @@
                         </ul>
                     </div>
                     @endif
-                      <?php if(isset($error) && $error[0] !=''){?>
-                       <div class="alert alert-danger">
-                        <ul>
-                            <a href="#" class="close" data-dismiss="alert">&times;</a>
-                            <li>
-                                <p><?php echo $error[0]; ?></p>
-                            </li>
-                        </ul>
-                    </div>
-                   <?php }?>
+                    <?php if(isset($error) && $error[0] !=''&& !$errors->any()){?>
+                        <div class="alert alert-danger">
+                            <ul>
+                                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                <li>
+                                    <p>
+                                        <?php echo $error[0]; ?>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <?php }?>
                     <form action="{{ url('/login') }}" method="post" class="pt-3 register-form" id="form_register" autocomplete="off">
                         {{ csrf_field() }}
                         <div class="form-group">

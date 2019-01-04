@@ -88,7 +88,7 @@ function getAjax(url, startDate, time, campaign_id, flag) {
             var befor_twenty_one_days = response.data.befor_twenty_one_days.data;
             var befor_seven_days = response.data.befor_seven_days.data;
 
-            var lableArraydata = [response.data.first_day.date, response.data.befor_forteen_days.date, response.data.befor_twenty_one_days.date, response.data.befor_seven_days.date];
+            var lableArraydata = [response.data.first_day.date, response.data.befor_seven_days.date, response.data.befor_forteen_days.date, response.data.befor_twenty_one_days.date];
 
 
             // ajax callback
@@ -142,7 +142,7 @@ function getAjax(url, startDate, time, campaign_id, flag) {
 
                     xAxis: [{
                         type: 'category',
-                        data: labelArray
+                        data: response.data.time_arr
                     }],
                     yAxis: [{
                         type: 'value'

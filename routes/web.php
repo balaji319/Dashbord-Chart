@@ -31,26 +31,26 @@ Route::get('logout', 'UserController@logout');
  * all routes.
  * @author Balaji  .
  */
-Route::group(['middleware' => ['userAuth'], ['namespace' => 'Web']] , function() {
 
-    /*
+Route::group(['middleware' => ['userAuth'], ['namespace' => 'Web']], function() {
+      /*
     |--------------------------------------------------------------------------
     |  Report Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('exe-summary', 'Report\ReportController@exeSummary');
-    Route::get('network-summary', 'Report\ReportController@networkCallSummary');
-    Route::get('statical-summary', 'Report\ReportController@staticalSummary');
-    Route::get('web-summary', 'Report\ReportController@webSummary');
-    Route::get('topcities', 'Report\ReportController@topCities');
-    Route::get('topcountries', 'Report\ReportController@topCountries');
-    Route::get('stats-countries', 'Report\ReportController@statsCountries');
-    Route::get('top-prayers', 'Report\ReportController@topPrayers');
-    Route::get('gender-break', 'Report\ReportController@genderBreak');
-    Route::get('minute-log', 'Report\ReportController@minuteLog');
-    Route::get('hour-log', 'Report\ReportController@hourLog');
-    Route::get('map-calls', 'Report\ReportController@mapCalls');
-    Route::get('hourly168', 'Report\ReportController@hourly168');
+    Route::get('exe-summary', 'Web\Report\ReportController@exeSummary');
+    Route::get('network-summary', 'Web\Report\ReportController@networkCallSummary');
+    Route::get('statical-summary', 'Web\Report\ReportController@staticalSummary');
+    Route::get('web-summary', 'Web\Report\ReportController@webSummary');
+    Route::get('topcities', 'Web\Report\ReportController@topCities');
+    Route::get('topcountries', 'Web\Report\ReportController@topCountries');
+    Route::get('stats-countries', 'Web\Report\ReportController@statsCountries');
+    Route::get('top-prayers', 'Web\Report\ReportController@topPrayers');
+    Route::get('gender-break', 'Web\Report\ReportController@genderBreak');
+    Route::get('minute-log', 'Web\Report\ReportController@minuteLog');
+    Route::get('hour-log', 'Web\Report\ReportController@hourLog');
+    Route::get('map-calls', 'Web\Report\ReportController@mapCalls');
+    Route::get('hourly168', 'Web\Report\ReportController@hourly168');
 
 
 
@@ -59,16 +59,16 @@ Route::group(['middleware' => ['userAuth'], ['namespace' => 'Web']] , function()
     | CallData Report Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('downloaddata', 'Report\CallDataController@downloadData');
-    Route::get('callrecording', 'Report\CallDataController@callRecording');
+    Route::get('downloaddata', 'Web\Report\CallDataController@downloadData');
+    Route::get('callrecording', 'Web\Report\CallDataController@callRecording');
 
  /*
     |--------------------------------------------------------------------------
     | Administrator Report Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('activenumbers', 'Report\AdministratorController@activeNumbers');
-    Route::get('requestnumber', 'Report\AdministratorController@requestNumber');
+    Route::get('activenumbers', 'Web\Report\AdministratorController@activeNumbers');
+    Route::get('requestnumber', 'Web\Report\AdministratorController@requestNumber');
 });
 
 
