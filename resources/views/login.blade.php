@@ -27,7 +27,7 @@
                         </ul>
                     </div>
                     @endif
-                      <?php if(isset($error) && $error[0] !=''){?>
+                      <?php if(isset($error) && $error[0] !=''&& !$errors->any()){?>
                        <div class="alert alert-danger">
                         <ul>
                             <a href="#" class="close" data-dismiss="alert">&times;</a>
