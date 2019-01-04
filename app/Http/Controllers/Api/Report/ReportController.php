@@ -329,9 +329,23 @@ class ReportController extends Controller
                 ->select(DB::raw("Tracking_ID,WavLocation,CallerID,TranscribedDate"))
                 ->where('dateentered', '>=', '7/15/2009')
                 ->where('Tracking_ID', $tracking_id)->first();
-            $data = ["email"=>$email, "download_link"=>$sql->WavLocation,"caller_id"=>$sql->CallerID,"date"=>$sql->TranscribedDate];
-            $info = MailController::sentcallRecording($data);
-            return response()->json(['status' => 200, 'message' => 'Success'], 200);
+            $email_id = explode(",",$email);
+            $invalide_email = '';
+            $invalide_email = '';
+            foreach ($email_id as $k => $v ) {
+                $pattern = '/^(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?)){255,})(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?)){65,}@)(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F]))*\\x22))(?:\\.(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F]))*\\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-+[a-z0-9]+)*\\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-+[a-z0-9]+)*)|(?:\\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\\]))$/iD';
+                preg_match($pattern, $v) === 1 ? $v_email = $v.", " : $invalide_email .= $v.", ";
+                $data = ["email"=>$v, "download_link"=>$sql->WavLocation,"caller_id"=>$sql->CallerID,"date"=>$sql->TranscribedDate];
+                $info = MailController::sentcallRecording($data);
+            }
+            
+            if($invalide_email != '') {
+                $success = '';
+                if($v_email != '') { $success = " Email sent to ".rtrim($v_email,', ').".";  }
+                return response()->json(['status' => 400, 'message' => rtrim($invalide_email,', ')." is not a valid email address.".$success ] , 400);
+            } else {
+                return response()->json(['status' => 200, 'message' => 'Success'], 200);
+            }
         } catch (Exception $ex) {
             return response()->json(['status' => 400, 'message' => $ex->getMessage()], 400);
         }
