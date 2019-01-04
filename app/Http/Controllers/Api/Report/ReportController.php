@@ -61,7 +61,7 @@ class ReportController extends Controller
         try {
             $report_month = $request->report_month;
             $report_year = $request->report_year;
-            $report_month = count($report_month) == 1 ? '0' . $report_month : $report_month;
+            $report_month = $report_month <=9 ? '0' . $report_month : $report_month;
             $campaign_number = $request->campaign_number;
             if (empty($report_month) || empty($report_year) || empty($campaign_number)) {
                 return response()->json(['status' => 400, 'message' => 'Please enter all details.'], 400);
@@ -459,21 +459,35 @@ class ReportController extends Controller
                       WHERE (IVRTranscriptions.City <> '') AND (IVRTranscriptions.City IS NOT NULL) AND (IVRTranscriptions.Address <> '') AND
                       (IVRTranscriptions.Address IS NOT NULL) AND (Dateentered >= '$date') AND (CompanyID = '".session('user_info')->CompanyID."')";
                 $summery = DB::select($sql);
-
-                // Iterates through the rows, printing a node for each row.
-                foreach ($summery as $k => $v ) {
+                if (!empty($playerlist)) {
+                    foreach ($summery as $k => $v ) {
+                        $kml[] = ' <altitudeMode>relativeToGround</altitudeMode>';
+                        $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',50</coordinates>';
+                        $kml[] = ' <Placemark>';
+                        $kml[] = ' <name>' . htmlentities( $v->FullName) . '</name>';
+                        $kml[] = ' <description>'.$v->FullName.'\n'.$v->address.'\n'.$v->city.'\n'.$v->State.'\n'.$v->Country.'\n</description>';
+                        $kml[] = ' <LookAt><longitude>99</longitude><latitude>-40</latitude><range>27</range><tilt>73.51179687707364</tilt><heading>-171.0039963981923</heading></LookAt> ';
+                        $kml[] = ' <Style><IconStyle><scale>0.6</scale><Icon><href>http://66.193.54.196/Dot.png</href></Icon></IconStyle></Style>';
+                        $kml[] = ' <Point>';
+                        $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',0</coordinates>';
+                        $kml[] = ' </Point>';
+                        $kml[] = ' </Placemark>';
+                    }
+                 }else{
                     $kml[] = ' <altitudeMode>relativeToGround</altitudeMode>';
-                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',50</coordinates>';
+                    $kml[] = ' <coordinates>-20,50</coordinates>';
                     $kml[] = ' <Placemark>';
-                    $kml[] = ' <name>' . htmlentities( $v->FullName) . '</name>';
-                    $kml[] = ' <description>'.$v->FullName.'\n'.$v->address.'\n'.$v->city.'\n'.$v->State.'\n'.$v->Country.'\n</description>';
+                    $kml[] = ' <name>No </name>';
+                    $kml[] = ' <description>pune</description>';
                     $kml[] = ' <LookAt><longitude>99</longitude><latitude>-40</latitude><range>27</range><tilt>73.51179687707364</tilt><heading>-171.0039963981923</heading></LookAt> ';
                     $kml[] = ' <Style><IconStyle><scale>0.6</scale><Icon><href>http://66.193.54.196/Dot.png</href></Icon></IconStyle></Style>';
                     $kml[] = ' <Point>';
-                    $kml[] = ' <coordinates>-' .$v->Long  . ','  .$v->Lat . ',0</coordinates>';
+                    $kml[] = ' <coordinates>-20,0</coordinates>';
                     $kml[] = ' </Point>';
                     $kml[] = ' </Placemark>';
-                }
+                 }
+                // Iterates through the rows, printing a node for each row.
+
             }
             // End XML file
             $kml[] = '</Folder>';

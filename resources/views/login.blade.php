@@ -5,12 +5,18 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <div class="login-panel panel panel-default">
+            <div class="login-panel panel panel-default"style="border-color: snow;">
+                    <div class="heade2r" style="/* border-color: #8e7e7e; */border-color: none !important; */border-bottom: none;border-top: none;border: 0px  #f8f8f8;border-bottom: none;background: #f8f8f8;/* position: absolute; */border: .1px solid #f8f8f8;border-width: 0px;border-style: solid;border-color: #f8f8f8;"><img class="header-icon" src="https://x5admin-qa-88.ytel.com/img/neon/ytel.svg" style="
+                        height: 42px !important;
+                        margin-top: 5px;
+                        margin-left: 40%;
+                        margin-bottom: 10px;
+                    "></div>
                 <div class="panel-heading">
                     <h3 class="panel-title" id="tilte-call-q">
                     </h3>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" style="border: 1px solid #f8f8f8;border-color: #cecccc;">
 
 @section('content') @if(session()->has('message'))
                     <div class="alert alert-success col-sm-12 col-md-offset-5">
@@ -27,16 +33,18 @@
                         </ul>
                     </div>
                     @endif
-                      <?php if(isset($error) && $error[0] !=''){?>
-                       <div class="alert alert-danger">
-                        <ul>
-                            <a href="#" class="close" data-dismiss="alert">&times;</a>
-                            <li>
-                                <p><?php echo $error[0]; ?></p>
-                            </li>
-                        </ul>
-                    </div>
-                   <?php }?>
+                    <?php if(isset($error) && $error[0] !=''&& !$errors->any()){?>
+                        <div class="alert alert-danger">
+                            <ul>
+                                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                <li>
+                                    <p>
+                                        <?php echo $error[0]; ?>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <?php }?>
                     <form action="{{ url('/login') }}" method="post" class="pt-3 register-form" id="form_register" autocomplete="off">
                         {{ csrf_field() }}
                         <div class="form-group">
@@ -71,8 +79,9 @@
 <script src="{{ asset('js/validation/login-validation.js') }}"></script>
 <style>
   body {
-        background-image: url(images/loginbg2.jpg);
+       // background-image: url(images/loginbg2.jpg);
         background-repeat: round;
+        background-color: #f8f8f8;
     }
     .login-panel .panel-heading{
      background-color: #62bae4 !important;

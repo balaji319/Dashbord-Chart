@@ -137,8 +137,8 @@ return [
     /*
      * Send email details in report.
      */
-    'MAIL_TO_ADDRESS' => env('MAIL_TO_ADDRESS','harshal@xoyal.com'), //support@ytel.com
-    'MAIL_FROM_ADMIN' => env('MAIL_FROM_NAME','Matt@f9group.com'),
+    'MAIL_TO_ADDRESS' => env('MAIL_TO_ADDRESS','sachin.singh@ytel.co.in'), //support@ytel.com
+    'MAIL_FROM_ADMIN' => env('MAIL_FROM_NAME','balaji@ytel.co.in'),
     'MAIL_FROM_NAME' => env('MAIL_FROM_NAME','YTEL Team'),
     
     'RECORDING_MAIL_FROM' => env('RECORDING_MAIL_FROM','Recordings@f9group.com'),
